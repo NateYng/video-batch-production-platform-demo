@@ -16,7 +16,7 @@ const task = computed(() => taskStore.currentTask)
 const taskId = computed(() => route.params.id || task.value.id)
 
 const activeTab = ref('batches')
-const sideTab = ref('failure')
+const sideTab = ref('stage')
 
 const batchStatusLabel = {
   completed: '已完成',
@@ -86,24 +86,6 @@ const recentLogs = [
       <MetricCard label="待审核" :value="task.pendingAudit" color="#f59e0b" />
       <MetricCard label="待发布" :value="task.pendingPublish" color="#0ea5e9" />
       <MetricCard label="完成率" :value="task.progress" suffix="%" />
-    </div>
-
-    <div class="stage-card compact page-card">
-      <h3>阶段进度</h3>
-      <el-steps :active="task.stages.findIndex((s) => s.status === 'active')" finish-status="success" align-center simple>
-        <el-step
-          v-for="(stage, i) in task.stages"
-          :key="i"
-          :title="stage.name"
-          :description="`${stage.time}`"
-          :status="stage.status === 'done' ? 'success' : stage.status === 'active' ? 'process' : 'wait'"
-        />
-      </el-steps>
-      <div class="time-info compact">
-        <span>已运行 {{ task.elapsed }}</span>
-        <span>预计剩余 {{ task.remaining }}</span>
-        <span>总预计 {{ task.estimated }}</span>
-      </div>
     </div>
 
     <div class="page-split">
@@ -188,6 +170,21 @@ const recentLogs = [
       <aside class="page-split-side">
         <div class="page-card fill-card">
           <el-tabs v-model="sideTab" class="side-tabs compact-tabs">
+            <el-tab-pane label="阶段" name="stage">
+              <el-steps :active="task.stages.findIndex((s) => s.status === 'active')" finish-status="success" direction="vertical" simple>
+                <el-step
+                  v-for="(stage, i) in task.stages"
+                  :key="i"
+                  :title="stage.name"
+                  :description="stage.time"
+                  :status="stage.status === 'done' ? 'success' : stage.status === 'active' ? 'process' : 'wait'"
+                />
+              </el-steps>
+              <div class="time-info compact">
+                <span>已运行 {{ task.elapsed }}</span>
+                <span>剩余 {{ task.remaining }}</span>
+              </div>
+            </el-tab-pane>
             <el-tab-pane label="失败分析" name="failure">
               <DonutChart :data="failureDonut" title="" height="120px" />
             </el-tab-pane>

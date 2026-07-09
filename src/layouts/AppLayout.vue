@@ -46,4 +46,9 @@ const appStore = useAppStore()
   display: flex;
   flex-direction: column;
 }
+
+.page-content > .page-viewport {
+  flex: 1;
+  min-height: 0;
+}
 </style>

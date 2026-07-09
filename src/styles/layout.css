@@ -1,8 +1,9 @@
-/* 视口布局：一屏展示，内部区域滚动 */
+/* 视口布局：一屏展示，仅内部区域滚动 */
 
 .page-viewport {
   height: 100%;
   min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -10,6 +11,7 @@
 .page-shell {
   height: 100%;
   min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -42,33 +44,53 @@
 .page-split {
   flex: 1;
   min-height: 0;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr 268px;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 12px;
   align-items: stretch;
 }
 
 .page-split.wide-side {
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: minmax(0, 1fr) 300px;
 }
 
 .page-split-main {
   min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .page-split-side {
   min-height: 0;
+  min-width: 280px;
+  width: 280px;
+  max-width: 280px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+.page-split.wide-side .page-split-side {
+  min-width: 300px;
+  width: 300px;
+  max-width: 300px;
+}
+
+.page-split-side > .page-card {
+  flex: 1;
+  min-height: 0;
 }
 
 .fill-card {
   flex: 1;
   min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   padding: 10px 12px;
@@ -143,19 +165,32 @@
 }
 
 .metric-grid.cols-6 {
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
 }
 
-@media (max-width: 1400px) {
-  .metric-grid.cols-6 {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* 侧栏 Tab 面板 */
+.side-tabs {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-@media (max-width: 900px) {
-  .metric-grid.cols-6 {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.side-tabs :deep(.el-tabs__header) {
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.side-tabs :deep(.el-tabs__content) {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.side-tabs :deep(.el-tab-pane) {
+  height: 100%;
 }
 
 /* 模式入口条 */
@@ -220,23 +255,7 @@
   max-width: 100%;
 }
 
-/* 侧栏 Tab 面板 */
-.side-tabs {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.side-tabs :deep(.el-tabs__header) {
-  margin-bottom: 8px;
-}
-
-.side-tabs :deep(.el-tabs__content) {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
+/* 侧栏列表 */
 
 .side-list {
   display: flex;
@@ -313,28 +332,76 @@
 /* 紧凑图表网格 */
 .charts-grid.compact {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 .chart-card.compact {
-  padding: 8px 10px;
+  padding: 10px 12px;
   min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .chart-card.compact h4 {
   font-size: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   flex-shrink: 0;
+  font-weight: 600;
 }
 
 .chart-card.compact .chart-body {
   flex: 1;
-  min-height: 0;
+  min-height: 140px;
+}
+
+/* 数据看板专用 */
+.dash-kpi {
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.dash-kpi .metric-card .card-inner {
+  padding: 12px 14px;
+}
+
+.dash-kpi .metric-card .label {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.dash-kpi .metric-card .value {
+  font-size: 22px;
+}
+
+.dash-kpi .metric-card .trend {
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.charts-grid.dash-charts {
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.chart-card.dash-chart {
+  padding: 12px 14px;
+}
+
+.chart-card.dash-chart h4 {
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.chart-card.dash-chart .chart-body {
+  height: 168px;
+  flex: none;
 }
 
 /* 阶段进度 */
@@ -436,6 +503,29 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+}
+
+.page-shell > .metric-grid,
+.page-shell > .mode-strip,
+.page-shell > .top-row {
+  flex-shrink: 0;
+}
+
+/* Tab 内容撑满 */
+.fill-tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.fill-tabs :deep(.el-tabs__content) {
+  flex: 1;
+  min-height: 0;
+}
+
+.fill-tabs :deep(.el-tab-pane) {
+  height: 100%;
 }
 
 /* 配置页 Tab */

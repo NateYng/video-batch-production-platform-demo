@@ -311,7 +311,6 @@ function handleChannelAction(row, action) {
 
 .calendar-section {
   flex: 0 0 auto;
-  max-height: 42%;
 }
 
 .channel-section {

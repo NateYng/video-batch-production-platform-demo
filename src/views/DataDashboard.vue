@@ -155,7 +155,7 @@ const lowEfficiencyAssets = [
 
 <template>
   <div class="page-shell data-dashboard">
-    <div class="page-toolbar with-actions">
+    <div class="page-toolbar with-actions dash-toolbar">
       <el-tabs v-model="activeTab" class="compact-tabs dash-tabs-inline">
         <el-tab-pane v-for="tab in tabs" :key="tab" :label="tab" :name="tab" />
       </el-tabs>
@@ -169,51 +169,51 @@ const lowEfficiencyAssets = [
       </div>
     </div>
 
-    <div class="metric-grid compact cols-6">
-      <MetricCard
-        v-for="card in kpiCards"
-        :key="card.label"
-        :label="card.label"
-        :value="card.value"
-        :trend="card.trend"
-        :color="card.color"
-        :prefix="card.prefix"
-        :suffix="card.suffix"
-      />
-    </div>
-
     <div class="page-split">
       <div class="page-split-main">
-        <div class="charts-grid compact">
-          <div class="page-card chart-card compact">
+        <div class="metric-grid dash-kpi cols-6">
+          <MetricCard
+            v-for="card in kpiCards"
+            :key="card.label"
+            :label="card.label"
+            :value="card.value"
+            :trend="card.trend"
+            :color="card.color"
+            :prefix="card.prefix"
+            :suffix="card.suffix"
+          />
+        </div>
+
+        <div class="charts-grid dash-charts">
+          <div class="page-card chart-card dash-chart">
             <h4>生产量趋势</h4>
-            <div class="chart-body"><VChart :option="productionTrendOption" style="height: 100%" autoresize /></div>
+            <div class="chart-body"><VChart :option="productionTrendOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card compact">
+          <div class="page-card chart-card dash-chart">
             <h4>失败原因分布</h4>
-            <div class="chart-body"><VChart :option="failureReasonOption" style="height: 100%" autoresize /></div>
+            <div class="chart-body"><VChart :option="failureReasonOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card compact">
+          <div class="page-card chart-card dash-chart">
             <h4>风险等级分布</h4>
-            <div class="chart-body"><VChart :option="riskLevelOption" style="height: 100%" autoresize /></div>
+            <div class="chart-body"><VChart :option="riskLevelOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card compact">
+          <div class="page-card chart-card dash-chart">
             <h4>渠道播放效果</h4>
-            <div class="chart-body"><VChart :option="channelCompareOption" style="height: 100%" autoresize /></div>
+            <div class="chart-body"><VChart :option="channelCompareOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card compact">
+          <div class="page-card chart-card dash-chart">
             <h4>完播率分布</h4>
-            <div class="chart-body"><VChart :option="completionDistOption" style="height: 100%" autoresize /></div>
+            <div class="chart-body"><VChart :option="completionDistOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card compact">
+          <div class="page-card chart-card dash-chart">
             <h4>模板效果 TOP5</h4>
-            <div class="chart-body"><VChart :option="templateTop5Option" style="height: 100%" autoresize /></div>
+            <div class="chart-body"><VChart :option="templateTop5Option" autoresize /></div>
           </div>
         </div>
       </div>
 
       <aside class="page-split-side">
-        <div class="page-card fill-card">
+        <div class="page-card fill-card dash-side">
           <el-tabs v-model="sideTab" class="side-tabs compact-tabs">
             <el-tab-pane label="AI建议" name="suggest">
               <div v-for="(s, i) in aiSuggestions" :key="i" class="suggest-item">
@@ -247,6 +247,10 @@ const lowEfficiencyAssets = [
 </template>
 
 <style scoped>
+.dash-toolbar {
+  flex-shrink: 0;
+}
+
 .dash-tabs-inline {
   flex: 1;
   min-width: 0;
@@ -254,6 +258,15 @@ const lowEfficiencyAssets = [
 
 .dash-tabs-inline :deep(.el-tabs__header) {
   margin-bottom: 0;
+}
+
+.dash-side {
+  padding: 12px 14px;
+}
+
+.chart-body :deep(.echarts) {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .suggest-item {
