@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>视频批量生产平台 · 产品介绍手册</title>
+<style>
+  :root{
+    --brand:#4f46e5; --brand-2:#6366f1; --brand-3:#818cf8; --brand-soft:#eef2ff; --brand-line:#c7d2fe;
+    --ink:#0a0a0a; --ink-2:#171717; --muted:#737373; --muted-2:#9a9a9a;
+    --line:#e6e6e6; --line-2:#efefef; --bg:#ffffff; --card:#f7f7f7; --card-2:#f1f1f1;
+    --success:#17a34a; --success-bg:#e9f7ee; --error:#e60a64; --info:#2563eb; --info-bg:#eaf1fe;
+    --dark:#0f172a; --dark-card:#1e293b;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"PingFang SC","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    color:var(--ink); background:#dcdde0; line-height:1.72;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .page{
+    position:relative; width:210mm; height:296mm; padding:17mm 15mm 16mm;
+    background:var(--bg); overflow:hidden;
+  }
+  @media screen{
+    .page{margin:0 auto 14px; box-shadow:0 2px 10px rgba(0,0,0,.14);}
+    .page:last-child{margin-bottom:0;}
+  }
+  body{counter-reset:pg;}
+  .page:not(.cover):not(.back){counter-increment:pg;}
+  .pfoot{
+    position:absolute; left:15mm; right:15mm; bottom:9mm;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:10px; color:var(--muted-2); border-top:1px solid var(--line-2); padding-top:6px;
+  }
+  .pfoot .num::after{content:counter(pg);}
+  h1,h2,h3,h4,p{margin:0;}
+  .kicker{display:inline-flex; align-items:center; gap:8px; margin-bottom:12px;}
+  .kicker .no{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:30px; height:22px; padding:0 8px; border-radius:6px;
+    background:var(--brand); color:#fff; font-weight:700; font-size:12.5px; letter-spacing:.5px;
+  }
+  .kicker .ktxt{font-size:12.5px; font-weight:600; color:var(--muted); letter-spacing:.6px;}
+  .sec-title{font-size:25px; font-weight:800; letter-spacing:-.2px; color:var(--ink); line-height:1.25;}
+  .sec-sub{font-size:13.5px; color:var(--muted); margin-top:8px; max-width:150mm;}
+  .divide{height:1px; background:var(--line); margin:14px 0;}
+  .lead{font-size:14px; color:var(--ink-2);}
+  .muted{color:var(--muted);} .small{font-size:12.5px;} .xs{font-size:11px;}
+  .b{font-weight:700;} .brandc{color:var(--brand);}
+  .grid{display:grid; gap:12px;}
+  .g2{grid-template-columns:1fr 1fr;} .g3{grid-template-columns:1fr 1fr 1fr;} .g4{grid-template-columns:repeat(4,1fr);}
+  .card{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
+  .card.soft{background:var(--card);}
+  .card h4{font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:5px;}
+  .card p{font-size:12.5px; color:var(--muted); line-height:1.62;}
+  .chip{display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:600;}
+  .chip.brand{background:var(--brand-soft); color:#3730a3; border:1px solid var(--brand-line);}
+  .chip.neu{background:var(--card-2); color:var(--muted); border:1px solid var(--line);}
+  .chip.ok{background:var(--success-bg); color:var(--success); border:1px solid #cdeedd;}
+  .callout{border:1px solid var(--brand-line); border-left:4px solid var(--brand); background:var(--brand-soft); border-radius:10px; padding:12px 15px;}
+  .callout.info{border-color:#cfe0fb; border-left-color:var(--info); background:var(--info-bg);}
+  .callout h4{font-size:13.5px; font-weight:700; margin-bottom:4px; color:var(--ink);}
+  .callout p{font-size:12.5px; color:var(--ink-2); line-height:1.6;}
+  .num-badge{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--brand); color:#fff; font-weight:700; font-size:13px; flex:0 0 auto;}
+  table.cmp{width:100%; border-collapse:collapse; font-size:12px;}
+  table.cmp th, table.cmp td{border:1px solid var(--line); padding:9px 11px; vertical-align:top; text-align:left;}
+  table.cmp thead th{background:var(--card); font-weight:700; font-size:12px;}
+  table.cmp .hicell{background:var(--brand-soft);}
+  table.cmp th.hi{background:var(--brand); color:#fff;}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
+  .stat .v{font-size:22px; font-weight:800; color:var(--brand);}
+  .stat .l{font-size:11.5px; color:var(--muted); margin-top:3px; line-height:1.5;}
+  ul.clean{margin:0; padding-left:0; list-style:none;}
+  ul.clean li{position:relative; padding-left:16px; font-size:12.5px; color:var(--ink-2); line-height:1.7;}
+  ul.clean li::before{content:""; position:absolute; left:0; top:9px; width:6px; height:6px; border-radius:50%; background:var(--brand);}
+  .cover{display:flex; flex-direction:column; color:var(--ink);}
+  .brandmark{display:flex; align-items:center; gap:14px;}
+  .logo{width:46px; height:46px; border-radius:12px; background:var(--brand); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px; line-height:1;}
+  .brandmark .wm{font-size:22px; line-height:1.2; font-weight:800; letter-spacing:.2px; max-width:140mm;}
+  .cover-mid{margin-top:48mm;}
+  .eyebrow{font-size:13px; font-weight:700; color:var(--brand); letter-spacing:2px;}
+  .cover h1{font-size:42px; line-height:1.15; font-weight:800; letter-spacing:-1px; margin-top:14px;}
+  .cover .subtitle{font-size:16px; color:var(--muted); margin-top:18px; max-width:150mm; line-height:1.7;}
+  .cover .tags{display:flex; gap:10px; margin-top:26px; flex-wrap:wrap;}
+  .cover .tag{padding:8px 14px; border-radius:10px; border:1px solid var(--line); background:var(--card); font-size:12.5px;}
+  .cover .tag b{color:var(--brand);}
+  .cover-foot{position:absolute; left:15mm; right:15mm; bottom:15mm; display:flex; justify-content:space-between; align-items:flex-end; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:12px;}
+  .toc-item{display:flex; align-items:baseline; gap:12px; padding:9px 0; border-bottom:1px solid var(--line-2);}
+  .toc-item .tno{color:var(--brand); font-weight:700; width:26px; font-size:13px;}
+  .toc-item .tt{font-size:14px; font-weight:600; color:var(--ink);}
+  .toc-item .td{font-size:11.5px; color:var(--muted-2);}
+  .toc-item .dots{flex:1; border-bottom:1px dotted var(--line); transform:translateY(-3px);}
+  .toc-item .pg{color:var(--muted); font-size:12.5px; font-weight:600;}
+  .role-card{border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--bg);}
+  .role-card .rt{font-size:13px; font-weight:700;}
+  .role-card .rd{font-size:11.5px; color:var(--muted); margin-top:4px; line-height:1.55;}
+  .step{display:flex; gap:12px; align-items:flex-start; padding:11px 0; border-bottom:1px dashed var(--line);}
+  .step:last-child{border-bottom:none;}
+  .step .sc{font-size:13px; font-weight:700;}
+  .step .sd{font-size:12px; color:var(--muted); margin-top:3px; line-height:1.6;}
+  .scn{border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--bg);}
+  .scn .tag{font-size:11px; color:var(--brand); font-weight:700; letter-spacing:.5px;}
+  .scn h4{font-size:15px; font-weight:800; margin:6px 0 8px;}
+  .scn .rowline{font-size:12px; color:var(--ink-2); line-height:1.65; margin-top:5px;}
+  .scn .rowline b{color:var(--ink);}
+  .figframe{border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:var(--card);}
+  .flow-row{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin:8px 0;}
+  .flow-box{padding:8px 14px; border-radius:8px; border:1.5px solid var(--brand-line); background:var(--brand-soft); font-size:11.5px; font-weight:700; color:#3730a3; text-align:center; min-width:72px;}
+  .flow-arrow{color:var(--brand); font-size:16px; font-weight:700;}
+  .back{background:var(--dark); color:#fff; display:flex; flex-direction:column; justify-content:space-between;}
+  .back .logo{background:var(--brand);}
+  .back h2{font-size:28px; font-weight:800; line-height:1.3;}
+  .back .muted{color:#94a3b8;}
+  .back .line{height:1px; background:#334155; margin:18px 0;}
+  @media print{
+    html,body{background:#fff; margin:0; padding:0;}
+    .page{margin:0; box-shadow:none; break-after:page; page-break-after:always;}
+    .page:last-child{break-after:auto; page-break-after:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<section class="page cover">
+  <div class="brandmark">
+    <div class="logo">VB</div>
+    <div class="wm">视频批量生产平台</div>
+  </div>
+  <div class="cover-mid">
+    <div class="eyebrow">产品介绍手册</div>
+    <h1>从创意到发布，<br>一条视频生产流水线。</h1>
+    <p class="subtitle">视频批量生产平台由 <b class="brandc">六大模块</b> 组成：工作台统揽全局，生产中心承接三种创作模式，审核中心守住合规底线，发布中心对接多渠道排期，数据中心驱动复盘优化，系统管理保障权限与成本——让团队"怎么组织生产"，决定 AI 能帮你规模化到哪。</p>
+    <div class="tags">
+      <div class="tag"><b>批量任务</b> · 万级规模生产</div>
+      <div class="tag"><b>模板创作</b> · 快速复用出片</div>
+      <div class="tag"><b>智能体编排</b> · 自定义流程策略</div>
+    </div>
+  </div>
+  <div class="cover-foot">
+    <div>面向企业与团队的 AI 原生视频批量生产中台</div>
+    <div>v1.0 · 2026</div>
+  </div>
+</section>
+
+<!-- 目录 -->
+<section class="page">
+  <div class="kicker"><span class="no">目录</span><span class="ktxt">CONTENTS</span></div>
+  <h2 class="sec-title">这本手册讲什么</h2>
+  <p class="sec-sub">10 分钟，让你从不了解本平台，到清楚它解决什么问题、由什么组成、能为你带来什么。</p>
+  <div style="margin-top:18px;">
+    <div class="toc-item"><span class="tno">01</span><span class="tt">一页读懂平台</span><span class="td">— 它是什么、适合谁</span><span class="dots"></span><span class="pg">02</span></div>
+    <div class="toc-item"><span class="tno">02</span><span class="tt">你是否被这些问题困扰</span><span class="td">— 规模化视频的新麻烦</span><span class="dots"></span><span class="pg">03</span></div>
+    <div class="toc-item"><span class="tno">03</span><span class="tt">六个模块，一个闭环</span><span class="td">— 平台的核心</span><span class="dots"></span><span class="pg">04</span></div>
+    <div class="toc-item"><span class="tno">04</span><span class="tt">生产中心能为你做什么</span><span class="td">— 三种模式 + 任务管理</span><span class="dots"></span><span class="pg">05</span></div>
+    <div class="toc-item"><span class="tno">05</span><span class="tt">工作台 · 实景</span><span class="td">— 一屏掌控全局</span><span class="dots"></span><span class="pg">06</span></div>
+    <div class="toc-item"><span class="tno">06</span><span class="tt">智能体编排 · 实景</span><span class="td">— 画布与流程模拟</span><span class="dots"></span><span class="pg">07</span></div>
+    <div class="toc-item"><span class="tno">07</span><span class="tt">审核与发布能为你做什么</span><span class="td">— 质检 + 多渠道</span><span class="dots"></span><span class="pg">08</span></div>
+    <div class="toc-item"><span class="tno">08</span><span class="tt">从任务到发布，走一遍</span><span class="td">— 端到端</span><span class="dots"></span><span class="pg">09</span></div>
+    <div class="toc-item"><span class="tno">09</span><span class="tt">典型场景（上）</span><span class="td">— 市场运营 / 短视频团队</span><span class="dots"></span><span class="pg">10</span></div>
+    <div class="toc-item"><span class="tno">10</span><span class="tt">典型场景（下）</span><span class="td">— 内容审核 / 管理层</span><span class="dots"></span><span class="pg">11</span></div>
+    <div class="toc-item"><span class="tno">11</span><span class="tt">为什么选择本平台</span><span class="td">— 和其它工具的区别</span><span class="dots"></span><span class="pg">12</span></div>
+    <div class="toc-item"><span class="tno">12</span><span class="tt">它能带来什么价值</span><span class="td">— 收益一览</span><span class="dots"></span><span class="pg">13</span></div>
+    <div class="toc-item"><span class="tno">13</span><span class="tt">安全 · 合规 · 部署</span><span class="td">— 企业关心的</span><span class="dots"></span><span class="pg">14</span></div>
+    <div class="toc-item"><span class="tno">14</span><span class="tt">如何开始</span><span class="td">— 5 分钟上手</span><span class="dots"></span><span class="pg">15</span></div>
+    <div class="toc-item"><span class="tno">15</span><span class="tt">常见问答 & 术语</span><span class="td">— FAQ</span><span class="dots"></span><span class="pg">16</span></div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 01 一页读懂 -->
+<section class="page">
+  <div class="kicker"><span class="no">01</span><span class="ktxt">一页读懂平台</span></div>
+  <h2 class="sec-title">一句话：把"创意"变成可批量、可审核、可发布的视频资产</h2>
+  <p class="sec-sub">视频批量生产平台是一套 AI 原生的企业级视频生产中台。它不只让个人"剪得更快"，更让团队"产得更稳"——从任务创建就开始结构化，一路可追溯到审核与发布，数据回流驱动下一轮优化。</p>
+
+  <div class="grid g3" style="margin-top:16px;">
+    <div class="card"><h4 class="brandc">批量任务生产线</h4><p>上传脚本/素材，选择模板与数字人，一次提交 1,000~10,000 条视频批量生成，队列调度、失败重试、成本预估全程可视。</p></div>
+    <div class="card"><h4 class="brandc">模板式创作台</h4><p>运营与创意团队在模板库中选型、配置变量字段与适用渠道，从模板一键生成任务，复用率与完播数据一目了然。</p></div>
+    <div class="card"><h4 class="brandc">智能体编排平台</h4><p>在画布上拖拽编排脚本生成→配音→合成→质检→发布等节点，配置模型、重试策略与风险阈值，流程可保存为模板复用。</p></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px;">
+    <h4>核心不是"又一个剪辑工具"，而是一条被认真对待的视频生产流水线</h4>
+    <p>任务、模板、流程、资产、审核、发布、数据在六大模块之间循环流动——视频生产这件事，第一次被放进企业级中台里，被当成和营销投放一样重要的一环。</p>
+  </div>
+
+  <h3 style="font-size:15px;font-weight:700;margin:18px 0 10px;">这本手册适合谁</h3>
+  <div class="grid g4">
+    <div class="role-card"><div class="rt">业务 / 运营决策者</div><div class="rd">关心产能、成本可控、合规可审计、多渠道发布 ROI。</div></div>
+    <div class="role-card"><div class="rt">市场运营 / 短视频团队</div><div class="rd">关心批量出片、模板复用、任务进度与失败重试。</div></div>
+    <div class="role-card"><div class="rt">内容审核员</div><div class="rd">关心 AI 质检分层、人工审核效率、规则可配置。</div></div>
+    <div class="role-card"><div class="rt">数据分析师 / 管理层</div><div class="rd">关心生产效率、内容质量、发布效果与成本看板。</div></div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 02 痛点 -->
+<section class="page">
+  <div class="kicker"><span class="no">02</span><span class="ktxt">你是否被这些问题困扰</span></div>
+  <h2 class="sec-title">AI 让单条视频更快，却让规模化生产更难管、更难审、更难算清账</h2>
+  <p class="sec-sub">剪一条视频只是交付链路里的一小段。当团队要日产千条、多渠道同步发布时，真正的瓶颈从"剪得慢"变成了"排不上、审不过来、出了问题说不清"。</p>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card soft"><h4>① 产能上去了，队列管不住</h4><p>任务一多就排队失控，不知道哪条在生成、哪条卡住了、失败该不该重试，运营只能反复催技术查日志。</p></div>
+    <div class="card soft"><h4>② 模板各做各的，复用率极低</h4><p>每个运营有自己的"私藏模板"，口径不统一、变量字段对不上，换个人就要从头搭一遍。</p></div>
+    <div class="card soft"><h4>③ 合规靠人肉，审核队列爆炸</h4><p>视频量一上来，审核员看不过来；没有 AI 分层，高风险和低风险混在一起，效率与质量双输。</p></div>
+    <div class="card soft"><h4>④ 发布靠手工，多渠道对不上</h4><p>抖音、视频号、官网各发各的，排期靠表格、状态靠微信群，出了错不知道发到了哪。</p></div>
+    <div class="card soft"><h4>⑤ 成本是一笔糊涂账</h4><p>算力、配音、数字人、合规检测各算各的，月底对不上预算，不知道哪类任务最烧钱。</p></div>
+    <div class="card" style="border-color:var(--brand-line);background:var(--brand-soft);">
+      <h4 class="brandc">平台的回答</h4>
+      <p>把"任务→生成→质检→审核→发布→数据"接成一条可追溯的链路：源头可配置、进度可见、审核有据、成本可查。<b>后面几页逐一展开。</b></p>
+    </div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 03 六个模块 -->
+<section class="page">
+  <div class="kicker"><span class="no">03</span><span class="ktxt">平台是什么</span></div>
+  <h2 class="sec-title">六个模块，一个闭环</h2>
+  <p class="sec-sub">任务、资产、审核、发布和数据在模块之间循环：从工作台出发，经生产中心批量出片，过审核中心合规把关，由发布中心触达渠道，数据中心回流优化——越用越顺、越产越省。</p>
+
+  <div class="figframe" style="margin-top:14px;">
+    <div class="flow-row">
+      <div class="flow-box">工作台<br><span style="font-weight:400;font-size:10px;color:var(--muted)">统揽全局</span></div>
+      <span class="flow-arrow">›</span>
+      <div class="flow-box">生产中心<br><span style="font-weight:400;font-size:10px;color:var(--muted)">三种模式出片</span></div>
+      <span class="flow-arrow">›</span>
+      <div class="flow-box">审核中心<br><span style="font-weight:400;font-size:10px;color:var(--muted)">AI+人工质检</span></div>
+      <span class="flow-arrow">›</span>
+      <div class="flow-box">发布中心<br><span style="font-weight:400;font-size:10px;color:var(--muted)">多渠道排期</span></div>
+    </div>
+    <div class="flow-row" style="margin-top:4px;">
+      <div class="flow-box" style="background:#eaf1fe;border-color:#cfe0fb;color:#1d4ed8;">数据中心<br><span style="font-weight:400;font-size:10px;color:var(--muted)">复盘优化</span></div>
+      <span class="flow-arrow" style="color:#2563eb;">↺</span>
+      <div class="flow-box" style="background:#f1f5f9;border-color:#cbd5e1;color:#475569;">系统管理<br><span style="font-weight:400;font-size:10px;color:var(--muted)">权限·模型·预算</span></div>
+      <span style="font-size:11px;color:var(--muted);margin-left:8px;">数据回流 · 让下一轮生产起点更高、越产越聪明</span>
+    </div>
+  </div>
+
+  <div class="grid g3" style="margin-top:16px;">
+    <div class="stat"><div class="v">8,420</div><div class="l">今日生成（条）<br>较昨日 ↑18.6%</div></div>
+    <div class="stat"><div class="v">316</div><div class="l">待审核（条）<br>审核中心角标实时更新</div></div>
+    <div class="stat"><div class="v">96.8%</div><div class="l">发布成功率<br>抖音 / 视频号 / 官网</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px;">
+    <div class="callout info"><h4>为什么是"闭环"，不是"工具堆"</h4><p>普通方案里，剪辑工具、审核表格、发布后台各存一处、互不相认。在本平台里它们共享同一份任务与资产事实源，发布效果还会沉淀回数据看板——每转一圈，团队对产能与成本的把握就更准一层。</p></div>
+    <div class="callout"><h4>交互 Demo 已上线</h4><p>12 页全交互前端 Demo 已部署，可在线体验工作台、批量任务、智能体画布、审核台、发布中心与数据看板等完整流程。</p></div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 04 生产中心 -->
+<section class="page">
+  <div class="kicker"><span class="no">04</span><span class="ktxt">生产中心 · 能为你做什么</span></div>
+  <h2 class="sec-title">团队怎么组织生产，就决定了 AI 能帮你规模化到哪</h2>
+  <p class="sec-sub">生产中心把批量任务、模板创作、智能体编排、任务详情、视频结果与资产中心串成一条产线——不是"零散工具拼盘"，而是把"做视频"做成中台里被认真对待的核心环节。</p>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card">
+      <h4>批量任务 · 万级规模调度</h4>
+      <p>5 步向导：视频类型 → 上传校验 → 模板/数字人/字幕 → 风控策略 → 发布配置。支持 1k~10k 条/任务，队列健康度、失败原因分布、成本预警侧栏实时可见。</p>
+    </div>
+    <div class="card">
+      <h4>模板创作台 · 复用驱动产能</h4>
+      <p>类型页签 + 卡片网格，右侧展示变量字段、适用渠道与输出包。从模板一键生成任务，生成记录表追踪每次产出，高复用模板一目了然。</p>
+    </div>
+    <div class="card">
+      <h4>智能体编排画布 · 流程可编程</h4>
+      <p>Vue Flow 画布拖拽连线：脚本生成 → 分镜 → 配音 → 数字人 → 合成 → 机器质检 → 人工审核 → 发布打包。节点可配模型、重试、风险阈值，支持运行模拟与保存为模板。</p>
+    </div>
+    <div class="card">
+      <h4>任务详情 · 六阶段流水</h4>
+      <p>进度总览 + 六阶段流水（脚本/素材/生成/质检/审核/发布），批次列表、失败原因、成本与并发侧栏。单条失败不阻断整批，支持一键重试失败条目。</p>
+    </div>
+    <div class="card">
+      <h4>视频结果列表 · 轻编辑 + 提交审核</h4>
+      <p>筛选 + 表格 + 右侧预览面板（详情/字幕/封面/发布页签）。支持改标题、换封面等轻编辑，批量选中提交审核，写入审核队列。</p>
+    </div>
+    <div class="card">
+      <h4>资产中心 · 六类资产统一管理</h4>
+      <p>品牌素材 / 媒体素材 / 数字人 / 知识库 / 账号渠道 / 模板资产分类管理，版权与审核状态可追溯，复用排行侧栏指导选型。</p>
+    </div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 05 工作台实景 -->
+<section class="page">
+  <div class="kicker"><span class="no">05</span><span class="ktxt">工作台 · 实景</span></div>
+  <h2 class="sec-title">一屏掌控全局，从指标到行动</h2>
+  <p class="sec-sub">登录即见今日概览四卡、三模式入口、任务监控表、风险质检队列、渠道效果与快捷操作——不用跳转五个系统，运营每天从这里开始。</p>
+
+  <div class="grid g2" style="margin-top:14px;">
+    <div class="card soft">
+      <h4>今日概览四卡</h4>
+      <ul class="clean" style="margin-top:8px;">
+        <li>今日生成 <b>8,420</b> ↑18.6%</li>
+        <li>待审 <b>316</b> ↑7.2% → 点击跳转审核台</li>
+        <li>发布成功率 <b>96.8%</b> ↑2.1%</li>
+        <li>失败待重试 <b>214</b> ↓3.4%</li>
+      </ul>
+    </div>
+    <div class="card soft">
+      <h4>三模式生产入口</h4>
+      <ul class="clean" style="margin-top:8px;">
+        <li><b>批量任务生产线</b> — 大规模模板批量生成与管理</li>
+        <li><b>模板式创作台</b> — 基于模板快速生成视频</li>
+        <li><b>智能体编排平台</b> — 自定义流程与智能体策略</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h4>批量任务监控 + 风险质检队列</h4>
+    <p style="margin-top:6px;">状态页签（全部 / 运行中 / 已完成 / 部分失败 / 已取消）+ 多条件筛选；右侧风险队列展示高风险必审 / 中风险抽检 / 低风险放行计数，「去审核」一键跳转审核中心。</p>
+  </div>
+
+  <div class="grid g3" style="margin-top:12px;">
+    <div class="card soft"><h4>渠道发布效果</h4><p>抖音 / 视频号 / 官网播放量与成功率对比，辅助判断哪条产线 ROI 更高。</p></div>
+    <div class="card soft"><h4>快捷操作</h4><p>导入脚本、上传素材、新建模板、配置流程、渠道管理——常用动作一步直达。</p></div>
+    <div class="card soft"><h4>累计指标条</h4><p>累计生成总量、算力消耗、预估成本、并发任务数、平均生成时长，数据每 5 分钟更新。</p></div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 06 智能体编排实景 -->
+<section class="page">
+  <div class="kicker"><span class="no">06</span><span class="ktxt">智能体编排 · 实景</span></div>
+  <h2 class="sec-title">让流程可视化，把策略配在节点上</h2>
+  <p class="sec-sub">中间是 Vue Flow 节点画布，右侧是当前节点参数面板，底部是运行日志与运行概览表——编排、配置、模拟、上线，全在一个页面完成。</p>
+
+  <div class="figframe" style="margin-top:14px;">
+    <div class="flow-row">
+      <div class="flow-box">脚本生成</div><span class="flow-arrow">→</span>
+      <div class="flow-box">分镜生成</div><span class="flow-arrow">→</span>
+      <div class="flow-box">智能配音</div><span class="flow-arrow">→</span>
+      <div class="flow-box">数字人驱动</div><span class="flow-arrow">→</span>
+      <div class="flow-box">视频合成</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-box">机器质检</div><span class="flow-arrow">→</span>
+      <div class="flow-box" style="border-style:dashed;">人工审核<br><span style="font-size:10px;font-weight:400">决策分支</span></div><span class="flow-arrow">→</span>
+      <div class="flow-box">发布打包</div>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px;">
+    <div class="card">
+      <h4>节点参数面板（以机器质检为例）</h4>
+      <ul class="clean" style="margin-top:8px;">
+        <li>模型选择：Quality-Vision v2.1</li>
+        <li>重试策略：失败 2 次 / 间隔 30s / 超时 120s</li>
+        <li>风险规则：高 ≥70 / 中 40-69 / 低 &lt;40</li>
+        <li>人工节点：启用审核 + 规则可配置</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>运行流程模拟</h4>
+      <p>点击「运行」后节点状态逐个流转（等待→运行中→完成/失败），运行日志滚动输出，运行概览表记录每节点耗时与输出条目数——上线前先验流程，少踩坑。</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:12px;">
+    <h4>流程可保存为模板</h4>
+    <p>验证通过的编排方案一键保存到模板库，下次创建批量任务时直接引用——团队的最佳实践第一次真正"留在系统里"。</p>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 07 审核与发布 -->
+<section class="page">
+  <div class="kicker"><span class="no">07</span><span class="ktxt">审核与发布 · 能为你做什么</span></div>
+  <h2 class="sec-title">视频进来，合规出去——而且每一步都有据可查</h2>
+  <p class="sec-sub">审核中心用 AI 分层 + 人工复核守住底线，发布中心用排期日历 + 渠道列表触达用户，效果数据回流看板形成闭环。</p>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card">
+      <h4 class="brandc">质检与审核台</h4>
+      <ul class="clean" style="margin-top:8px;">
+        <li>风险分层页签：高风险必审 42 / 中风险抽检 318 / 低风险放行 6,920</li>
+        <li>AI 质检分 + 命中规则 R-xx + 建议处理</li>
+        <li>通过 / 驳回 / 打回修改，操作即时流转</li>
+        <li>审核规则配置：阈值 70 分、中风险抽检 20%、品牌必审开关</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 class="brandc">发布中心</h4>
+      <ul class="clean" style="margin-top:8px;">
+        <li>待发布概览：抖音 2,400 / 视频号 1,860 / 官网 120</li>
+        <li>排期日历（日/周视图）+ 渠道发布列表</li>
+        <li>发布前校验清单 + 一键发布模拟</li>
+        <li>效果反馈：播放量、互动率回流数据看板</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout info" style="margin-top:14px;">
+    <h4>审核前的"门禁"：AI 质检分层</h4>
+    <p>机器质检分 ≥70 进入高风险必审；40-69 按 20% 抽检；&lt;40 可规则放行并保留质检记录。把"审核质量"从"靠人自觉"变成"系统把关"——出了问题能追溯、能定责、能复盘。</p>
+  </div>
+
+  <div class="grid g4" style="margin-top:14px;">
+    <div class="chip brand">AI 质检阈值 70 分</div>
+    <div class="chip brand">高风险必审</div>
+    <div class="chip neu">中风险抽检 20%</div>
+    <div class="chip ok">低风险规则放行</div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 08 端到端 -->
+<section class="page">
+  <div class="kicker"><span class="no">08</span><span class="ktxt">从任务到发布</span></div>
+  <h2 class="sec-title">一个批量任务，走完全程</h2>
+  <p class="sec-sub">以一个常见的"模板批量生成 + 多渠道发布"为例，看看它如何在六大模块之间流动、并最终沉淀为团队产能资产。</p>
+
+  <div style="margin-top:16px;">
+    <div class="step"><span class="num-badge">1</span><div><div class="sc">在工作台选择「批量任务生产线」，进入 5 步向导</div><div class="sd">上传脚本 xlsx、选择模板与数字人、配置风控策略与发布渠道，右侧任务概要 + 成本预估实时联动。</div></div></div>
+    <div class="step"><span class="num-badge">2</span><div><div class="sc">提交后进入批量任务中心，队列调度开始生成</div><div class="sd">概览卡显示排队中 12 / 生成中 38 / 部分失败 7 / 今日完成 64；失败可重试，单条失败不阻断整批。</div></div></div>
+    <div class="step"><span class="num-badge">3</span><div><div class="sc">生成完成 → 视频结果列表 → 轻编辑 → 批量提交审核</div><div class="sd">运营可改标题、换封面；选中条目写入审核队列，工作台待审角标实时更新。</div></div></div>
+    <div class="step"><span class="num-badge">4</span><div><div class="sc">审核员在质检台分层处理，通过后进入发布池</div><div class="sd">AI 质检分 + 规则编号辅助判断；高风险必审、中风险抽检、低风险放行，全程留痕。</div></div></div>
+    <div class="step"><span class="num-badge">5</span><div><div class="sc">发布中心排期发布，效果回流数据看板</div><div class="sd">抖音 / 视频号 / 官网一键或排期发布；播放量、成功率、单条成本进入复盘，指导下一轮模板选型。</div></div></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px;">
+    <h4>关键差别：全过程"有据可查"</h4>
+    <p>从一份脚本到千条视频上线，中间每一步都连着上一步：任务进度知道卡在哪、审核有质检分与规则、成本有预算预警、经验留在模板与数据里。这就是"中台化生产"与"工具拼凑"的根本区别。</p>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 09 典型场景上 -->
+<section class="page">
+  <div class="kicker"><span class="no">09</span><span class="ktxt">典型场景（上）</span></div>
+  <h2 class="sec-title">不同的团队，同一套底层能力</h2>
+  <p class="sec-sub">以下为典型使用场景示意，帮助你判断本平台与自身情况的契合度。</p>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="scn">
+      <div class="tag">场景 A · 市场运营团队</div>
+      <h4>日产千条，多渠道同步，最需要"排得上、发得出"</h4>
+      <div class="rowline"><b>常见困扰：</b>活动节点密集，手工剪辑跟不上，发布靠人肉对表，出了错不知道发到了哪。</div>
+      <div class="rowline"><b>平台怎么帮：</b>批量任务 + 模板复用 + 发布排期 + 渠道效果看板，一屏掌控产能与 ROI。</div>
+      <div class="rowline"><b>带来什么：</b>同样人手产出更多视频、发布更准时、复盘有数据（示意）。</div>
+    </div>
+    <div class="scn">
+      <div class="tag">场景 B · 短视频制作团队</div>
+      <h4>模板驱动、数字人加持，复用率决定产能上限</h4>
+      <div class="rowline"><b>常见困扰：</b>每条视频从零搭，数字人/配音/字幕各调各的，好模板藏在个人电脑里。</div>
+      <div class="rowline"><b>平台怎么帮：</b>模板创作台 + 资产中心 + 智能体编排，变量字段标准化、流程可保存复用。</div>
+      <div class="rowline"><b>带来什么：</b>模板复用覆盖度提升、单条成本下降、新人上手更快（示意）。</div>
+    </div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 10 典型场景下 -->
+<section class="page">
+  <div class="kicker"><span class="no">10</span><span class="ktxt">典型场景（下）</span></div>
+  <h2 class="sec-title">审核与管理层，同样受益</h2>
+  <p class="sec-sub">以下为典型使用场景示意，帮助你判断本平台与自身情况的契合度。</p>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="scn">
+      <div class="tag">场景 C · 内容审核团队</div>
+      <h4>量大、合规严，最需要"分得清、审得快"</h4>
+      <div class="rowline"><b>常见困扰：</b>待审队列爆炸，高风险和低风险混在一起，规则靠口头传达，出了事说不清依据。</div>
+      <div class="rowline"><b>平台怎么帮：</b>AI 质检分层 + 规则编号 R-xx + 审核规则可配置，高风险必审、中风险抽检、低风险放行。</div>
+      <div class="rowline"><b>带来什么：</b>审核效率提升、合规有据可查、规则调整即时生效（示意）。</div>
+    </div>
+    <div class="scn">
+      <div class="tag">场景 D · 管理层 / 数据分析</div>
+      <h4>产能、质量、成本，三笔账要算得清</h4>
+      <div class="rowline"><b>常见困扰：</b>月底对不上预算，不知道哪类任务最烧钱，发布效果和生产效率各看各的报表。</div>
+      <div class="rowline"><b>平台怎么帮：</b>数据看板四页签（生产效率/内容质量/发布效果/资产复用）+ 成本中心预算控制 + AI 复盘建议。</div>
+      <div class="rowline"><b>带来什么：</b>成本可控、异常早发现、决策有数据支撑（示意）。</div>
+    </div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 11 对比 -->
+<section class="page">
+  <div class="kicker"><span class="no">11</span><span class="ktxt">为什么选择本平台</span></div>
+  <h2 class="sec-title">和你可能在用的工具，差在哪</h2>
+  <p class="sec-sub">剪辑软件、通用 AI 助手、发布后台各解决一段问题；本平台把"任务→生成→审核→发布→数据"接成一条可治理的完整链路。</p>
+
+  <table class="cmp" style="margin-top:14px;">
+    <thead>
+      <tr><th>能力维度</th><th>剪辑软件</th><th>通用 AI 助手</th><th>发布后台</th><th class="hi">视频批量生产平台</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>覆盖范围</td><td>单条剪辑</td><td>零散生成</td><td>只到发布</td><td class="hicell">任务→发布全链路</td></tr>
+      <tr><td>批量规模</td><td>手工逐条</td><td>无队列</td><td>不涉及</td><td class="hicell">1k~10k 条/任务</td></tr>
+      <tr><td>流程是否可编排</td><td>否</td><td>提示词</td><td>否</td><td class="hicell">智能体画布 + 模板</td></tr>
+      <tr><td>审核是否分层</td><td>否</td><td>否</td><td>弱</td><td class="hicell">AI 质检 + 规则编号</td></tr>
+      <tr><td>成本是否可视</td><td>否</td><td>否</td><td>否</td><td class="hicell">预算预警 + 成本看板</td></tr>
+      <tr><td>数据是否回流</td><td>否</td><td>会话即忘</td><td>偏发布</td><td class="hicell">四维度复盘 + AI 建议</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid g3" style="margin-top:14px;">
+    <div class="card soft"><h4>与模型共生</h4><p>底层模型越强，生成越快越好——不与模型赛跑，而是把它用在对的节点上。</p></div>
+    <div class="card soft"><h4>越用越省</h4><p>模板与流程沉淀复用，单条成本随规模下降，成为别人搬不走的产能资产。</p></div>
+    <div class="card soft"><h4>权限与预算原生</h4><p>自定义角色、模型 API、审核规则、成本预算——企业级管控是基本盘，不是补丁。</p></div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 12 价值 -->
+<section class="page">
+  <div class="kicker"><span class="no">12</span><span class="ktxt">它能带来什么价值</span></div>
+  <h2 class="sec-title">四件事，直接影响你的产能与成本</h2>
+  <p class="sec-sub">下列为价值方向示意，具体收益需结合你的团队与实际业务量评估。</p>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card"><h4>产能更可预期，队列看得见</h4><p>万级任务队列调度、失败重试、进度六阶段流水，把"不知道还要等多久"变成"每一批都心中有数"。</p></div>
+    <div class="card"><h4>质量更可控，审核有分层</h4><p>AI 质检分 + 风险规则 + 人工复核，高风险必审、低风险放行，审核员精力花在刀刃上。</p></div>
+    <div class="card"><h4>成本更透明，预算有预警</h4><p>今日成本 / 本月预算 / 单条成本 ¥1.86 一屏可见，预算使用 80% 自动预警，不再月底对不上账。</p></div>
+    <div class="card"><h4>经验可沉淀，模板能复用</h4><p>流程保存为模板、资产复用排行、数据看板 AI 复盘建议——团队产能随系统一起积累。</p></div>
+  </div>
+
+  <div class="grid g4" style="margin-top:14px;">
+    <div class="stat"><div class="v">93.6%</div><div class="l">生成成功率<br>（示意）</div></div>
+    <div class="stat"><div class="v">2分18秒</div><div class="l">平均生成耗时<br>（示意）</div></div>
+    <div class="stat"><div class="v">62%</div><div class="l">模板复用覆盖度<br>（示意）</div></div>
+    <div class="stat"><div class="v">¥1.86</div><div class="l">单条成本<br>（示意）</div></div>
+  </div>
+
+  <div class="callout info" style="margin-top:14px;">
+    <h4>诚实说明</h4>
+    <p>本页指标与描述用于表达价值方向，非承诺性 SLA。真实收益取决于团队规模、视频类型与使用深度，欢迎用真实业务做一次试点评估。</p>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 13 安全合规 -->
+<section class="page">
+  <div class="kicker"><span class="no">13</span><span class="ktxt">安全 · 合规 · 部署</span></div>
+  <h2 class="sec-title">企业最关心的几件事，平台生来就考虑了</h2>
+  <p class="sec-sub">面向中大型内容与运营团队设计，把权限、审核、审计与成本管控作为基本盘。</p>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card"><h4>自定义角色与权限点</h4><p>超级管理员 / 市场运营 / 短视频团队 / 内容审核员 / 数据分析师等角色可按功能点灵活配置，数据范围支持全部 / 本部门及以下。</p></div>
+    <div class="card"><h4>审核规则可配置</h4><p>高风险必审、中风险抽检比例、品牌/官网必审开关、AI 质检阈值——管理员一次定义，全团队复用。</p></div>
+    <div class="card"><h4>模型 API 可管可控</h4><p>支持多供应商（如通义千问）、API Key 脱敏、测试连接、调用日志与配额监控，按场景分配模型。</p></div>
+    <div class="card"><h4>成本预算与告警</h4><p>单日预算上限 ¥10,000、单任务上限 ¥5,000、预警阈值 80%；操作日志与告警记录全程可审计。</p></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px;">
+    <h4>一次建设，长期受用</h4>
+    <p>通过本平台交付的视频生产体系，天生带着结构化任务、审核链路与资产沉淀。未来做智能化升级或渠道扩展时，数据和流程"接得住"，避免陷入"各系统孤岛、没人敢动"的困境。</p>
+  </div>
+  <p class="xs muted" style="margin-top:10px;">注：具体部署形态、私有化与合规能力以商务与技术方案为准。</p>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 14 如何开始 -->
+<section class="page">
+  <div class="kicker"><span class="no">14</span><span class="ktxt">如何开始</span></div>
+  <h2 class="sec-title">先从工作台开始，5 分钟跑通第一条批量任务</h2>
+  <p class="sec-sub">工作台是平台的入口。把团队"组织生产"这件事，先做成一件可视化的事，再顺流进入审核与发布。</p>
+
+  <div style="margin-top:16px;">
+    <div class="step"><span class="num-badge">1</span><div><div class="sc">打开在线 Demo，进入工作台首页</div><div class="sd">查看今日概览、三模式入口与任务监控表，熟悉六大模块导航。</div></div></div>
+    <div class="step"><span class="num-badge">2</span><div><div class="sc">创建一条批量任务，走完 5 步向导</div><div class="sd">选择视频类型、上传脚本、选配模板与数字人、设置风控与发布渠道，提交后写入任务列表。</div></div></div>
+    <div class="step"><span class="num-badge">3</span><div><div class="sc">在视频结果列表提交审核，体验审核台分层</div><div class="sd">批量选中 → 提交审核 → 在质检台通过/驳回，观察状态即时流转。</div></div></div>
+    <div class="step"><span class="num-badge">4</span><div><div class="sc">在发布中心排期发布，查看数据看板复盘</div><div class="sd">一键发布模拟 → 效果数据回流 → 打开数据看板查看生产效率与成本指标。</div></div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="callout"><h4>在线交互 Demo</h4><p><b>https://nateyng.github.io/video-batch-production-platform-demo/</b><br>12 页全交互，mock 数据演示，无需登录即可体验完整流程。</p></div>
+    <div class="callout info"><h4>联系我们 / 预约演示</h4><p>希望针对你的行业与业务量做一次试点评估？欢迎联系我们，安排一对一演示与方案沟通。</p></div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 15 FAQ -->
+<section class="page">
+  <div class="kicker"><span class="no">15</span><span class="ktxt">常见问答 & 术语</span></div>
+  <h2 class="sec-title">你可能还想问</h2>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card soft"><h4>和剪辑软件有什么不同？</h4><p>剪辑软件帮"单条剪得更好"，本平台帮"团队产得更稳"：从任务创建到审核发布全链路，支持万级批量调度。</p></div>
+    <div class="card soft"><h4>需要很强的技术背景才能用吗？</h4><p>不需要。运营用工作台与模板台，审核员用质检台，管理员用系统配置；智能体编排面向进阶用户，也有预设模板可复用。</p></div>
+    <div class="card soft"><h4>单任务最多能生成多少条？</h4><p>建议规模 1,000~10,000 条/任务，支持队列、批次、并发与失败自动重试；单条失败不阻断整批。</p></div>
+    <div class="card soft"><h4>会绑定某一个大模型吗？</h4><p>不绑定。系统配置支持多供应商 API（如通义千问），按场景（脚本/配音/质检）自由选择与切换。</p></div>
+    <div class="card soft"><h4>审核规则可以自定义吗？</h4><p>可以。AI 质检阈值、风险分层、中风险抽检比例、品牌/官网必审等规则均可配置，改一处全局生效。</p></div>
+    <div class="card soft"><h4>能私有化部署吗？</h4><p>面向企业级场景设计，支持权限分级、审核审计与成本管控，可按方案私有化部署。</p></div>
+  </div>
+
+  <h3 style="font-size:14px;font-weight:700;margin:18px 0 10px;">小词表</h3>
+  <div class="grid g2">
+    <div class="card"><p><b>批量任务：</b>基于模板/流程一次提交大规模视频生成的生产单元。</p></div>
+    <div class="card"><p><b>智能体编排：</b>在画布上拖拽节点、配置参数、串联生成流程的可视化编排能力。</p></div>
+    <div class="card"><p><b>AI 质检分：</b>机器对视频内容的合规评分，默认阈值 70 分，低于阈值进入人工审核。</p></div>
+    <div class="card"><p><b>风险分层：</b>高 ≥70 / 中 40-69 / 低 &lt;40，决定必审、抽检或规则放行。</p></div>
+  </div>
+  <div class="pfoot"><span>视频批量生产平台 · 从创意到发布，一条视频生产流水线</span><span class="num"></span></div>
+</section>
+
+<!-- 封底 -->
+<section class="page back">
+  <div>
+    <div class="brandmark" style="margin-bottom:24px;">
+      <div class="logo">VB</div>
+      <div class="wm" style="color:#fff;font-size:22px;">视频批量生产平台</div>
+    </div>
+    <h2>从创意到发布，<br>一条视频生产流水线。</h2>
+    <p class="muted" style="margin-top:16px;font-size:14px;line-height:1.7;">让团队"怎么组织生产"，决定 AI 能帮你规模化到哪。<br>从工作台开始，把每一次批量交付，都变成越用越聪明的产能资产。</p>
+    <div class="line"></div>
+    <p style="font-size:13px;">在线 Demo · 产品文档 · 预约演示</p>
+    <p class="muted" style="font-size:12px;margin-top:6px;">https://nateyng.github.io/video-batch-production-platform-demo/</p>
+  </div>
+  <div style="font-size:12px;color:#64748b;">
+    <div>视频批量生产平台 · 产品介绍手册</div>
+    <div style="margin-top:4px;">v1.0 · 2026</div>
+  </div>
+</section>
+
+</body>
+</html>
