@@ -41,14 +41,8 @@ const appStore = useAppStore()
 .page-content {
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-}
-
-.page-content > .page-viewport {
-  flex: 1;
-  min-height: 0;
 }
 </style>

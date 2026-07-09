@@ -45,17 +45,31 @@ const productionTrendOption = computed(() => ({
   ],
 }))
 
+const pieLegend = {
+  orient: 'vertical',
+  right: 0,
+  top: 'middle',
+  itemWidth: 8,
+  itemHeight: 8,
+  itemGap: 6,
+  textStyle: { fontSize: 10, color: '#64748b' },
+}
+
 const failureReasonOption = computed(() => ({
   tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
+  legend: {
+    ...pieLegend,
+    data: ['素材加载', '视频合成', '语音合成', '字幕生成', '风险拦截', '其他'],
+  },
   series: [{
     type: 'pie',
-    radius: ['42%', '68%'],
-    center: ['50%', '45%'],
+    radius: ['28%', '48%'],
+    center: ['30%', '50%'],
     data: [
-      { name: '素材加载失败', value: 32.6 },
-      { name: '视频合成失败', value: 27.8 },
-      { name: '语音合成失败', value: 16.2 },
-      { name: '字幕生成失败', value: 12.5 },
+      { name: '素材加载', value: 32.6 },
+      { name: '视频合成', value: 27.8 },
+      { name: '语音合成', value: 16.2 },
+      { name: '字幕生成', value: 12.5 },
       { name: '风险拦截', value: 6.1 },
       { name: '其他', value: 4.8 },
     ],
@@ -66,10 +80,14 @@ const failureReasonOption = computed(() => ({
 
 const riskLevelOption = computed(() => ({
   tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+  legend: {
+    ...pieLegend,
+    data: ['高风险', '中风险', '低风险'],
+  },
   series: [{
     type: 'pie',
-    radius: ['42%', '68%'],
-    center: ['50%', '45%'],
+    radius: ['28%', '48%'],
+    center: ['30%', '50%'],
     data: [
       { name: '高风险', value: 420 },
       { name: '中风险', value: 1860 },
@@ -185,27 +203,27 @@ const lowEfficiencyAssets = [
         </div>
 
         <div class="charts-grid dash-charts">
-          <div class="page-card chart-card dash-chart">
+          <div class="page-card chart-card dash-chart chart-wide chart-bar">
             <h4>生产量趋势</h4>
             <div class="chart-body"><VChart :option="productionTrendOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card dash-chart">
+          <div class="page-card chart-card dash-chart chart-pie">
             <h4>失败原因分布</h4>
             <div class="chart-body"><VChart :option="failureReasonOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card dash-chart">
+          <div class="page-card chart-card dash-chart chart-pie">
             <h4>风险等级分布</h4>
             <div class="chart-body"><VChart :option="riskLevelOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card dash-chart">
+          <div class="page-card chart-card dash-chart chart-wide chart-bar">
             <h4>渠道播放效果</h4>
             <div class="chart-body"><VChart :option="channelCompareOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card dash-chart">
+          <div class="page-card chart-card dash-chart chart-bar-sm">
             <h4>完播率分布</h4>
             <div class="chart-body"><VChart :option="completionDistOption" autoresize /></div>
           </div>
-          <div class="page-card chart-card dash-chart">
+          <div class="page-card chart-card dash-chart chart-bar-sm">
             <h4>模板效果 TOP5</h4>
             <div class="chart-body"><VChart :option="templateTop5Option" autoresize /></div>
           </div>
@@ -264,9 +282,17 @@ const lowEfficiencyAssets = [
   padding: 12px 14px;
 }
 
+.chart-body {
+  width: 100%;
+}
+
 .chart-body :deep(.echarts) {
   width: 100% !important;
   height: 100% !important;
+}
+
+.chart-pie .chart-body {
+  padding-right: 4px;
 }
 
 .suggest-item {

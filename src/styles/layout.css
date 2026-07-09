@@ -1,20 +1,16 @@
-/* 视口布局：一屏展示，仅内部区域滚动 */
+/* 视口布局：内容不足一屏时铺满，超出时由 page-content 滚动 */
 
 .page-viewport {
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .page-shell {
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
 }
 
 .page-shell.scrollable {
@@ -42,13 +38,10 @@
 }
 
 .page-split {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
   gap: 12px;
-  align-items: stretch;
+  align-items: start;
 }
 
 .page-split.wide-side {
@@ -56,24 +49,23 @@
 }
 
 .page-split-main {
-  min-height: 0;
   min-width: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .page-split-side {
-  min-height: 0;
   min-width: 280px;
   width: 280px;
   max-width: 280px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  overflow: hidden;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  align-self: start;
 }
 
 .page-split.wide-side .page-split-side {
@@ -83,18 +75,14 @@
 }
 
 .page-split-side > .page-card {
-  flex: 1;
-  min-height: 0;
+  width: 100%;
 }
 
 .fill-card {
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   padding: 10px 12px;
-  overflow: hidden;
+  min-width: 0;
 }
 
 .fill-card .card-header {
@@ -123,9 +111,8 @@
 }
 
 .table-flex {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .table-flex :deep(.el-table) {
@@ -171,9 +158,6 @@
 
 /* 侧栏 Tab 面板 */
 .side-tabs {
-  flex: 1;
-  min-height: 0;
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -184,13 +168,7 @@
 }
 
 .side-tabs :deep(.el-tabs__content) {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
-
-.side-tabs :deep(.el-tab-pane) {
-  height: 100%;
+  overflow: visible;
 }
 
 /* 模式入口条 */
@@ -385,7 +363,8 @@
 }
 
 .charts-grid.dash-charts {
-  grid-template-rows: repeat(2, minmax(0, 1fr));
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -397,11 +376,25 @@
   font-size: 13px;
   margin-bottom: 8px;
   color: var(--text-primary);
+  font-weight: 600;
 }
 
-.chart-card.dash-chart .chart-body {
+/* 宽图占两列（柱状图） */
+.chart-card.dash-chart.chart-wide {
+  grid-column: span 2;
+}
+
+.chart-card.dash-chart.chart-bar .chart-body {
+  height: 200px;
+}
+
+/* 环状图：矮卡片 + 图例侧置 */
+.chart-card.dash-chart.chart-pie .chart-body {
+  height: 118px;
+}
+
+.chart-card.dash-chart.chart-bar-sm .chart-body {
   height: 168px;
-  flex: none;
 }
 
 /* 阶段进度 */
@@ -511,20 +504,21 @@
   flex-shrink: 0;
 }
 
-/* Tab 内容撑满 */
-.fill-tabs {
+/* Tab 内容撑满（仅在定高容器内生效） */
+.page-shell.is-fill .fill-tabs {
   height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
 
-.fill-tabs :deep(.el-tabs__content) {
+.page-shell.is-fill .fill-tabs :deep(.el-tabs__content) {
   flex: 1;
   min-height: 0;
+  overflow-y: auto;
 }
 
-.fill-tabs :deep(.el-tab-pane) {
+.page-shell.is-fill .fill-tabs :deep(.el-tab-pane) {
   height: 100%;
 }
 
