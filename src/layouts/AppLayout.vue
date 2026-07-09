@@ -11,7 +11,7 @@ const isDark = computed(() => route.meta.theme === 'dark')
 </script>
 
 <template>
-  <div class="app-layout" :class="{ dark: isDark }">
+  <div class="app-layout" :class="{ dark: isDark }" :data-theme="isDark ? 'dark-page' : ''">
     <Sidebar />
     <div class="main-area" :class="{ collapsed: appStore.sidebarCollapsed }">
       <Topbar />
@@ -34,22 +34,17 @@ const isDark = computed(() => route.meta.theme === 'dark')
   display: flex;
   flex-direction: column;
   min-width: 0;
-  margin-left: 220px;
-  transition: margin-left 0.2s;
+  margin-left: 232px;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .main-area.collapsed {
-  margin-left: 64px;
+  margin-left: 72px;
 }
 
 .page-content {
   flex: 1;
   overflow: auto;
-  padding: 16px 20px;
-  background: var(--bg-page);
-}
-
-.app-layout.dark .page-content {
-  background: #0b1220;
+  padding: 20px 24px;
 }
 </style>

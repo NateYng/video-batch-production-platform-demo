@@ -10,10 +10,12 @@ html,
 body,
 #app {
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   background: var(--bg-page);
   color: var(--text-primary);
+  font-feature-settings: 'tnum' 1;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -21,24 +23,68 @@ a {
   text-decoration: none;
 }
 
+/* 科技网格底纹 */
+.page-content {
+  background: var(--bg-page-mesh);
+  background-attachment: fixed;
+  position: relative;
+}
+
+.page-content::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.page-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 中台卡片 */
 .page-card {
   background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.page-card:hover {
+  border-color: var(--border-strong);
 }
 
 .page-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .page-header h1 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme='dark-page'] .page-header h1 {
+  background: linear-gradient(135deg, #e8edf5 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .page-header p {
@@ -49,8 +95,8 @@ a {
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
 .metric-grid.cols-6 {
@@ -61,64 +107,165 @@ a {
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* 风险标签 */
 .risk-high {
-  color: #ef4444;
-  background: #fef2f2;
-  border-color: #fecaca;
+  color: #f43f5e;
+  background: rgba(244, 63, 94, 0.1);
+  border-color: rgba(244, 63, 94, 0.25);
 }
 
 .risk-medium {
   color: #f59e0b;
-  background: #fffbeb;
-  border-color: #fde68a;
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.25);
 }
 
 .risk-low {
-  color: #22c55e;
-  background: #f0fdf4;
-  border-color: #bbf7d0;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.25);
 }
 
 .status-running {
-  color: #0ea5e9;
+  color: var(--primary);
 }
 
 .status-success {
-  color: #22c55e;
+  color: var(--success);
 }
 
 .status-fail {
-  color: #ef4444;
+  color: var(--danger);
 }
 
 .status-warn {
-  color: #f59e0b;
+  color: var(--warning);
+}
+
+/* Element Plus 全局增强 */
+.el-button--primary {
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 180, 216, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.el-button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 180, 216, 0.4);
+}
+
+.el-button--primary:active {
+  transform: translateY(0);
+}
+
+.el-tag {
+  border-radius: 6px !important;
+  font-weight: 500;
+}
+
+.el-progress__text {
+  font-variant-numeric: tabular-nums;
 }
 
 .el-table {
-  --el-table-header-bg-color: #f8fafc;
+  --el-table-header-bg-color: rgba(99, 102, 241, 0.04);
+  --el-table-border-color: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.el-table th.el-table__cell {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: none;
+  letter-spacing: 0.2px;
+}
+
+.el-tabs__item.is-active {
+  color: var(--primary) !important;
+  font-weight: 600;
+}
+
+.el-tabs__active-bar {
+  background: var(--gradient-primary) !important;
+  height: 3px !important;
+  border-radius: 2px;
+}
+
+.el-input__wrapper {
+  border-radius: var(--radius-sm) !important;
+  transition: box-shadow 0.2s;
+}
+
+.el-input__wrapper:focus-within,
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 1px var(--primary) inset, 0 0 0 3px rgba(0, 180, 216, 0.12) !important;
+}
+
+/* 深色页面 */
+[data-theme='dark-page'] .page-card {
+  background: var(--bg-card);
+  border-color: var(--border);
 }
 
 [data-theme='dark-page'] .el-table {
-  --el-table-bg-color: #111827;
-  --el-table-tr-bg-color: #111827;
-  --el-table-header-bg-color: #0f172a;
-  --el-table-row-hover-bg-color: #1f2937;
-  --el-table-border-color: #1f2937;
-  --el-table-text-color: #e2e8f0;
-  --el-table-header-text-color: #94a3b8;
+  --el-table-bg-color: transparent;
+  --el-table-tr-bg-color: transparent;
+  --el-table-header-bg-color: rgba(0, 180, 216, 0.06);
+  --el-table-row-hover-bg-color: rgba(0, 180, 216, 0.06);
+  --el-table-border-color: var(--border);
+  --el-table-text-color: #c8d4e8;
+  --el-table-header-text-color: #8b9cb8;
 }
 
 [data-theme='dark-page'] .el-input__wrapper,
 [data-theme='dark-page'] .el-select__wrapper {
-  background: #0f172a !important;
-  box-shadow: 0 0 0 1px #1f2937 inset !important;
+  background: rgba(8, 14, 28, 0.8) !important;
+  box-shadow: 0 0 0 1px var(--border) inset !important;
 }
 
 [data-theme='dark-page'] .el-tabs__item {
-  color: #94a3b8;
+  color: #8b9cb8;
 }
 
 [data-theme='dark-page'] .el-tabs__item.is-active {
-  color: #38bdf8;
+  color: var(--primary-light) !important;
+}
+
+[data-theme='dark-page'] .page-header h1 {
+  -webkit-text-fill-color: unset;
+  color: #e8edf5;
+}
+
+[data-theme='dark-page'] .risk-high {
+  background: rgba(244, 63, 94, 0.15);
+}
+
+[data-theme='dark-page'] .risk-medium {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+[data-theme='dark-page'] .risk-low {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.35);
 }

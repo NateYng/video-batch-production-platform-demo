@@ -378,32 +378,44 @@ async function runFlow() {
 }
 
 :deep(.vue-flow__node) {
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 12px;
-  padding: 8px 14px;
-  border: 1px solid var(--border);
-  background: #fff;
+  padding: 10px 16px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+  font-weight: 500;
 }
 
 :deep(.vue-flow__node.selected) {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.25), 0 4px 16px rgba(0, 180, 216, 0.15);
 }
 
 :deep(.decision-node) {
-  border-color: #f59e0b;
-  background: #fffbeb;
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.08);
   transform: rotate(0deg);
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 :deep(.start-node) {
-  border-color: #22c55e;
-  background: #f0fdf4;
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.08);
 }
 
 :deep(.end-node) {
-  border-color: #64748b;
-  background: #f8fafc;
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.06);
+}
+
+:deep(.vue-flow__edge-path) {
+  stroke: rgba(0, 180, 216, 0.5);
+  stroke-width: 2;
+}
+
+:deep(.vue-flow__background) {
+  background: rgba(99, 102, 241, 0.02);
 }
 </style>

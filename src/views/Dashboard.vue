@@ -32,34 +32,31 @@ const modeEntries = [
     desc: '大规模视频批产，支持万级并发调度与分批执行',
     path: '/create-task',
     icon: VideoCamera,
-    color: '#0ea5e9',
-    bg: 'linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%)',
+    accent: 'cyan',
   },
   {
     title: '模板式创作台',
     desc: '基于模板快速复用，变量驱动批量生成',
     path: '/templates',
     icon: DocumentCopy,
-    color: '#8b5cf6',
-    bg: 'linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%)',
+    accent: 'indigo',
   },
   {
     title: '智能体编排平台',
     desc: '多智能体协作编排，自动化脚本与素材处理',
     path: '/agent-flow',
     icon: Connection,
-    color: '#22c55e',
-    bg: 'linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%)',
+    accent: 'emerald',
   },
 ]
 
 const quickActions = [
-  { label: '创建任务', icon: Plus, path: '/create-task', color: '#0ea5e9' },
-  { label: '上传素材', icon: Upload, path: '/assets', color: '#8b5cf6' },
-  { label: '审核队列', icon: Checked, path: '/audit', color: '#f59e0b' },
-  { label: '发布管理', icon: Promotion, path: '/publish', color: '#22c55e' },
-  { label: '数据看板', icon: DataAnalysis, path: '/data', color: '#3b82f6' },
-  { label: '系统配置', icon: Setting, path: '/settings', color: '#64748b' },
+  { label: '创建任务', icon: Plus, path: '/create-task', accent: 'cyan' },
+  { label: '上传素材', icon: Upload, path: '/assets', accent: 'indigo' },
+  { label: '审核队列', icon: Checked, path: '/audit', accent: 'amber' },
+  { label: '发布管理', icon: Promotion, path: '/publish', accent: 'emerald' },
+  { label: '数据看板', icon: DataAnalysis, path: '/data', accent: 'blue' },
+  { label: '系统配置', icon: Setting, path: '/settings', accent: 'slate' },
 ]
 
 const statusMap = {
@@ -126,17 +123,18 @@ function viewTask(row) {
         v-for="mode in modeEntries"
         :key="mode.path"
         class="mode-card page-card"
-        :style="{ background: mode.bg }"
+        :class="`accent-${mode.accent}`"
         @click="goTo(mode.path)"
       >
-        <div class="mode-icon" :style="{ color: mode.color }">
-          <el-icon :size="28"><component :is="mode.icon" /></el-icon>
+        <div class="mode-glow" />
+        <div class="mode-icon">
+          <el-icon :size="26"><component :is="mode.icon" /></el-icon>
         </div>
         <div class="mode-info">
           <h3>{{ mode.title }}</h3>
           <p>{{ mode.desc }}</p>
         </div>
-        <el-icon class="mode-arrow" :style="{ color: mode.color }"><TrendCharts /></el-icon>
+        <el-icon class="mode-arrow"><TrendCharts /></el-icon>
       </div>
     </div>
 
@@ -234,11 +232,12 @@ function viewTask(row) {
               v-for="action in quickActions"
               :key="action.path"
               class="quick-item"
+              :class="`accent-${action.accent}`"
               @click="goTo(action.path)"
             >
-              <el-icon :size="20" :style="{ color: action.color }">
-                <component :is="action.icon" />
-              </el-icon>
+              <div class="quick-icon">
+                <el-icon :size="18"><component :is="action.icon" /></el-icon>
+              </div>
               <span>{{ action.label }}</span>
             </div>
           </div>
@@ -264,26 +263,70 @@ function viewTask(row) {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 18px 20px;
+  padding: 20px 22px;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  border: 1px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  position: relative;
+  overflow: hidden;
 }
 
 .mode-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
 }
+
+.mode-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.mode-card:hover .mode-glow {
+  opacity: 0.8;
+}
+
+.mode-card.accent-cyan .mode-glow { background: radial-gradient(circle, rgba(0, 180, 216, 0.2) 0%, transparent 70%); }
+.mode-card.accent-indigo .mode-glow { background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%); }
+.mode-card.accent-emerald .mode-glow { background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%); }
+
+.mode-card.accent-cyan { border-color: rgba(0, 180, 216, 0.15); }
+.mode-card.accent-indigo { border-color: rgba(99, 102, 241, 0.15); }
+.mode-card.accent-emerald { border-color: rgba(16, 185, 129, 0.15); }
 
 .mode-icon {
   width: 52px;
   height: 52px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.mode-card.accent-cyan .mode-icon {
+  background: linear-gradient(135deg, rgba(0, 180, 216, 0.15), rgba(0, 180, 216, 0.05));
+  color: #00b4d8;
+  box-shadow: 0 0 16px rgba(0, 180, 216, 0.15);
+}
+
+.mode-card.accent-indigo .mode-icon {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(99, 102, 241, 0.05));
+  color: #6366f1;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
+}
+
+.mode-card.accent-emerald .mode-icon {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+  color: #10b981;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.15);
 }
 
 .mode-info h3 {
@@ -300,8 +343,20 @@ function viewTask(row) {
 
 .mode-arrow {
   margin-left: auto;
-  opacity: 0.5;
+  opacity: 0.4;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.2s, transform 0.2s;
 }
+
+.mode-card:hover .mode-arrow {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.mode-card.accent-cyan .mode-arrow { color: #00b4d8; }
+.mode-card.accent-indigo .mode-arrow { color: #6366f1; }
+.mode-card.accent-emerald .mode-arrow { color: #10b981; }
 
 .main-layout {
   display: grid;
@@ -347,10 +402,15 @@ function viewTask(row) {
 }
 
 .risk-item {
-  padding: 10px;
-  background: #f8fafc;
-  border-radius: 6px;
+  padding: 10px 12px;
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 8px;
   border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.risk-item:hover {
+  border-color: var(--border-strong);
 }
 
 .risk-item-top {
@@ -395,9 +455,15 @@ function viewTask(row) {
 }
 
 .channel-item {
-  padding: 10px;
-  background: #f8fafc;
-  border-radius: 6px;
+  padding: 10px 12px;
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.channel-item:hover {
+  border-color: var(--border);
 }
 
 .channel-name {
@@ -428,17 +494,40 @@ function viewTask(row) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 12px 8px;
-  border-radius: 8px;
+  gap: 8px;
+  padding: 14px 8px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 11px;
   color: var(--text-secondary);
-  transition: background 0.15s;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
+.quick-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.quick-item.accent-cyan .quick-icon { background: rgba(0, 180, 216, 0.1); color: #00b4d8; }
+.quick-item.accent-indigo .quick-icon { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
+.quick-item.accent-amber .quick-icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.quick-item.accent-emerald .quick-icon { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.quick-item.accent-blue .quick-icon { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.quick-item.accent-slate .quick-icon { background: rgba(100, 116, 139, 0.1); color: #64748b; }
+
 .quick-item:hover {
-  background: #f1f5f9;
+  background: rgba(99, 102, 241, 0.04);
+  border-color: var(--border);
+}
+
+.quick-item:hover .quick-icon {
+  transform: scale(1.05);
 }
 
 @media (max-width: 1200px) {

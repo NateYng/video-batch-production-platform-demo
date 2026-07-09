@@ -38,7 +38,7 @@ const productionTrendOption = computed(() => ({
   },
   yAxis: { type: 'value', axisLabel: { fontSize: 11 } },
   series: [
-    { name: '生成量', type: 'bar', data: [8200, 9100, 7800, 10200, 9600, 11200, 8420], itemStyle: { color: '#0ea5e9' } },
+    { name: '生成量', type: 'bar', data: [8200, 9100, 7800, 10200, 9600, 11200, 8420], itemStyle: { color: '#00b4d8' } },
     { name: '成功量', type: 'bar', data: [7680, 8520, 7320, 9580, 9020, 10480, 7880], itemStyle: { color: '#22c55e' } },
     { name: '失败量', type: 'bar', data: [520, 580, 480, 620, 580, 720, 540], itemStyle: { color: '#ef4444' } },
   ],
@@ -59,7 +59,7 @@ const failureReasonOption = computed(() => ({
       { name: '其他', value: 4.8 },
     ],
     label: { show: false },
-    color: ['#0ea5e9', '#f59e0b', '#ef4444', '#8b5cf6', '#22c55e', '#64748b'],
+    color: ['#00b4d8', '#f59e0b', '#ef4444', '#8b5cf6', '#22c55e', '#64748b'],
   }],
 }))
 
@@ -86,7 +86,7 @@ const channelCompareOption = computed(() => ({
   xAxis: { type: 'category', data: ['抖音', '视频号', '官网'], axisLabel: { fontSize: 11 } },
   yAxis: { type: 'value', axisLabel: { fontSize: 11 } },
   series: [
-    { name: '播放量(万)', type: 'bar', data: [256.8, 128.6, 32.4], itemStyle: { color: '#0ea5e9' } },
+    { name: '播放量(万)', type: 'bar', data: [256.8, 128.6, 32.4], itemStyle: { color: '#00b4d8' } },
     { name: '完播率(%)', type: 'bar', data: [42.3, 38.6, 56.2], itemStyle: { color: '#22c55e' } },
     { name: '互动率(%)', type: 'bar', data: [8.6, 6.2, 4.8], itemStyle: { color: '#f59e0b' } },
   ],
@@ -123,7 +123,7 @@ const templateTop5Option = computed(() => ({
   series: [{
     type: 'bar',
     data: [86, 128, 186, 256, 428].reverse(),
-    itemStyle: { color: '#0ea5e9', borderRadius: [0, 4, 4, 0] },
+    itemStyle: { color: '#00b4d8', borderRadius: [0, 4, 4, 0] },
   }],
 }))
 
