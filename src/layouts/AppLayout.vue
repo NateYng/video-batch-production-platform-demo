@@ -40,7 +40,10 @@ const appStore = useAppStore()
 
 .page-content {
   flex: 1;
-  overflow: auto;
-  padding: 20px 24px;
+  min-height: 0;
+  overflow: hidden;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
 }
 </style>

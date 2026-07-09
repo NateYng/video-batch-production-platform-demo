@@ -12,6 +12,8 @@ onMounted(() => {
 
 <template>
   <AppLayout>
-    <router-view />
+    <div class="page-viewport">
+      <router-view />
+    </div>
   </AppLayout>
 </template>

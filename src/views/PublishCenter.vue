@@ -1,17 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { CircleCheck, CircleClose } from '@element-plus/icons-vue'
 import { usePublishStore } from '@/stores'
 import { publishSchedule } from '@/mock'
 
-const router = useRouter()
 const publishStore = usePublishStore()
 
 const channelTab = ref('all')
 const calendarView = ref('day')
 const selectedDate = ref('2025-07-09')
+const sideTab = ref('check')
 
 const channelOverview = [
   { name: '抖音', pending: 3600, todayPublished: 1260, trend: 12, successRate: 96.2, color: '#0ea5e9' },
@@ -117,73 +116,42 @@ function handleChannelAction(row, action) {
 </script>
 
 <template>
-  <div class="publish-center">
-    <div class="page-header">
-      <div>
-        <h1>发布中心</h1>
-        <p>管理多渠道发布排期、渠道账号与发布前校验</p>
+  <div class="page-shell publish-center">
+    <div class="top-row">
+      <div class="overview-grid compact">
+        <div v-for="item in channelOverview" :key="item.name" class="overview-card page-card compact">
+          <div class="ov-header">
+            <span class="ov-dot" :style="{ background: item.color }" />
+            <span class="ov-name">{{ item.name }}</span>
+          </div>
+          <template v-if="!item.isSummary">
+            <div class="ov-pending">待发布 <strong>{{ item.pending.toLocaleString() }}</strong></div>
+            <div class="ov-sub">今日 {{ item.todayPublished.toLocaleString() }}
+              <span :class="item.trend >= 0 ? 'up' : 'down'">{{ item.trend >= 0 ? '↑' : '↓' }}{{ Math.abs(item.trend) }}%</span>
+            </div>
+          </template>
+          <template v-else>
+            <div class="ov-pending summary-val">{{ item.successRate }}%</div>
+            <div class="ov-sub"><span class="up">↑ {{ item.trend }}%</span> 综合成功率</div>
+          </template>
+        </div>
       </div>
-      <div class="header-actions">
-        <el-button type="primary" @click="handlePublish">一键发布</el-button>
-        <el-button @click="handleSchedule">排期发布</el-button>
-        <el-button type="warning" plain @click="handleRetryAll">重试失败</el-button>
-        <el-button plain @click="handleViewRecords">查看发布记录</el-button>
+      <div class="page-toolbar-actions top-actions">
+        <el-button type="primary" size="small" @click="handlePublish">一键发布</el-button>
+        <el-button size="small" @click="handleSchedule">排期</el-button>
+        <el-button size="small" type="warning" plain @click="handleRetryAll">重试</el-button>
       </div>
     </div>
 
-    <div class="page-body">
-      <div class="main-col">
-        <div class="overview-grid">
-          <div
-            v-for="item in channelOverview"
-            :key="item.name"
-            class="overview-card page-card"
-          >
-            <div class="ov-header">
-              <span class="ov-dot" :style="{ background: item.color }" />
-              <span class="ov-name">{{ item.name }}</span>
-            </div>
-            <template v-if="!item.isSummary">
-              <div class="ov-pending">
-                待发布 <strong>{{ item.pending.toLocaleString() }}</strong>
-              </div>
-              <div class="ov-sub">今日已发 {{ item.todayPublished.toLocaleString() }}
-                <span :class="item.trend >= 0 ? 'up' : 'down'">
-                  {{ item.trend >= 0 ? '↑' : '↓' }}{{ Math.abs(item.trend) }}%
-                </span>
-              </div>
-              <div class="ov-rate">成功率 {{ item.successRate }}%</div>
-            </template>
-            <template v-else>
-              <div class="ov-pending summary-val">{{ item.successRate }}%</div>
-              <div class="ov-sub">
-                <span class="up">↑ {{ item.trend }}%</span> 较昨日
-              </div>
-              <div class="ov-rate">全渠道综合发布成功率</div>
-            </template>
-          </div>
-        </div>
-
-        <div class="page-card calendar-section">
+    <div class="page-split wide-side">
+      <div class="page-split-main">
+        <div class="page-card fill-card calendar-section">
           <div class="section-head">
-            <div>
-              <h3>发布排期日历</h3>
-              <span class="sub">日视图 · {{ selectedDate }}</span>
-            </div>
-            <div class="calendar-tools">
-              <el-radio-group v-model="calendarView" size="small">
-                <el-radio-button value="day">日视图</el-radio-button>
-                <el-radio-button value="week">周视图</el-radio-button>
-              </el-radio-group>
-              <el-button size="small" plain>设置</el-button>
-            </div>
-          </div>
-          <div class="calendar-legend">
-            <span class="legend ready">已就绪</span>
-            <span class="legend queuing">排队中</span>
-            <span class="legend published">已发布</span>
-            <span class="legend publishing">发布中</span>
-            <span class="legend failed">发布失败</span>
+            <h3>发布排期 · {{ selectedDate }}</h3>
+            <el-radio-group v-model="calendarView" size="small">
+              <el-radio-button value="day">日</el-radio-button>
+              <el-radio-button value="week">周</el-radio-button>
+            </el-radio-group>
           </div>
           <div class="calendar-grid">
             <div class="grid-header">
@@ -193,15 +161,9 @@ function handleChannelAction(row, action) {
             <div v-for="ch in calendarChannels" :key="ch" class="grid-row">
               <div class="channel-col">{{ ch }}</div>
               <div v-for="slot in timeSlots" :key="slot" class="time-col">
-                <div
-                  v-if="scheduleGrid[ch][slot]"
-                  class="schedule-card"
-                  :class="getScheduleClass(ch, slot)"
-                >
+                <div v-if="scheduleGrid[ch][slot]" class="schedule-card" :class="getScheduleClass(ch, slot)">
                   <div class="sc-title">{{ scheduleGrid[ch][slot].title }}</div>
-                  <div class="sc-meta">
-                    {{ scheduleGrid[ch][slot].count }} 条 · {{ getScheduleLabel(ch, slot) }}
-                  </div>
+                  <div class="sc-meta">{{ scheduleGrid[ch][slot].count }} 条 · {{ getScheduleLabel(ch, slot) }}</div>
                 </div>
                 <div v-else class="schedule-empty">—</div>
               </div>
@@ -209,113 +171,76 @@ function handleChannelAction(row, action) {
           </div>
         </div>
 
-        <div class="page-card channel-section">
+        <div class="page-card fill-card channel-section">
           <div class="section-head">
-            <h3>渠道发布列表</h3>
             <el-radio-group v-model="channelTab" size="small">
-              <el-radio-button value="all">全部渠道 {{ publishStore.channels.length }}</el-radio-button>
-              <el-radio-button value="抖音">抖音 2</el-radio-button>
-              <el-radio-button value="视频号">视频号 1</el-radio-button>
-              <el-radio-button value="官网">官网 1</el-radio-button>
+              <el-radio-button value="all">全部</el-radio-button>
+              <el-radio-button value="抖音">抖音</el-radio-button>
+              <el-radio-button value="视频号">视频号</el-radio-button>
+              <el-radio-button value="官网">官网</el-radio-button>
             </el-radio-group>
           </div>
-          <el-table :data="filteredChannels" stripe>
-            <el-table-column label="渠道" width="100">
-              <template #default="{ row }">
-                <el-tag size="small" effect="plain">{{ row.channel }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="account" label="账号/栏目" min-width="140" />
-            <el-table-column label="待发布" width="100" align="right">
-              <template #default="{ row }">{{ row.pending.toLocaleString() }}</template>
-            </el-table-column>
-            <el-table-column label="成功率" width="90" align="right">
-              <template #default="{ row }">{{ row.successRate }}%</template>
-            </el-table-column>
-            <el-table-column label="发布状态" width="110">
-              <template #default="{ row }">
-                <el-tag :type="statusMap[row.status]?.type" size="small">
-                  {{ statusMap[row.status]?.label }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="failReason" label="失败原因" min-width="120">
-              <template #default="{ row }">
-                <span :class="{ 'status-fail': row.failReason }">{{ row.failReason || '—' }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="nextTime" label="下次发布" width="100" />
-            <el-table-column label="操作" width="200" fixed="right">
-              <template #default="{ row }">
-                <el-button link type="primary" size="small">详情</el-button>
-                <el-button link size="small">管理</el-button>
-                <el-button
-                  v-if="row.status === 'partial_fail'"
-                  link
-                  type="warning"
-                  size="small"
-                  @click="handleChannelAction(row, 'retry')"
-                >
-                  重试失败
-                </el-button>
-                <el-button
-                  v-else
-                  link
-                  type="success"
-                  size="small"
-                  @click="handleChannelAction(row, 'publish')"
-                >
-                  发布
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+          <div class="table-flex">
+            <el-table :data="filteredChannels" stripe size="small">
+              <el-table-column label="渠道" width="80">
+                <template #default="{ row }"><el-tag size="small" effect="plain">{{ row.channel }}</el-tag></template>
+              </el-table-column>
+              <el-table-column prop="account" label="账号" min-width="120" show-overflow-tooltip />
+              <el-table-column label="待发布" width="80" align="right">
+                <template #default="{ row }">{{ row.pending.toLocaleString() }}</template>
+              </el-table-column>
+              <el-table-column label="成功率" width="75" align="right">
+                <template #default="{ row }">{{ row.successRate }}%</template>
+              </el-table-column>
+              <el-table-column label="状态" width="90">
+                <template #default="{ row }">
+                  <el-tag :type="statusMap[row.status]?.type" size="small">{{ statusMap[row.status]?.label }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="failReason" label="失败原因" min-width="100" show-overflow-tooltip>
+                <template #default="{ row }">
+                  <span :class="{ 'status-fail': row.failReason }">{{ row.failReason || '—' }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="120" fixed="right">
+                <template #default="{ row }">
+                  <el-button v-if="row.status === 'partial_fail'" link type="warning" size="small" @click="handleChannelAction(row, 'retry')">重试</el-button>
+                  <el-button v-else link type="success" size="small" @click="handleChannelAction(row, 'publish')">发布</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
       </div>
 
-      <aside class="side-col">
-        <div class="page-card side-block">
-          <h3>发布前校验</h3>
-          <ul class="checklist">
-            <li v-for="item in checklist" :key="item.label" :class="{ fail: !item.ok }">
-              <el-icon v-if="item.ok" color="#22c55e"><CircleCheck /></el-icon>
-              <el-icon v-else color="#ef4444"><CircleClose /></el-icon>
-              <span class="ck-label">{{ item.label }}</span>
-              <span class="ck-value">{{ item.value }}</span>
-            </li>
-          </ul>
-          <el-button type="primary" link>查看校验详情 →</el-button>
-        </div>
-
-        <div class="page-card side-block">
-          <div class="side-head">
-            <h3>效果反馈（近7日）</h3>
-            <el-button link type="primary" size="small" @click="router.push('/data')">更多</el-button>
-          </div>
-          <div class="effect-grid">
-            <div v-for="m in effectMetrics" :key="m.label" class="effect-item">
-              <div class="ef-label">{{ m.label }}</div>
-              <div class="ef-value">{{ m.value }}</div>
-              <div class="ef-trend" :class="m.trend >= 0 ? 'up' : 'down'">
-                {{ m.trend >= 0 ? '↑' : '↓' }}{{ Math.abs(m.trend) }}%
+      <aside class="page-split-side">
+        <div class="page-card fill-card">
+          <el-tabs v-model="sideTab" class="side-tabs compact-tabs">
+            <el-tab-pane label="校验" name="check">
+              <ul class="checklist">
+                <li v-for="item in checklist" :key="item.label" :class="{ fail: !item.ok }">
+                  <el-icon v-if="item.ok" color="#22c55e"><CircleCheck /></el-icon>
+                  <el-icon v-else color="#ef4444"><CircleClose /></el-icon>
+                  <span class="ck-label">{{ item.label }}</span>
+                  <span class="ck-value">{{ item.value }}</span>
+                </li>
+              </ul>
+            </el-tab-pane>
+            <el-tab-pane label="效果" name="effect">
+              <div class="effect-grid">
+                <div v-for="m in effectMetrics" :key="m.label" class="effect-item">
+                  <div class="ef-label">{{ m.label }}</div>
+                  <div class="ef-value">{{ m.value }}</div>
+                  <div class="ef-trend" :class="m.trend >= 0 ? 'up' : 'down'">{{ m.trend >= 0 ? '↑' : '↓' }}{{ Math.abs(m.trend) }}%</div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="page-card side-block">
-          <h3>快捷操作</h3>
-          <div class="quick-grid">
-            <el-button
-              v-for="action in quickActions"
-              :key="action"
-              size="small"
-              plain
-              class="quick-btn"
-            >
-              {{ action }}
-            </el-button>
-          </div>
+            </el-tab-pane>
+            <el-tab-pane label="快捷" name="quick">
+              <div class="quick-grid">
+                <el-button v-for="action in quickActions" :key="action" size="small" plain class="quick-btn">{{ action }}</el-button>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </div>
       </aside>
     </div>
@@ -323,153 +248,88 @@ function handleChannelAction(row, action) {
 </template>
 
 <style scoped>
-.publish-center {
-  min-height: 100%;
-}
-
-.header-actions {
+.top-row {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
-.page-body {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 16px;
-  align-items: start;
+.top-row .overview-grid.compact {
+  flex: 1;
 }
 
-.overview-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.overview-card {
-  padding: 14px 16px;
+.top-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
 }
 
 .ov-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 6px;
+  margin-bottom: 4px;
 }
 
 .ov-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
 }
 
 .ov-name {
-  font-size: 13px;
+  font-size: 11px;
   color: var(--text-secondary);
 }
 
 .ov-pending {
-  font-size: 14px;
-  margin-bottom: 4px;
+  font-size: 11px;
 }
 
 .ov-pending strong,
 .summary-val {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--text-primary);
-}
-
-.summary-val {
-  margin-bottom: 4px;
 }
 
 .ov-sub {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 4px;
-}
-
-.ov-rate {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--text-secondary);
 }
 
-.up {
-  color: #22c55e;
+.up { color: #22c55e; }
+.down { color: #ef4444; }
+
+.page-split-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.down {
-  color: #ef4444;
+.calendar-section {
+  flex: 0 0 auto;
+  max-height: 42%;
 }
 
-.calendar-section,
 .channel-section {
-  padding: 16px;
-  margin-bottom: 16px;
+  flex: 1;
+  min-height: 0;
 }
 
 .section-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-  gap: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .section-head h3 {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
-}
-
-.section-head .sub {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-left: 8px;
-}
-
-.calendar-tools {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.calendar-legend {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
-  font-size: 11px;
-}
-
-.legend::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  margin-right: 4px;
-}
-
-.legend.ready::before {
-  background: #22c55e;
-}
-
-.legend.queuing::before {
-  background: #f59e0b;
-}
-
-.legend.published::before {
-  background: #0ea5e9;
-}
-
-.legend.publishing::before {
-  background: #8b5cf6;
-}
-
-.legend.failed::before {
-  background: #ef4444;
 }
 
 .calendar-grid {
@@ -481,21 +341,22 @@ function handleChannelAction(row, action) {
 .grid-header,
 .grid-row {
   display: grid;
-  grid-template-columns: 100px repeat(3, 1fr);
+  grid-template-columns: 72px repeat(3, 1fr);
 }
 
 .grid-header {
-  background: #f8fafc;
-  font-size: 12px;
+  background: rgba(99, 102, 241, 0.04);
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-secondary);
 }
 
 .channel-col,
 .time-col {
-  padding: 10px 12px;
+  padding: 6px 8px;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  font-size: 11px;
 }
 
 .grid-row:last-child .channel-col,
@@ -507,139 +368,83 @@ function handleChannelAction(row, action) {
   display: flex;
   align-items: center;
   font-weight: 500;
-  background: #fafbfc;
 }
 
 .schedule-card {
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  min-height: 56px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  min-height: 36px;
 }
 
-.schedule-card.ready {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-}
-
-.schedule-card.queuing {
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-}
-
-.schedule-card.published {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-}
+.schedule-card.ready { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.schedule-card.queuing { background: #fffbeb; border: 1px solid #fde68a; }
+.schedule-card.published { background: #f0f9ff; border: 1px solid #bae6fd; }
 
 .sc-title {
   font-weight: 500;
-  margin-bottom: 4px;
-  line-height: 1.3;
+  margin-bottom: 2px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sc-meta {
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .schedule-empty {
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
-  padding: 16px 0;
-}
-
-.side-col {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  position: sticky;
-  top: 0;
-}
-
-.side-block {
-  padding: 14px 16px;
-}
-
-.side-block h3 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.side-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.side-head h3 {
-  margin-bottom: 0;
+  padding: 8px 0;
 }
 
 .checklist {
   list-style: none;
-  margin-bottom: 8px;
 }
 
 .checklist li {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  font-size: 12px;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 11px;
   border-bottom: 1px solid var(--border);
 }
 
-.checklist li.fail .ck-value {
-  color: #ef4444;
-}
+.checklist li.fail .ck-value { color: #ef4444; }
 
-.ck-label {
-  flex: 1;
-}
-
-.ck-value {
-  color: var(--text-secondary);
-}
+.ck-label { flex: 1; }
+.ck-value { color: var(--text-secondary); font-size: 10px; }
 
 .effect-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 6px;
 }
 
 .effect-item {
-  padding: 8px;
-  background: #f8fafc;
+  padding: 6px;
+  background: rgba(99, 102, 241, 0.04);
   border-radius: 6px;
 }
 
-.ef-label {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.ef-value {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 2px 0;
-}
-
-.ef-trend {
-  font-size: 11px;
-}
+.ef-label { font-size: 10px; color: var(--text-secondary); }
+.ef-value { font-size: 14px; font-weight: 600; }
+.ef-trend { font-size: 10px; }
 
 .quick-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 .quick-btn {
   width: 100%;
   margin: 0;
+  font-size: 11px;
 }
 </style>

@@ -16,6 +16,7 @@ use([BarChart, PieChart, TooltipComponent, LegendComponent, GridComponent, Canva
 
 const activeTab = ref('生产效率')
 const timeRange = ref('近7天')
+const sideTab = ref('suggest')
 const tabs = ['生产效率', '内容质量', '发布效果', '资产复用']
 
 const kpiCards = [
@@ -153,103 +154,92 @@ const lowEfficiencyAssets = [
 </script>
 
 <template>
-  <div class="data-dashboard">
-    <div class="page-header">
-      <div>
-        <h1>数据看板</h1>
-        <p>生产效率、内容质量、发布效果与资产复用多维分析</p>
-      </div>
-      <div class="header-actions">
+  <div class="page-shell data-dashboard">
+    <div class="page-toolbar with-actions">
+      <el-tabs v-model="activeTab" class="compact-tabs dash-tabs-inline">
+        <el-tab-pane v-for="tab in tabs" :key="tab" :label="tab" :name="tab" />
+      </el-tabs>
+      <div class="page-toolbar-actions">
         <el-radio-group v-model="timeRange" size="small">
           <el-radio-button value="今日">今日</el-radio-button>
           <el-radio-button value="近7天">近7天</el-radio-button>
           <el-radio-button value="近30天">近30天</el-radio-button>
-          <el-radio-button value="自定义">自定义</el-radio-button>
         </el-radio-group>
-        <el-button size="small" type="primary" plain>导出报表</el-button>
+        <el-button size="small" type="primary" plain>导出</el-button>
       </div>
     </div>
 
-    <el-tabs v-model="activeTab" class="dash-tabs">
-      <el-tab-pane v-for="tab in tabs" :key="tab" :label="tab" :name="tab" />
-    </el-tabs>
+    <div class="metric-grid compact cols-6">
+      <MetricCard
+        v-for="card in kpiCards"
+        :key="card.label"
+        :label="card.label"
+        :value="card.value"
+        :trend="card.trend"
+        :color="card.color"
+        :prefix="card.prefix"
+        :suffix="card.suffix"
+      />
+    </div>
 
-    <div class="page-body">
-      <div class="main-col">
-        <div class="metric-grid cols-6">
-          <MetricCard
-            v-for="card in kpiCards"
-            :key="card.label"
-            :label="card.label"
-            :value="card.value"
-            :trend="card.trend"
-            :color="card.color"
-            :prefix="card.prefix"
-            :suffix="card.suffix"
-          />
-        </div>
-
-        <div class="charts-grid">
-          <div class="page-card chart-card">
+    <div class="page-split">
+      <div class="page-split-main">
+        <div class="charts-grid compact">
+          <div class="page-card chart-card compact">
             <h4>生产量趋势</h4>
-            <VChart :option="productionTrendOption" style="height: 240px" autoresize />
+            <div class="chart-body"><VChart :option="productionTrendOption" style="height: 100%" autoresize /></div>
           </div>
-          <div class="page-card chart-card">
+          <div class="page-card chart-card compact">
             <h4>失败原因分布</h4>
-            <VChart :option="failureReasonOption" style="height: 240px" autoresize />
+            <div class="chart-body"><VChart :option="failureReasonOption" style="height: 100%" autoresize /></div>
           </div>
-          <div class="page-card chart-card">
+          <div class="page-card chart-card compact">
             <h4>风险等级分布</h4>
-            <VChart :option="riskLevelOption" style="height: 240px" autoresize />
+            <div class="chart-body"><VChart :option="riskLevelOption" style="height: 100%" autoresize /></div>
           </div>
-          <div class="page-card chart-card">
-            <h4>渠道播放效果对比</h4>
-            <VChart :option="channelCompareOption" style="height: 240px" autoresize />
+          <div class="page-card chart-card compact">
+            <h4>渠道播放效果</h4>
+            <div class="chart-body"><VChart :option="channelCompareOption" style="height: 100%" autoresize /></div>
           </div>
-          <div class="page-card chart-card">
+          <div class="page-card chart-card compact">
             <h4>完播率分布</h4>
-            <VChart :option="completionDistOption" style="height: 240px" autoresize />
+            <div class="chart-body"><VChart :option="completionDistOption" style="height: 100%" autoresize /></div>
           </div>
-          <div class="page-card chart-card">
+          <div class="page-card chart-card compact">
             <h4>模板效果 TOP5</h4>
-            <VChart :option="templateTop5Option" style="height: 240px" autoresize />
+            <div class="chart-body"><VChart :option="templateTop5Option" style="height: 100%" autoresize /></div>
           </div>
         </div>
       </div>
 
-      <aside class="side-col">
-        <div class="page-card side-block">
-          <h3>AI 复盘建议</h3>
-          <div v-for="(s, i) in aiSuggestions" :key="i" class="suggest-item">
-            <el-tag size="small" :type="s.type === '加量' ? 'success' : s.type === '成本' ? 'info' : 'warning'">
-              {{ s.type }}
-            </el-tag>
-            <p>{{ s.text }}</p>
-          </div>
-        </div>
-
-        <div class="page-card side-block">
-          <h3>异常提醒</h3>
-          <div v-for="(a, i) in anomalyAlerts" :key="i" class="alert-item" :class="a.level">
-            <el-icon><WarningFilled /></el-icon>
-            <span>{{ a.text }}</span>
-          </div>
-        </div>
-
-        <div class="page-card side-block">
-          <h3>高效资产</h3>
-          <div v-for="item in highEfficiencyAssets" :key="item.name" class="asset-row">
-            <span class="ar-name">{{ item.name }}</span>
-            <span class="ar-metric good">{{ item.metric }}</span>
-          </div>
-        </div>
-
-        <div class="page-card side-block">
-          <h3>低效资产</h3>
-          <div v-for="item in lowEfficiencyAssets" :key="item.name" class="asset-row">
-            <span class="ar-name">{{ item.name }}</span>
-            <span class="ar-metric bad">{{ item.metric }}</span>
-          </div>
+      <aside class="page-split-side">
+        <div class="page-card fill-card">
+          <el-tabs v-model="sideTab" class="side-tabs compact-tabs">
+            <el-tab-pane label="AI建议" name="suggest">
+              <div v-for="(s, i) in aiSuggestions" :key="i" class="suggest-item">
+                <el-tag size="small" :type="s.type === '加量' ? 'success' : s.type === '成本' ? 'info' : 'warning'">{{ s.type }}</el-tag>
+                <p>{{ s.text }}</p>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="异常" name="alert">
+              <div v-for="(a, i) in anomalyAlerts" :key="i" class="alert-item" :class="a.level">
+                <el-icon><WarningFilled /></el-icon>
+                <span>{{ a.text }}</span>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="高效" name="high">
+              <div v-for="item in highEfficiencyAssets" :key="item.name" class="asset-row">
+                <span class="ar-name">{{ item.name }}</span>
+                <span class="ar-metric good">{{ item.metric }}</span>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="低效" name="low">
+              <div v-for="item in lowEfficiencyAssets" :key="item.name" class="asset-row">
+                <span class="ar-name">{{ item.name }}</span>
+                <span class="ar-metric bad">{{ item.metric }}</span>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </div>
       </aside>
     </div>
@@ -257,66 +247,18 @@ const lowEfficiencyAssets = [
 </template>
 
 <style scoped>
-.data-dashboard {
-  min-height: 100%;
+.dash-tabs-inline {
+  flex: 1;
+  min-width: 0;
 }
 
-.header-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.dash-tabs {
-  margin-bottom: 16px;
-}
-
-.page-body {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 16px;
-  align-items: start;
-}
-
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.chart-card {
-  padding: 14px 16px;
-}
-
-.chart-card h4 {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: var(--text-primary);
-}
-
-.side-col {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  position: sticky;
-  top: 0;
-}
-
-.side-block {
-  padding: 14px 16px;
-}
-
-.side-block h3 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 10px;
+.dash-tabs-inline :deep(.el-tabs__header) {
+  margin-bottom: 0;
 }
 
 .suggest-item {
-  margin-bottom: 10px;
-  padding-bottom: 10px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -327,57 +269,43 @@ const lowEfficiencyAssets = [
 }
 
 .suggest-item p {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
-  margin-top: 6px;
-  line-height: 1.5;
+  margin-top: 4px;
+  line-height: 1.4;
 }
 
 .alert-item {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: flex-start;
-  font-size: 12px;
-  padding: 6px 0;
+  font-size: 11px;
+  padding: 5px 0;
   color: var(--text-secondary);
 }
 
-.alert-item.high {
-  color: #ef4444;
-}
-
-.alert-item.medium {
-  color: #f59e0b;
-}
+.alert-item.high { color: #ef4444; }
+.alert-item.medium { color: #f59e0b; }
 
 .asset-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 0;
-  font-size: 12px;
+  padding: 5px 0;
+  font-size: 11px;
   border-bottom: 1px solid var(--border);
 }
 
-.asset-row:last-child {
-  border-bottom: none;
-}
+.asset-row:last-child { border-bottom: none; }
 
 .ar-name {
-  color: var(--text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 6px;
 }
 
-.ar-metric.good {
-  color: #22c55e;
-}
-
-.ar-metric.bad {
-  color: #ef4444;
-}
-
-@media (max-width: 1400px) {
-  .charts-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+.ar-metric.good { color: #22c55e; flex-shrink: 0; }
+.ar-metric.bad { color: #ef4444; flex-shrink: 0; }
 </style>

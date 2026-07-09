@@ -6,13 +6,13 @@ import { assetRankings } from '@/mock'
 import MetricCard from '@/components/MetricCard.vue'
 import {
   Picture, VideoCamera, User, Reading, Link, Checked,
-  Upload, PriceTag, DocumentChecked,
+  Upload, DocumentChecked,
 } from '@element-plus/icons-vue'
 
 const assetStore = useAssetStore()
 
 const activeTab = ref('全部')
-const categoryTabs = ['全部', '品牌资产', '媒体素材', '数字人资产', '知识库', '账号与渠道', '素材审核']
+const sideTab = ref('hot')
 
 const statCards = [
   { label: '资产总数', value: 32846, trend: 6.2 },
@@ -67,131 +67,119 @@ function selectCategory(name) {
 </script>
 
 <template>
-  <div class="asset-center">
-    <div class="page-header">
-      <div>
-        <h1>资产中心</h1>
-        <p>统一管理品牌资产、媒体素材、数字人与知识库，支撑批量生产复用</p>
+  <div class="page-shell asset-center">
+    <div class="page-toolbar with-actions">
+      <div class="category-strip">
+        <div
+          class="category-chip page-card"
+          :class="{ active: activeTab === '全部' }"
+          @click="selectCategory('全部')"
+        >
+          <span>全部</span>
+          <span class="cat-count">32k+</span>
+        </div>
+        <div
+          v-for="cat in categoryCards"
+          :key="cat.name"
+          class="category-chip page-card"
+          :class="{ active: activeTab === cat.name }"
+          @click="selectCategory(cat.name)"
+        >
+          <el-icon :size="14" :style="{ color: cat.color }"><component :is="cat.icon" /></el-icon>
+          <span>{{ cat.name }}</span>
+          <span class="cat-count">{{ cat.count > 999 ? (cat.count / 1000).toFixed(1) + 'k' : cat.count }}</span>
+        </div>
       </div>
-      <div class="header-actions">
-        <el-button type="primary" :icon="Upload" @click="handleUpload">上传资产</el-button>
-        <el-button :icon="PriceTag" @click="handleBatchTag">批量标注</el-button>
-        <el-button type="warning" plain :icon="DocumentChecked" @click="handleBatchAudit">批量审核</el-button>
+      <div class="page-toolbar-actions">
+        <el-button type="primary" size="small" :icon="Upload" @click="handleUpload">上传</el-button>
+        <el-button size="small" :icon="DocumentChecked" @click="handleBatchAudit">审核</el-button>
       </div>
     </div>
 
-    <el-tabs v-model="activeTab" class="category-tabs">
-      <el-tab-pane v-for="tab in categoryTabs" :key="tab" :label="tab" :name="tab" />
-    </el-tabs>
+    <div class="metric-grid compact" style="grid-template-columns: repeat(4, 1fr)">
+      <MetricCard
+        v-for="card in statCards"
+        :key="card.label"
+        :label="card.label"
+        :value="card.value"
+        :trend="card.trend"
+        :color="card.color"
+      />
+    </div>
 
-    <div class="page-body">
-      <div class="main-col">
-        <div class="metric-grid">
-          <MetricCard
-            v-for="card in statCards"
-            :key="card.label"
-            :label="card.label"
-            :value="card.value"
-            :trend="card.trend"
-            :color="card.color"
-          />
-        </div>
-
-        <div class="category-grid">
-          <div
-            v-for="cat in categoryCards"
-            :key="cat.name"
-            class="category-card page-card"
-            :class="{ active: activeTab === cat.name }"
-            @click="selectCategory(cat.name)"
-          >
-            <div class="cat-icon" :style="{ background: cat.color + '22', color: cat.color }">
-              <el-icon :size="22"><component :is="cat.icon" /></el-icon>
-            </div>
-            <div class="cat-info">
-              <div class="cat-name">{{ cat.name }}</div>
-              <div class="cat-count">{{ cat.count.toLocaleString() }}</div>
-              <div class="cat-desc">{{ cat.desc }}</div>
-            </div>
+    <div class="page-split">
+      <div class="page-split-main">
+        <div class="page-card fill-card">
+          <div class="filter-bar-compact">
+            <span class="filter-label">资产列表 · {{ activeTab }}</span>
+            <el-input placeholder="搜索" style="width: 140px" size="small" clearable />
           </div>
-        </div>
-
-        <div class="page-card table-section">
-          <div class="section-head">
-            <h3>资产列表</h3>
-            <el-input placeholder="搜索资产名称/标签" style="width: 220px" size="small" clearable />
+          <div class="table-flex">
+            <el-table :data="filteredAssets" stripe size="small">
+              <el-table-column type="selection" width="36" />
+              <el-table-column prop="id" label="ID" width="130" show-overflow-tooltip />
+              <el-table-column prop="name" label="名称" min-width="130" show-overflow-tooltip />
+              <el-table-column prop="type" label="类型" width="100">
+                <template #default="{ row }">
+                  <el-tag size="small" effect="dark">{{ row.type }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="标签" min-width="120">
+                <template #default="{ row }">
+                  <el-tag v-for="tag in row.tags.slice(0, 2)" :key="tag" size="small" class="tag-item">{{ tag }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="审核" width="80">
+                <template #default="{ row }">
+                  <el-tag :type="auditTag(row.audit).type" size="small">{{ auditTag(row.audit).label }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="引用" width="70" align="right">
+                <template #default="{ row }">{{ row.refs.toLocaleString() }}</template>
+              </el-table-column>
+              <el-table-column prop="updated" label="更新" width="90" />
+              <el-table-column label="操作" width="100" fixed="right">
+                <template #default>
+                  <el-button link type="primary" size="small">详情</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
-          <el-table :data="filteredAssets" stripe>
-            <el-table-column type="selection" width="42" />
-            <el-table-column prop="id" label="资产ID" width="160" />
-            <el-table-column prop="name" label="资产名称" min-width="160" />
-            <el-table-column prop="type" label="类型" width="110">
-              <template #default="{ row }">
-                <el-tag size="small" effect="dark">{{ row.type }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="标签" min-width="140">
-              <template #default="{ row }">
-                <el-tag v-for="tag in row.tags" :key="tag" size="small" class="tag-item">{{ tag }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="copyright" label="版权" width="100" />
-            <el-table-column label="审核" width="90">
-              <template #default="{ row }">
-                <el-tag :type="auditTag(row.audit).type" size="small">
-                  {{ auditTag(row.audit).label }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="引用" width="80" align="right">
-              <template #default="{ row }">{{ row.refs.toLocaleString() }}</template>
-            </el-table-column>
-            <el-table-column prop="updated" label="更新时间" width="110" />
-            <el-table-column label="操作" width="140" fixed="right">
-              <template #default>
-                <el-button link type="primary" size="small">详情</el-button>
-                <el-button link size="small">编辑</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
         </div>
       </div>
 
-      <aside class="side-col">
-        <div class="page-card rank-block">
-          <h3>热门素材 TOP3</h3>
-          <div v-for="(item, i) in assetRankings.hotAssets" :key="item.name" class="rank-item">
-            <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
-            <span class="rank-name">{{ item.name }}</span>
-            <span class="rank-refs">{{ item.refs }} 次</span>
-          </div>
-        </div>
-
-        <div class="page-card rank-block">
-          <h3>高复用模板 TOP3</h3>
-          <div v-for="(item, i) in assetRankings.topTemplates" :key="item.name" class="rank-item">
-            <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
-            <span class="rank-name">{{ item.name }}</span>
-            <span class="rank-refs">{{ item.refs }} 次</span>
-          </div>
-        </div>
-
-        <div class="page-card rank-block">
-          <h3>数字人 TOP3</h3>
-          <div v-for="(item, i) in assetRankings.topDigitalHumans" :key="item.name" class="rank-item">
-            <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
-            <span class="rank-name">{{ item.name }}</span>
-            <span class="rank-refs">{{ item.refs }} 次</span>
-          </div>
-        </div>
-
-        <div class="page-card rank-block">
-          <h3>知识库 TOP3</h3>
-          <div v-for="(item, i) in knowledgeRankings" :key="item.name" class="rank-item">
-            <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
-            <span class="rank-name">{{ item.name }}</span>
-            <span class="rank-refs">{{ item.refs }} 次</span>
-          </div>
+      <aside class="page-split-side">
+        <div class="page-card fill-card">
+          <el-tabs v-model="sideTab" class="side-tabs compact-tabs">
+            <el-tab-pane label="热门素材" name="hot">
+              <div v-for="(item, i) in assetRankings.hotAssets" :key="item.name" class="rank-item">
+                <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
+                <span class="rank-name">{{ item.name }}</span>
+                <span class="rank-refs">{{ item.refs }}</span>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="高复用模板" name="template">
+              <div v-for="(item, i) in assetRankings.topTemplates" :key="item.name" class="rank-item">
+                <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
+                <span class="rank-name">{{ item.name }}</span>
+                <span class="rank-refs">{{ item.refs }}</span>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="数字人" name="dh">
+              <div v-for="(item, i) in assetRankings.topDigitalHumans" :key="item.name" class="rank-item">
+                <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
+                <span class="rank-name">{{ item.name }}</span>
+                <span class="rank-refs">{{ item.refs }}</span>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="知识库" name="kb">
+              <div v-for="(item, i) in knowledgeRankings" :key="item.name" class="rank-item">
+                <span class="rank-no" :class="'top' + (i + 1)">{{ i + 1 }}</span>
+                <span class="rank-name">{{ item.name }}</span>
+                <span class="rank-refs">{{ item.refs }}</span>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </div>
       </aside>
     </div>
@@ -199,87 +187,27 @@ function selectCategory(name) {
 </template>
 
 <style scoped>
-.header-actions {
-  display: flex;
-  gap: 8px;
+.page-toolbar.with-actions .category-strip {
+  flex: 1;
+  margin-right: 8px;
 }
 
-.category-tabs {
-  margin-bottom: 16px;
+.category-chip {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
 }
 
-.page-body {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 16px;
-  align-items: start;
+.category-chip span:not(.cat-count) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }
 
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.category-card {
-  display: flex;
-  gap: 12px;
-  padding: 14px 16px;
-  cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
-}
-
-.category-card:hover {
-  border-color: var(--primary);
-  transform: translateY(-1px);
-}
-
-.category-card.active {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 1px var(--primary);
-}
-
-.cat-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.cat-name {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.cat-count {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary);
-  margin: 2px 0;
-}
-
-.cat-desc {
-  font-size: 11px;
-  color: var(--text-tertiary);
-}
-
-.table-section {
-  padding: 16px;
-}
-
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.section-head h3 {
-  font-size: 15px;
+.filter-label {
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -287,44 +215,24 @@ function selectCategory(name) {
   margin-right: 4px;
 }
 
-.side-col {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  position: sticky;
-  top: 0;
-}
-
-.rank-block {
-  padding: 14px 16px;
-}
-
-.rank-block h3 {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
 .rank-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  font-size: 12px;
+  gap: 6px;
+  padding: 5px 0;
+  font-size: 11px;
   border-bottom: 1px solid var(--border);
 }
 
-.rank-item:last-child {
-  border-bottom: none;
-}
+.rank-item:last-child { border-bottom: none; }
 
 .rank-no {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 4px;
   background: rgba(99, 102, 241, 0.08);
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -332,20 +240,9 @@ function selectCategory(name) {
   flex-shrink: 0;
 }
 
-.rank-no.top1 {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
-}
-
-.rank-no.top2 {
-  background: rgba(148, 163, 184, 0.15);
-  color: #94a3b8;
-}
-
-.rank-no.top3 {
-  background: rgba(180, 83, 9, 0.15);
-  color: #d97706;
-}
+.rank-no.top1 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.rank-no.top2 { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+.rank-no.top3 { background: rgba(180, 83, 9, 0.15); color: #d97706; }
 
 .rank-name {
   flex: 1;
@@ -357,5 +254,6 @@ function selectCategory(name) {
 .rank-refs {
   color: var(--text-tertiary);
   flex-shrink: 0;
+  font-size: 10px;
 }
 </style>

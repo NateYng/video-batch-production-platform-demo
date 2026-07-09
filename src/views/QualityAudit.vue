@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useAuditStore } from '@/stores'
 import { auditRules } from '@/mock'
 import { ElMessage } from 'element-plus'
+import { VideoPlay } from '@element-plus/icons-vue'
 
 const auditStore = useAuditStore()
 
@@ -73,37 +74,18 @@ function partialRegen() {
 </script>
 
 <template>
-  <div class="audit-page">
-    <div class="page-header">
-      <div>
-        <h1>质检与审核台</h1>
-        <p>机器质检 + 人工复核，管理高风险内容与审核规则</p>
-      </div>
+  <div class="page-shell audit-page">
+    <div class="count-cards compact">
+      <div class="count-card page-card high"><span class="count">42</span><span class="label">高风险</span></div>
+      <div class="count-card page-card medium"><span class="count">318</span><span class="label">中风险</span></div>
+      <div class="count-card page-card low"><span class="count">6920</span><span class="label">低风险</span></div>
+      <div class="count-card page-card passed"><span class="count">1286</span><span class="label">今日通过</span></div>
     </div>
 
-    <div class="count-cards">
-      <div class="count-card page-card high">
-        <span class="count">42</span>
-        <span class="label">高风险待审</span>
-      </div>
-      <div class="count-card page-card medium">
-        <span class="count">318</span>
-        <span class="label">中风险待审</span>
-      </div>
-      <div class="count-card page-card low">
-        <span class="count">6920</span>
-        <span class="label">低风险</span>
-      </div>
-      <div class="count-card page-card passed">
-        <span class="count">1286</span>
-        <span class="label">今日通过</span>
-      </div>
-    </div>
-
-    <div class="main-layout">
-      <div class="audit-main">
-        <div class="page-card table-section">
-          <el-tabs v-model="activeRiskTab">
+    <div class="page-split wide-side">
+      <div class="page-split-main">
+        <div class="page-card fill-card table-section">
+          <el-tabs v-model="activeRiskTab" class="compact-tabs">
             <el-tab-pane v-for="tab in riskTabs" :key="tab.key" :name="tab.key">
               <template #label>
                 {{ tab.label }}
@@ -112,6 +94,7 @@ function partialRegen() {
             </el-tab-pane>
           </el-tabs>
 
+          <div class="table-flex">
           <el-table
             :data="filteredItems"
             stripe
@@ -137,65 +120,31 @@ function partialRegen() {
             <el-table-column prop="suggest" label="建议操作" width="100" />
             <el-table-column prop="deadline" label="时限" width="100" />
           </el-table>
-        </div>
-
-        <div class="rule-cards">
-          <h3>审核规则配置</h3>
-          <div class="rule-grid">
-            <div v-for="rule in auditRules" :key="rule.name" class="rule-card page-card">
-              <div class="rule-name">{{ rule.name }}</div>
-              <div class="rule-scope">{{ rule.scope }}</div>
-              <div class="rule-meta">
-                <el-tag size="small" type="primary" effect="plain">{{ rule.rule }}</el-tag>
-                <span>{{ rule.time }}</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
-      <aside v-if="selectedItem" class="audit-sidebar">
-        <div class="page-card sidebar-block">
+      <aside v-if="selectedItem" class="page-split-side audit-sidebar">
+        <div class="page-card fill-card sidebar-block">
           <div class="preview-box">
-            <el-icon :size="40"><VideoPlay /></el-icon>
+            <el-icon :size="32"><VideoPlay /></el-icon>
             <span>审核预览</span>
           </div>
-          <h3>{{ selectedItem.title }}</h3>
+          <h3 class="side-title">{{ selectedItem.title }}</h3>
           <p class="item-meta">{{ selectedItem.id }} · {{ selectedItem.type }}</p>
           <div class="score-badge" :style="{ borderColor: scoreColor(selectedItem.score) }">
-            AI 评分 <strong :style="{ color: scoreColor(selectedItem.score) }">{{ selectedItem.score }}</strong>
+            AI <strong :style="{ color: scoreColor(selectedItem.score) }">{{ selectedItem.score }}</strong>
           </div>
-        </div>
-
-        <div class="page-card sidebar-block">
-          <h4>风险明细</h4>
-          <el-table :data="riskDetails" size="small">
+          <el-table :data="riskDetails" size="small" class="mini-table">
             <el-table-column prop="rule" label="规则" show-overflow-tooltip />
-            <el-table-column prop="risk" label="风险点" width="100" />
-            <el-table-column prop="score" label="分项" width="50" />
-            <el-table-column prop="action" label="建议" width="80" />
+            <el-table-column prop="action" label="建议" width="64" />
           </el-table>
-        </div>
-
-        <div class="page-card sidebar-block">
-          <h4>审核历史</h4>
-          <el-timeline>
-            <el-timeline-item
-              v-for="(h, i) in auditHistory"
-              :key="i"
-              :timestamp="h.time"
-              placement="top"
-            >
-              {{ h.action }} — {{ h.result }}（{{ h.operator }}）
-            </el-timeline-item>
-          </el-timeline>
-        </div>
-
-        <div class="action-bar page-card">
-          <el-button type="success" @click="approve">通过</el-button>
-          <el-button type="danger" @click="reject">驳回</el-button>
-          <el-button type="warning" plain @click="returnForEdit">打回修改</el-button>
-          <el-button plain @click="partialRegen">局部重生成</el-button>
+          <div class="action-bar">
+            <el-button type="success" size="small" @click="approve">通过</el-button>
+            <el-button type="danger" size="small" @click="reject">驳回</el-button>
+            <el-button type="warning" plain size="small" @click="returnForEdit">打回</el-button>
+            <el-button plain size="small" @click="partialRegen">重生成</el-button>
+          </div>
         </div>
       </aside>
     </div>
@@ -206,26 +155,26 @@ function partialRegen() {
 .count-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
-.count-card {
-  padding: 16px 20px;
+.count-cards.compact .count-card {
+  padding: 8px 12px;
   text-align: center;
 }
 
 .count-card .count {
   display: block;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
 }
 
 .count-card .label {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .count-card.high .count { color: #ef4444; }
@@ -233,109 +182,55 @@ function partialRegen() {
 .count-card.low .count { color: #22c55e; }
 .count-card.passed .count { color: var(--primary); }
 
-.main-layout {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 12px;
-}
-
-.table-section {
-  padding: 12px 16px;
-  margin-bottom: 12px;
-}
-
-.tab-badge {
-  margin-left: 6px;
-}
-
-.rule-cards h3 {
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.rule-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.rule-card {
-  padding: 12px 14px;
-}
-
-.rule-name {
-  font-weight: 600;
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-.rule-scope {
-  font-size: 11px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.rule-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--text-tertiary);
-}
-
-.audit-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.tab-badge { margin-left: 4px; }
 
 .sidebar-block {
-  padding: 14px 16px;
+  overflow-y: auto;
 }
 
-.sidebar-block h3 {
-  font-size: 14px;
-  margin: 8px 0 4px;
-}
-
-.sidebar-block h4 {
+.side-title {
   font-size: 13px;
-  margin-bottom: 10px;
+  margin: 8px 0 4px;
 }
 
 .preview-box {
   aspect-ratio: 16/9;
+  max-height: 100px;
   background: rgba(99, 102, 241, 0.06);
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   color: var(--text-tertiary);
-  font-size: 12px;
+  font-size: 11px;
   border: 1px solid var(--border);
 }
 
 .item-meta {
   font-size: 11px;
   color: var(--text-secondary);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .score-badge {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 1px solid;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
+  margin-bottom: 8px;
+}
+
+.mini-table {
+  margin-bottom: 8px;
 }
 
 .action-bar {
-  padding: 12px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 .action-bar .el-button {

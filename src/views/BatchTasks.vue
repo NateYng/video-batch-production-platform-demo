@@ -112,16 +112,13 @@ function viewTask(row) {
 </script>
 
 <template>
-  <div class="batch-tasks">
-    <div class="page-header">
-      <div>
-        <h1>批量任务中心</h1>
-        <p>管理所有批量生产任务，支持筛选、暂停、重试与批量操作</p>
-      </div>
-      <el-button type="primary" :icon="Plus" @click="router.push('/create-task')">创建任务</el-button>
+  <div class="page-shell batch-tasks">
+    <div class="page-toolbar">
+      <span />
+      <el-button type="primary" size="small" :icon="Plus" @click="router.push('/create-task')">创建任务</el-button>
     </div>
 
-    <div class="metric-grid">
+    <div class="metric-grid compact">
       <MetricCard
         v-for="card in overviewCards"
         :key="card.label"
@@ -131,10 +128,10 @@ function viewTask(row) {
       />
     </div>
 
-    <div class="main-layout">
-      <div class="main-content">
-        <div class="page-card content-card">
-          <div class="filter-bar">
+    <div class="page-split">
+      <div class="page-split-main">
+        <div class="page-card fill-card">
+          <div class="filter-bar-compact">
             <el-input
               v-model="keyword"
               placeholder="搜索任务名称 / ID"
@@ -158,9 +155,11 @@ function viewTask(row) {
             </div>
           </div>
 
+          <div class="table-flex">
           <el-table
             :data="filteredTasks"
             stripe
+            size="small"
             @selection-change="handleSelectionChange"
             @row-click="viewTask"
           >
@@ -215,11 +214,12 @@ function viewTask(row) {
               </template>
             </el-table-column>
           </el-table>
+          </div>
         </div>
       </div>
 
-      <aside class="sidebar">
-        <div class="page-card sidebar-card">
+      <aside class="page-split-side">
+        <div class="page-card side-block">
           <h3>队列健康度</h3>
           <div class="health-metrics">
             <div class="health-item">
@@ -241,11 +241,11 @@ function viewTask(row) {
           </div>
         </div>
 
-        <div class="page-card sidebar-card">
-          <DonutChart title="失败原因分布" :data="failureData" height="160px" />
+        <div class="page-card side-block">
+          <DonutChart title="失败原因" :data="failureData" height="120px" />
         </div>
 
-        <div class="page-card sidebar-card cost-warning">
+        <div class="page-card side-block cost-warning">
           <h3>成本预警</h3>
           <div class="warning-content">
             <div class="warning-amount">¥ 28,426.50</div>
@@ -260,76 +260,42 @@ function viewTask(row) {
 </template>
 
 <style scoped>
-.batch-tasks {
-  max-width: 1600px;
+.side-block {
+  padding: 10px 12px;
+  flex-shrink: 0;
 }
 
-.main-layout {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 16px;
-  align-items: start;
-}
-
-.content-card {
-  padding: 16px;
-}
-
-.filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.batch-actions {
-  margin-left: auto;
-  display: flex;
-  gap: 8px;
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.sidebar-card {
-  padding: 14px;
-}
-
-.sidebar-card h3 {
-  font-size: 14px;
+.side-block h3 {
+  font-size: 12px;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .health-metrics {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .health-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .health-label {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
 }
 
 .health-value {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .risk-tag {
-  font-size: 11px;
-  padding: 2px 8px;
+  font-size: 10px;
+  padding: 1px 6px;
   border-radius: 4px;
   border: 1px solid;
   font-weight: 500;
@@ -337,37 +303,29 @@ function viewTask(row) {
 
 .cost-warning {
   border-color: #fecaca;
-  background: linear-gradient(180deg, #fff 0%, #fef2f2 100%);
+  background: linear-gradient(180deg, var(--bg-card-solid) 0%, #fef2f2 100%);
 }
 
 .warning-amount {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: #ef4444;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .warning-desc {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .warning-tip {
-  font-size: 11px;
+  font-size: 10px;
   color: #f59e0b;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 @media (max-width: 1200px) {
-  .main-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .metric-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .batch-actions {
     margin-left: 0;
     width: 100%;

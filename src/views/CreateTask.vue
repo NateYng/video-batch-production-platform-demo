@@ -99,211 +99,146 @@ function submitTask() {
 </script>
 
 <template>
-  <div class="create-task">
-    <div class="page-header">
-      <div>
-        <h1>创建批量任务</h1>
-        <p>五步向导完成视频批产配置，支持万级规模生产调度</p>
-      </div>
-    </div>
-
-    <div class="wizard-layout">
-      <div class="wizard-main">
-        <div class="page-card steps-card">
-          <el-steps :active="currentStep" finish-status="success" align-center>
+  <div class="page-shell create-task">
+    <div class="page-split wide-side">
+      <div class="page-split-main">
+        <div class="page-card wizard-steps compact">
+          <el-steps :active="currentStep" finish-status="success" align-center simple>
             <el-step v-for="(step, i) in steps" :key="i" :title="step" />
           </el-steps>
         </div>
 
-        <div class="page-card step-content">
-          <!-- Step 1: Video Type -->
-          <div v-show="currentStep === 0">
-            <h3 class="step-title">选择视频类型</h3>
-            <p class="step-desc">选择本次批量生产的视频内容类型，不同类型将匹配不同的生产模板</p>
-            <div class="type-grid">
-              <div
-                v-for="(type, i) in videoTypes"
-                :key="type"
-                class="type-card"
-                :class="{ active: selectedType === type }"
-                :style="{ '--accent': typeColors[i % typeColors.length] }"
-                @click="selectedType = type"
-              >
-                <el-icon :size="32" :style="{ color: typeColors[i % typeColors.length] }">
-                  <component :is="typeIcons[type] || VideoCamera" />
-                </el-icon>
-                <span>{{ type }}</span>
-                <el-icon v-if="selectedType === type" class="check-icon"><Check /></el-icon>
+        <div class="page-card fill-card step-content">
+          <div class="step-scroll">
+            <div v-show="currentStep === 0">
+              <h3 class="step-title">选择视频类型</h3>
+              <div class="type-grid">
+                <div
+                  v-for="(type, i) in videoTypes"
+                  :key="type"
+                  class="type-card"
+                  :class="{ active: selectedType === type }"
+                  :style="{ '--accent': typeColors[i % typeColors.length] }"
+                  @click="selectedType = type"
+                >
+                  <el-icon :size="24" :style="{ color: typeColors[i % typeColors.length] }">
+                    <component :is="typeIcons[type] || VideoCamera" />
+                  </el-icon>
+                  <span>{{ type }}</span>
+                  <el-icon v-if="selectedType === type" class="check-icon"><Check /></el-icon>
+                </div>
               </div>
+              <el-form label-width="80px" size="small" style="margin-top: 12px">
+                <el-form-item label="任务名称">
+                  <el-input v-model="taskName" placeholder="输入任务名称" style="max-width: 320px" />
+                </el-form-item>
+              </el-form>
             </div>
-            <el-form label-width="100px" style="margin-top: 20px">
-              <el-form-item label="任务名称">
-                <el-input v-model="taskName" placeholder="输入任务名称" style="max-width: 400px" />
-              </el-form-item>
-            </el-form>
-          </div>
 
-          <!-- Step 2: Upload -->
-          <div v-show="currentStep === 1">
-            <h3 class="step-title">上传素材文件</h3>
-            <p class="step-desc">上传脚本/数据文件，系统将自动解析并生成视频内容</p>
-            <div class="upload-zone page-card">
-              <el-icon :size="40" color="#94a3b8"><Upload /></el-icon>
-              <p>拖拽文件到此处，或 <el-button link type="primary">点击上传</el-button></p>
-              <span class="upload-hint">支持 .xlsx / .csv / .json，单文件最大 50MB</span>
-            </div>
-            <el-table :data="uploadFiles" stripe style="margin-top: 16px">
-              <el-table-column prop="name" label="文件名" />
-              <el-table-column prop="size" label="大小" width="100" />
-              <el-table-column prop="rows" label="数据行数" width="100" align="right">
-                <template #default="{ row }">{{ row.rows.toLocaleString() }}</template>
-              </el-table-column>
-              <el-table-column label="状态" width="100">
-                <template #default>
-                  <el-tag type="success" size="small">已就绪</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="80">
-                <template #default>
-                  <el-button link type="danger" size="small">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-
-          <!-- Step 3: Production Config -->
-          <div v-show="currentStep === 2">
-            <h3 class="step-title">生产配置</h3>
-            <p class="step-desc">配置模板、数字人、语音、字幕与封面等生产参数</p>
-            <el-form label-width="120px" class="config-form">
-              <el-form-item label="生产模板">
-                <el-select v-model="config.template" style="width: 280px">
-                  <el-option label="科普短视频标准版" value="TPL-003" />
-                  <el-option label="企业新闻播报模板 v3" value="TPL-001" />
-                  <el-option label="数字人讲解" value="TPL-002" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="数字人">
-                <el-select v-model="config.digitalHuman" style="width: 280px">
-                  <el-option v-for="dh in digitalHumans" :key="dh.id" :label="dh.name" :value="dh.id" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="语音风格">
-                <el-radio-group v-model="config.voice">
-                  <el-radio value="知性女声">知性女声</el-radio>
-                  <el-radio value="科技男声">科技男声</el-radio>
-                  <el-radio value="亲和女声">亲和女声</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="字幕">
-                <el-switch v-model="config.subtitle" />
-                <el-select v-if="config.subtitle" v-model="config.subtitleStyle" style="width: 160px; margin-left: 12px">
-                  <el-option label="标准样式" value="standard" />
-                  <el-option label="品牌样式" value="brand" />
-                  <el-option label="简约样式" value="minimal" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="封面">
-                <el-switch v-model="config.cover" />
-                <el-select v-if="config.cover" v-model="config.coverTemplate" style="width: 160px; margin-left: 12px">
-                  <el-option label="自动生成" value="auto" />
-                  <el-option label="模板封面" value="template" />
-                  <el-option label="首帧截取" value="frame" />
-                </el-select>
-              </el-form-item>
-            </el-form>
-          </div>
-
-          <!-- Step 4: Audit Strategy -->
-          <div v-show="currentStep === 3">
-            <h3 class="step-title">审核策略</h3>
-            <p class="step-desc">配置机器质检与人工审核策略，保障内容合规</p>
-            <el-form label-width="120px" class="config-form">
-              <el-form-item label="审核模式">
-                <el-radio-group v-model="config.auditStrategy">
-                  <el-radio value="machine_first">机器优先（推荐）</el-radio>
-                  <el-radio value="human_first">人工优先</el-radio>
-                  <el-radio value="machine_only">仅机器审核</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="人工抽检率">
-                <el-slider v-model="config.sampleRate" :min="0" :max="100" show-input style="max-width: 400px" />
-              </el-form-item>
-              <el-form-item label="风险阈值">
-                <el-radio-group v-model="config.riskLevel">
-                  <el-radio value="low">宽松（低风险拦截）</el-radio>
-                  <el-radio value="medium">标准（中风险拦截）</el-radio>
-                  <el-radio value="high">严格（高风险拦截）</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-form>
-            <div class="audit-rules page-card">
-              <h4>适用审核规则</h4>
-              <div class="rule-list">
-                <el-tag>R-01 违禁词检测</el-tag>
-                <el-tag>R-03 医疗功效</el-tag>
-                <el-tag>R-07 版权检测</el-tag>
-                <el-tag>R-08 夸大宣传</el-tag>
-                <el-tag>R-12 字幕纠错</el-tag>
+            <div v-show="currentStep === 1">
+              <h3 class="step-title">上传素材文件</h3>
+              <div class="upload-zone">
+                <el-icon :size="32" color="#94a3b8"><Upload /></el-icon>
+                <p>拖拽或 <el-button link type="primary">点击上传</el-button></p>
+                <span class="upload-hint">支持 .xlsx / .csv / .json</span>
               </div>
+              <el-table :data="uploadFiles" stripe size="small" style="margin-top: 10px">
+                <el-table-column prop="name" label="文件名" show-overflow-tooltip />
+                <el-table-column prop="size" label="大小" width="80" />
+                <el-table-column prop="rows" label="行数" width="70" align="right" />
+                <el-table-column label="状态" width="80">
+                  <template #default><el-tag type="success" size="small">就绪</el-tag></template>
+                </el-table-column>
+              </el-table>
             </div>
-          </div>
 
-          <!-- Step 5: Publish Config -->
-          <div v-show="currentStep === 4">
-            <h3 class="step-title">发布配置</h3>
-            <p class="step-desc">配置发布渠道与生产规模参数</p>
-            <el-form label-width="120px" class="config-form">
-              <el-form-item label="发布渠道">
-                <el-checkbox-group v-model="config.channels">
-                  <el-checkbox label="抖音" value="抖音" />
-                  <el-checkbox label="视频号" value="视频号" />
-                  <el-checkbox label="官网" value="官网" />
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="发布方式">
-                <el-radio-group v-model="config.publishMode">
-                  <el-radio value="immediate">审核通过后立即发布</el-radio>
-                  <el-radio value="scheduled">定时发布</el-radio>
-                </el-radio-group>
-                <el-time-select
-                  v-if="config.publishMode === 'scheduled'"
-                  v-model="config.publishTime"
-                  start="08:00"
-                  step="01:00"
-                  end="22:00"
-                  style="width: 120px; margin-left: 12px"
-                />
-              </el-form-item>
-              <el-divider />
-              <el-form-item label="生产总量">
-                <el-input-number v-model="config.totalCount" :min="100" :max="100000" :step="1000" />
-                <span class="form-hint">条视频</span>
-              </el-form-item>
-              <el-form-item label="分批数量">
-                <el-input-number v-model="config.batchCount" :min="1" :max="100" />
-                <span class="form-hint">批（每批约 {{ Math.ceil(config.totalCount / config.batchCount).toLocaleString() }} 条）</span>
-              </el-form-item>
-              <el-form-item label="并发数">
-                <el-input-number v-model="config.concurrency" :min="1" :max="256" />
-                <span class="form-hint">路并发（当前队列可用 142 路）</span>
-              </el-form-item>
-            </el-form>
+            <div v-show="currentStep === 2">
+              <h3 class="step-title">生产配置</h3>
+              <el-form label-width="90px" size="small" class="config-form">
+                <el-form-item label="生产模板">
+                  <el-select v-model="config.template" style="width: 240px">
+                    <el-option label="科普短视频标准版" value="TPL-003" />
+                    <el-option label="企业新闻播报模板 v3" value="TPL-001" />
+                    <el-option label="数字人讲解" value="TPL-002" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="数字人">
+                  <el-select v-model="config.digitalHuman" style="width: 240px">
+                    <el-option v-for="dh in digitalHumans" :key="dh.id" :label="dh.name" :value="dh.id" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="语音风格">
+                  <el-radio-group v-model="config.voice">
+                    <el-radio value="知性女声">知性女声</el-radio>
+                    <el-radio value="科技男声">科技男声</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="字幕">
+                  <el-switch v-model="config.subtitle" />
+                </el-form-item>
+                <el-form-item label="封面">
+                  <el-switch v-model="config.cover" />
+                </el-form-item>
+              </el-form>
+            </div>
+
+            <div v-show="currentStep === 3">
+              <h3 class="step-title">审核策略</h3>
+              <el-form label-width="90px" size="small" class="config-form">
+                <el-form-item label="审核模式">
+                  <el-radio-group v-model="config.auditStrategy">
+                    <el-radio value="machine_first">机器优先</el-radio>
+                    <el-radio value="human_first">人工优先</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="抽检率">
+                  <el-slider v-model="config.sampleRate" :min="0" :max="100" style="max-width: 280px" />
+                </el-form-item>
+                <el-form-item label="风险阈值">
+                  <el-radio-group v-model="config.riskLevel">
+                    <el-radio value="low">宽松</el-radio>
+                    <el-radio value="medium">标准</el-radio>
+                    <el-radio value="high">严格</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-form>
+            </div>
+
+            <div v-show="currentStep === 4">
+              <h3 class="step-title">发布配置</h3>
+              <el-form label-width="90px" size="small" class="config-form">
+                <el-form-item label="发布渠道">
+                  <el-checkbox-group v-model="config.channels">
+                    <el-checkbox label="抖音" value="抖音" />
+                    <el-checkbox label="视频号" value="视频号" />
+                    <el-checkbox label="官网" value="官网" />
+                  </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="生产总量">
+                  <el-input-number v-model="config.totalCount" :min="100" :max="100000" :step="1000" size="small" />
+                  <span class="form-hint">条</span>
+                </el-form-item>
+                <el-form-item label="分批数量">
+                  <el-input-number v-model="config.batchCount" :min="1" :max="100" size="small" />
+                </el-form-item>
+                <el-form-item label="并发数">
+                  <el-input-number v-model="config.concurrency" :min="1" :max="256" size="small" />
+                </el-form-item>
+              </el-form>
+            </div>
           </div>
 
           <div class="step-actions">
-            <el-button v-if="currentStep > 0" :icon="ArrowLeft" @click="prevStep">上一步</el-button>
-            <el-button v-if="currentStep < 4" type="primary" @click="nextStep">
+            <el-button v-if="currentStep > 0" size="small" :icon="ArrowLeft" @click="prevStep">上一步</el-button>
+            <el-button v-if="currentStep < 4" size="small" type="primary" @click="nextStep">
               下一步 <el-icon class="el-icon--right"><ArrowRight /></el-icon>
             </el-button>
-            <el-button v-if="currentStep === 4" type="primary" :icon="Check" @click="submitTask">
-              提交任务
-            </el-button>
+            <el-button v-if="currentStep === 4" size="small" type="primary" :icon="Check" @click="submitTask">提交任务</el-button>
           </div>
         </div>
       </div>
 
-      <aside class="summary-panel">
+      <aside class="page-split-side">
         <div class="page-card summary-card">
           <h3>任务摘要</h3>
           <div class="summary-list">
@@ -313,29 +248,10 @@ function submitTask() {
             </div>
           </div>
         </div>
-
         <div class="page-card cost-card">
           <h3>成本预估</h3>
           <div class="cost-amount">¥ {{ estimatedCost.toLocaleString() }}</div>
-          <div class="cost-breakdown">
-            <div class="cost-row">
-              <span>视频合成</span>
-              <span>¥ {{ Math.round(estimatedCost * 0.45).toLocaleString() }}</span>
-            </div>
-            <div class="cost-row">
-              <span>数字人播报</span>
-              <span>¥ {{ Math.round(estimatedCost * 0.27).toLocaleString() }}</span>
-            </div>
-            <div class="cost-row">
-              <span>语音合成</span>
-              <span>¥ {{ Math.round(estimatedCost * 0.18).toLocaleString() }}</span>
-            </div>
-            <div class="cost-row">
-              <span>素材处理</span>
-              <span>¥ {{ Math.round(estimatedCost * 0.1).toLocaleString() }}</span>
-            </div>
-          </div>
-          <div class="cost-tip">基于 {{ config.totalCount.toLocaleString() }} 条 × ¥1.86/条估算</div>
+          <div class="cost-tip">{{ config.totalCount.toLocaleString() }} 条 × ¥1.86/条</div>
         </div>
       </aside>
     </div>
@@ -343,62 +259,41 @@ function submitTask() {
 </template>
 
 <style scoped>
-.create-task {
-  max-width: 1400px;
-}
-
-.wizard-layout {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 16px;
-  align-items: start;
-}
-
-.steps-card {
-  padding: 20px 24px;
-  margin-bottom: 16px;
+.page-split-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .step-content {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 .step-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.step-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .type-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
 .type-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 20px 12px;
+  gap: 6px;
+  padding: 12px 8px;
   border: 2px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
-  transition: all 0.15s;
   position: relative;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
-}
-
-.type-card:hover {
-  border-color: var(--accent);
-  background: #f8fafc;
 }
 
 .type-card.active {
@@ -408,8 +303,8 @@ function submitTask() {
 
 .check-icon {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 4px;
+  right: 4px;
   color: var(--accent);
 }
 
@@ -417,75 +312,60 @@ function submitTask() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 40px;
+  gap: 6px;
+  padding: 20px;
   border: 2px dashed var(--border);
-  background: #f8fafc;
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: var(--radius);
 }
 
 .upload-hint {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
 }
 
-.config-form {
-  max-width: 600px;
-}
-
-.form-hint {
-  margin-left: 10px;
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.audit-rules {
-  padding: 16px;
-  margin-top: 16px;
-  background: #f8fafc;
-}
-
-.audit-rules h4 {
-  font-size: 13px;
+.config-form :deep(.el-form-item) {
   margin-bottom: 10px;
 }
 
-.rule-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.form-hint {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
 }
 
 .step-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 24px;
-  padding-top: 20px;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .summary-card,
 .cost-card {
-  padding: 16px;
+  padding: 10px 12px;
 }
 
 .summary-card h3,
 .cost-card h3 {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .summary-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .summary-item {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .summary-label {
@@ -495,55 +375,22 @@ function submitTask() {
 .summary-value {
   font-weight: 500;
   text-align: right;
-  max-width: 160px;
+  max-width: 140px;
 }
 
 .cost-card {
-  margin-top: 12px;
-  background: linear-gradient(180deg, #fff 0%, #f0f9ff 100%);
+  margin-top: 8px;
 }
 
 .cost-amount {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--primary);
-  margin-bottom: 14px;
-}
-
-.cost-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.cost-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--text-secondary);
+  margin-bottom: 6px;
 }
 
 .cost-tip {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-secondary);
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-}
-
-@media (max-width: 1100px) {
-  .wizard-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .type-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .type-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 </style>

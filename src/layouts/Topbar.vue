@@ -16,13 +16,10 @@ function goCreate() {
   <header class="topbar">
     <div class="left">
       <div class="breadcrumb">
-        <span class="bc-module">视频生产中台</span>
+        <span class="bc-module">视频中台</span>
         <span class="bc-sep">/</span>
         <h2 class="page-title">{{ route.meta.title }}</h2>
-      </div>
-      <div class="live-status">
-        <span class="live-dot" />
-        <span>系统运行中</span>
+        <span class="live-status"><span class="live-dot" />运行中</span>
       </div>
     </div>
     <div class="center">
@@ -52,11 +49,8 @@ function goCreate() {
       </el-tooltip>
       <el-dropdown>
         <div class="user-info">
-          <el-avatar :size="34" class="user-avatar">MO</el-avatar>
-          <div class="user-meta">
-            <span class="user-name">市场运营团队</span>
-            <span class="user-role">管理员</span>
-          </div>
+          <el-avatar :size="28" class="user-avatar">MO</el-avatar>
+          <span class="user-name">市场运营</span>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
@@ -74,53 +68,55 @@ function goCreate() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 24px;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(99, 102, 241, 0.08);
-  gap: 16px;
-  position: sticky;
-  top: 0;
+  gap: 12px;
+  flex-shrink: 0;
   z-index: 50;
 }
 
 .left {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .bc-module {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-tertiary);
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .bc-sep {
   color: var(--text-tertiary);
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .page-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   white-space: nowrap;
-  letter-spacing: -0.2px;
 }
 
 .live-status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
+  gap: 4px;
+  font-size: 10px;
   color: var(--success);
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border-radius: 10px;
 }
 
 .live-dot {
@@ -139,7 +135,7 @@ function goCreate() {
 
 .center {
   flex: 1;
-  max-width: 420px;
+  max-width: 360px;
 }
 
 .search-input {
@@ -158,11 +154,9 @@ function goCreate() {
 }
 
 .create-btn {
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px !important;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+  font-size: 12px;
+  padding: 6px 12px;
+  height: 30px;
 }
 
 .icon-circle {
@@ -178,10 +172,10 @@ function goCreate() {
 .user-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
-  padding: 4px 8px 4px 4px;
-  border-radius: 24px;
+  padding: 2px 8px 2px 2px;
+  border-radius: 20px;
   transition: background 0.2s;
 }
 
@@ -195,21 +189,9 @@ function goCreate() {
   font-weight: 700;
 }
 
-.user-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
 .user-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  line-height: 1.2;
-}
-
-.user-role {
-  font-size: 10px;
-  color: var(--text-tertiary);
 }
 
 .icon-btn {

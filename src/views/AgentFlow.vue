@@ -169,16 +169,13 @@ async function runFlow() {
 </script>
 
 <template>
-  <div class="agent-flow-page">
-    <div class="page-header">
-      <div>
-        <h1>智能体编排</h1>
-        <p>拖拽节点、连线编排视频批量生产流程，配置各节点模型与风控阈值</p>
-      </div>
-      <div class="header-actions">
-        <el-button @click="saveTemplate">保存为模板</el-button>
-        <el-button type="primary" plain @click="publishFlow">发布流程</el-button>
-        <el-button type="primary" :loading="isRunning" @click="runFlow">运行流程</el-button>
+  <div class="page-shell agent-flow-page">
+    <div class="page-toolbar with-actions">
+      <span />
+      <div class="page-toolbar-actions">
+        <el-button size="small" @click="saveTemplate">保存模板</el-button>
+        <el-button size="small" type="primary" plain @click="publishFlow">发布</el-button>
+        <el-button size="small" type="primary" :loading="isRunning" @click="runFlow">运行流程</el-button>
       </div>
     </div>
 
@@ -235,10 +232,10 @@ async function runFlow() {
       <div class="run-table page-card">
         <div class="section-head">
           <h3>运行概览</h3>
-          <el-tag v-if="isRunning" type="primary" effect="plain">运行中</el-tag>
-          <el-tag v-else type="info" effect="plain">空闲</el-tag>
+          <el-tag v-if="isRunning" type="primary" effect="plain" size="small">运行中</el-tag>
+          <el-tag v-else type="info" effect="plain" size="small">空闲</el-tag>
         </div>
-        <el-table :data="runOverviewRows" size="small" max-height="200" stripe>
+        <el-table :data="runOverviewRows" size="small" height="120" stripe>
           <el-table-column prop="name" label="节点" width="100" />
           <el-table-column prop="model" label="模型" width="120" />
           <el-table-column label="状态" width="90">
@@ -277,34 +274,27 @@ async function runFlow() {
 
 <style scoped>
 .agent-flow-page {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  height: calc(100vh - 100px);
-}
-
-.header-actions {
-  display: flex;
   gap: 8px;
 }
 
 .flow-layout {
   display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 12px;
+  grid-template-columns: 1fr 260px;
+  gap: 10px;
   flex: 1;
   min-height: 0;
 }
 
 .canvas-wrap {
   height: 100%;
-  min-height: 360px;
+  min-height: 0;
   overflow: hidden;
 }
 
 .config-panel {
-  padding: 16px;
+  padding: 10px 12px;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .config-panel h3,
@@ -322,14 +312,16 @@ async function runFlow() {
 
 .bottom-panels {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 12px;
+  grid-template-columns: 1fr 280px;
+  gap: 8px;
+  flex-shrink: 0;
   position: relative;
+  max-height: 150px;
 }
 
 .run-table,
 .run-log {
-  padding: 12px 16px;
+  padding: 8px 12px;
 }
 
 .section-head {
@@ -340,9 +332,9 @@ async function runFlow() {
 }
 
 .log-list {
-  max-height: 160px;
+  max-height: 100px;
   overflow-y: auto;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .log-item {

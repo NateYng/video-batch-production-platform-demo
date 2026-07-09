@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useVideoStore } from '@/stores'
 import { ElMessage } from 'element-plus'
+import { VideoPlay } from '@element-plus/icons-vue'
 
 const videoStore = useVideoStore()
 
@@ -70,45 +71,43 @@ function batchSubmitAudit() {
 </script>
 
 <template>
-  <div class="video-results">
-    <div class="page-header">
-      <div>
-        <h1>视频结果列表</h1>
-        <p>查看批量任务产出视频，支持筛选、预览与快速编辑</p>
-      </div>
-      <el-button type="primary" @click="batchSubmitAudit">批量提交审核</el-button>
-    </div>
-
-    <div class="filter-bar page-card">
-      <el-input v-model="keyword" placeholder="搜索标题 / ID" clearable style="width: 200px" />
-      <el-select v-model="filterRisk" placeholder="风险等级" clearable style="width: 120px">
-        <el-option label="高风险" value="high" />
-        <el-option label="中风险" value="medium" />
-        <el-option label="低风险" value="low" />
-      </el-select>
-      <el-select v-model="filterAudit" placeholder="审核状态" clearable style="width: 120px">
-        <el-option label="待审核" value="pending" />
-        <el-option label="审核中" value="auditing" />
-        <el-option label="已通过" value="passed" />
-        <el-option label="已驳回" value="rejected" />
-      </el-select>
-      <el-select v-model="filterPublish" placeholder="发布状态" clearable style="width: 120px">
-        <el-option label="待发布" value="pending" />
-        <el-option label="已发布" value="published" />
-        <el-option label="发布失败" value="failed" />
-      </el-select>
+  <div class="page-shell video-results">
+    <div class="page-toolbar">
       <span class="filter-count">共 {{ filteredList.length }} 条</span>
+      <el-button type="primary" size="small" @click="batchSubmitAudit">批量提交审核</el-button>
     </div>
 
-    <div class="content-layout">
-      <div class="table-wrap page-card">
-        <el-table
-          :data="filteredList"
-          stripe
-          highlight-current-row
-          @selection-change="onSelect"
-          @row-click="selectRow"
-        >
+    <div class="page-split wide-side">
+      <div class="page-split-main">
+        <div class="page-card fill-card">
+          <div class="filter-bar-compact">
+            <el-input v-model="keyword" placeholder="搜索" clearable size="small" style="width: 140px" />
+            <el-select v-model="filterRisk" placeholder="风险" clearable size="small" style="width: 100px">
+              <el-option label="高风险" value="high" />
+              <el-option label="中风险" value="medium" />
+              <el-option label="低风险" value="low" />
+            </el-select>
+            <el-select v-model="filterAudit" placeholder="审核" clearable size="small" style="width: 100px">
+              <el-option label="待审核" value="pending" />
+              <el-option label="审核中" value="auditing" />
+              <el-option label="已通过" value="passed" />
+              <el-option label="已驳回" value="rejected" />
+            </el-select>
+            <el-select v-model="filterPublish" placeholder="发布" clearable size="small" style="width: 100px">
+              <el-option label="待发布" value="pending" />
+              <el-option label="已发布" value="published" />
+              <el-option label="失败" value="failed" />
+            </el-select>
+          </div>
+          <div class="table-flex">
+            <el-table
+              :data="filteredList"
+              stripe
+              size="small"
+              highlight-current-row
+              @selection-change="onSelect"
+              @row-click="selectRow"
+            >
           <el-table-column type="selection" width="40" />
           <el-table-column prop="id" label="视频 ID" width="160" />
           <el-table-column prop="title" label="标题" min-width="180" show-overflow-tooltip />
@@ -132,22 +131,25 @@ function batchSubmitAudit() {
           <el-table-column prop="version" label="版本" width="60" />
           <el-table-column prop="time" label="生成时间" width="150" />
         </el-table>
+          </div>
+        </div>
       </div>
 
-      <aside v-if="selectedVideo" class="preview-panel page-card">
+      <aside class="page-split-side">
+      <div v-if="selectedVideo" class="page-card fill-card preview-panel">
         <div class="video-placeholder">
-          <el-icon :size="48"><VideoPlay /></el-icon>
+          <el-icon :size="36"><VideoPlay /></el-icon>
           <span>{{ selectedVideo.duration }}</span>
         </div>
-        <h3>{{ selectedVideo.title }}</h3>
-        <p class="meta">{{ selectedVideo.id }} · {{ selectedVideo.batch }}</p>
+        <h3 class="pv-title">{{ selectedVideo.title }}</h3>
+        <p class="meta">{{ selectedVideo.id }}</p>
 
         <div class="quick-actions">
           <el-button size="small" @click="openTitleDialog">改标题</el-button>
           <el-button size="small" @click="changeCover">换封面</el-button>
         </div>
 
-        <el-tabs v-model="previewTab" class="preview-tabs">
+        <el-tabs v-model="previewTab" class="compact-tabs preview-tabs">
           <el-tab-pane label="详情" name="detail">
             <el-descriptions :column="1" size="small">
               <el-descriptions-item label="模板">{{ selectedVideo.template }}</el-descriptions-item>
@@ -179,9 +181,10 @@ function batchSubmitAudit() {
             </el-descriptions>
           </el-tab-pane>
         </el-tabs>
-      </aside>
-      <aside v-else class="preview-panel page-card empty-preview">
-        <el-empty description="点击表格行预览视频" />
+      </div>
+      <div v-else class="page-card fill-card preview-panel empty-preview">
+        <el-empty description="选择视频预览" :image-size="60" />
+      </div>
       </aside>
     </div>
 
@@ -206,84 +209,70 @@ function batchSubmitAudit() {
 </template>
 
 <style scoped>
-.filter-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
-}
-
 .filter-count {
-  margin-left: auto;
   font-size: 12px;
   color: var(--text-secondary);
 }
 
-.content-layout {
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 12px;
-  min-height: 500px;
-}
-
-.table-wrap {
-  padding: 0;
-  overflow: hidden;
-}
-
 .preview-panel {
-  padding: 16px;
+  overflow-y: auto;
 }
 
 .video-placeholder {
-  aspect-ratio: 9/16;
-  max-height: 280px;
+  aspect-ratio: 16/9;
+  max-height: 120px;
   background: rgba(99, 102, 241, 0.06);
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
   color: var(--text-tertiary);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   border: 1px solid var(--border);
 }
 
-.preview-panel h3 {
-  font-size: 14px;
+.pv-title {
+  font-size: 13px;
   margin-bottom: 4px;
+  line-height: 1.35;
 }
 
 .meta {
   font-size: 11px;
   color: var(--text-secondary);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .quick-actions {
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.preview-tabs :deep(.el-tabs__content) {
+  max-height: 160px;
+  overflow-y: auto;
 }
 
 .subtitle-preview p {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .cover-thumb {
   aspect-ratio: 16/9;
+  max-height: 80px;
   background: rgba(99, 102, 241, 0.06);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-tertiary);
-  margin-bottom: 8px;
-  font-size: 12px;
+  margin-bottom: 6px;
+  font-size: 11px;
   border: 1px solid var(--border);
 }
 
@@ -309,7 +298,6 @@ function batchSubmitAudit() {
   justify-content: center;
   font-size: 12px;
   cursor: pointer;
-  transition: border-color 0.2s;
 }
 
 .cover-option.active {
