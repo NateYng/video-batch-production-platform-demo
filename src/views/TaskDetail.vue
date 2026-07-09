@@ -80,12 +80,12 @@ const recentLogs = [
     </div>
 
     <div class="metric-grid compact kpi-6">
-      <MetricCard label="总量" :value="task.total" />
-      <MetricCard label="已完成" :value="task.completed" color="#22c55e" />
-      <MetricCard label="失败" :value="task.failed" color="#ef4444" />
-      <MetricCard label="待审核" :value="task.pendingAudit" color="#f59e0b" />
-      <MetricCard label="待发布" :value="task.pendingPublish" color="#0ea5e9" />
-      <MetricCard label="完成率" :value="task.progress" suffix="%" />
+      <MetricCard label="总量" :value="task.total" accent="indigo" />
+      <MetricCard label="已完成" :value="task.completed" color="#22c55e" accent="emerald" />
+      <MetricCard label="失败" :value="task.failed" color="#ef4444" accent="rose" />
+      <MetricCard label="待审核" :value="task.pendingAudit" color="#f59e0b" accent="amber" />
+      <MetricCard label="待发布" :value="task.pendingPublish" color="#0ea5e9" accent="cyan" />
+      <MetricCard label="完成率" :value="task.progress" suffix="%" accent="violet" />
     </div>
 
     <div class="page-split">

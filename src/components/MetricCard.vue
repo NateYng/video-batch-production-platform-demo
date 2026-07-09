@@ -11,107 +11,146 @@ defineProps({
 </script>
 
 <template>
-  <div class="metric-card page-card" :class="`accent-${accent}`">
-    <div class="card-accent" />
-    <div class="card-inner" :class="{ 'has-trend': trend !== undefined }">
-      <div class="label">{{ label }}</div>
-      <div class="value" :class="{ 'has-color': !!color }" :style="color ? { color, WebkitTextFillColor: color } : {}">
-        {{ prefix }}{{ typeof value === 'number' ? value.toLocaleString() : value }}{{ suffix }}
-      </div>
-      <div v-if="trend !== undefined" class="trend" :class="trend >= 0 ? 'up' : 'down'">
-        <span class="trend-icon">{{ trend >= 0 ? '▲' : '▼' }}</span>
-        {{ Math.abs(trend) }}% 较昨日
-      </div>
-      <slot />
+  <div
+    class="metric-card"
+    :class="`accent-${accent}`"
+    :style="color ? { '--value-color': color } : {}"
+  >
+    <div class="metric-top">
+      <span class="label">{{ label }}</span>
+      <span
+        v-if="trend !== undefined"
+        class="trend-badge"
+        :class="trend >= 0 ? 'up' : 'down'"
+      >
+        {{ trend >= 0 ? '↑' : '↓' }}{{ Math.abs(trend) }}%
+      </span>
     </div>
+    <div class="value" :class="{ 'has-color': !!color }">
+      {{ prefix }}{{ typeof value === 'number' ? value.toLocaleString() : value }}{{ suffix }}
+    </div>
+    <slot />
   </div>
 </template>
 
 <style scoped>
 .metric-card {
+  --metric-accent: #00b4d8;
+  --metric-glow: rgba(0, 180, 216, 0.1);
   position: relative;
+  min-height: 100px;
+  padding: 18px 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, var(--bg-card-solid) 0%, color-mix(in srgb, var(--bg-card-solid) 92%, var(--metric-accent)) 100%);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
   overflow: hidden;
-  padding: 0;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, var(--metric-accent), color-mix(in srgb, var(--metric-accent) 60%, white));
+}
+
+.metric-card::after {
+  content: '';
+  position: absolute;
+  right: -24px;
+  top: -32px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--metric-glow) 0%, transparent 72%);
+  pointer-events: none;
 }
 
 .metric-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
+  border-color: color-mix(in srgb, var(--metric-accent) 35%, var(--border));
 }
 
-.card-accent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--gradient-primary);
-}
+.accent-cyan { --metric-accent: #00b4d8; --metric-glow: rgba(0, 180, 216, 0.14); }
+.accent-indigo { --metric-accent: #6366f1; --metric-glow: rgba(99, 102, 241, 0.14); }
+.accent-emerald { --metric-accent: #10b981; --metric-glow: rgba(16, 185, 129, 0.14); }
+.accent-amber { --metric-accent: #f59e0b; --metric-glow: rgba(245, 158, 11, 0.14); }
+.accent-rose { --metric-accent: #f43f5e; --metric-glow: rgba(244, 63, 94, 0.14); }
+.accent-slate { --metric-accent: #64748b; --metric-glow: rgba(100, 116, 139, 0.12); }
+.accent-blue { --metric-accent: #3b82f6; --metric-glow: rgba(59, 130, 246, 0.14); }
+.accent-violet { --metric-accent: #8b5cf6; --metric-glow: rgba(139, 92, 246, 0.14); }
 
-.accent-cyan .card-accent {
-  background: linear-gradient(90deg, #00b4d8, #48cae4);
-}
-
-.accent-indigo .card-accent {
-  background: linear-gradient(90deg, #6366f1, #818cf8);
-}
-
-.accent-emerald .card-accent {
-  background: linear-gradient(90deg, #10b981, #34d399);
-}
-
-.accent-rose .card-accent {
-  background: linear-gradient(90deg, #f43f5e, #fb7185);
-}
-
-.card-inner {
-  padding: 16px 18px;
+.metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
 }
 
 .label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
-  margin-bottom: 8px;
   font-weight: 500;
-  letter-spacing: 0.2px;
+}
+
+.trend-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.trend-badge.up {
+  color: #047857;
+  background: rgba(16, 185, 129, 0.14);
+}
+
+.trend-badge.down {
+  color: #b91c1c;
+  background: rgba(244, 63, 94, 0.12);
 }
 
 .value {
-  font-size: 28px;
+  position: relative;
+  z-index: 1;
+  font-size: 30px;
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.5px;
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--primary-dark) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.trend {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  margin-top: 8px;
-  font-weight: 500;
-}
-
-.trend-icon {
-  font-size: 8px;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
 }
 
 .value.has-color {
-  background: none;
-  -webkit-text-fill-color: unset;
+  color: var(--value-color);
 }
 
-.trend.up {
-  color: var(--success);
+[data-theme='dark'] .metric-card {
+  background: linear-gradient(145deg, var(--bg-card) 0%, color-mix(in srgb, var(--bg-card) 88%, var(--metric-accent)) 100%);
 }
 
-.trend.down {
-  color: var(--danger);
+[data-theme='dark'] .trend-badge.up {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='dark'] .trend-badge.down {
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.2);
 }
 </style>

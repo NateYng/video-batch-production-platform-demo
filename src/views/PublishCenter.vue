@@ -119,9 +119,13 @@ function handleChannelAction(row, action) {
   <div class="page-shell publish-center">
     <div class="top-row">
       <div class="overview-grid compact">
-        <div v-for="item in channelOverview" :key="item.name" class="overview-card page-card compact">
+        <div
+          v-for="item in channelOverview"
+          :key="item.name"
+          class="overview-card page-card compact"
+          :style="{ '--ov-accent': item.color }"
+        >
           <div class="ov-header">
-            <span class="ov-dot" :style="{ background: item.color }" />
             <span class="ov-name">{{ item.name }}</span>
           </div>
           <template v-if="!item.isSummary">
@@ -266,42 +270,6 @@ function handleChannelAction(row, action) {
   justify-content: center;
   gap: 6px;
 }
-
-.ov-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-}
-
-.ov-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
-.ov-name {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.ov-pending {
-  font-size: 11px;
-}
-
-.ov-pending strong,
-.summary-val {
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.ov-sub {
-  font-size: 10px;
-  color: var(--text-secondary);
-}
-
-.up { color: #22c55e; }
-.down { color: #ef4444; }
 
 .page-split-main {
   display: flex;

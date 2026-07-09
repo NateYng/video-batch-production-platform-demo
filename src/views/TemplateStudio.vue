@@ -82,7 +82,7 @@ if (assetStore.templateList.length && !selectedTemplate.value) {
           <div
             v-for="tpl in filteredTemplates"
             :key="tpl.id"
-            class="template-card page-card"
+            class="template-card"
             :class="{ selected: selectedTemplate?.id === tpl.id }"
             @click="selectTemplate(tpl)"
           >
@@ -178,59 +178,6 @@ if (assetStore.templateList.length && !selectedTemplate.value) {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.template-card {
-  cursor: pointer;
-  overflow: hidden;
-  border: 2px solid transparent;
-  transition: border-color 0.15s;
-}
-
-.template-card.selected {
-  border-color: var(--primary);
-}
-
-.tpl-preview {
-  aspect-ratio: 16 / 9;
-  min-height: 80px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.06) 0%, rgba(0, 180, 216, 0.06) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.tpl-badge {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  font-size: 9px;
-  color: #fff;
-  padding: 1px 5px;
-  border-radius: 3px;
-}
-
-.tpl-body {
-  padding: 10px 12px;
-}
-
-.tpl-body h4 {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.tpl-stats {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--text-secondary);
 }
 
 .detail-panel {

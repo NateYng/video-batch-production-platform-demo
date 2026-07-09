@@ -20,12 +20,12 @@ const sideTab = ref('suggest')
 const tabs = ['生产效率', '内容质量', '发布效果', '资产复用']
 
 const kpiCards = [
-  { label: '生成成功率', value: '93.6%', trend: 2.4 },
-  { label: '高风险占比', value: '4.2%', trend: -0.8, color: '#ef4444' },
-  { label: '近7日播放', value: '128万', trend: 18.6 },
-  { label: '模板复用', value: '62%', trend: 5.2 },
-  { label: '平均耗时', value: '2m18s', trend: -6.3 },
-  { label: '单条成本', value: '¥1.86', trend: -3.1, prefix: '', suffix: '' },
+  { label: '生成成功率', value: '93.6%', trend: 2.4, accent: 'emerald' },
+  { label: '高风险占比', value: '4.2%', trend: -0.8, color: '#ef4444', accent: 'rose' },
+  { label: '近7日播放', value: '128万', trend: 18.6, accent: 'cyan' },
+  { label: '模板复用', value: '62%', trend: 5.2, accent: 'indigo' },
+  { label: '平均耗时', value: '2m18s', trend: -6.3, accent: 'violet' },
+  { label: '单条成本', value: '¥1.86', trend: -3.1, accent: 'amber' },
 ]
 
 const productionTrendOption = computed(() => ({
@@ -195,8 +195,7 @@ const lowEfficiencyAssets = [
         :value="card.value"
         :trend="card.trend"
         :color="card.color"
-        :prefix="card.prefix"
-        :suffix="card.suffix"
+        :accent="card.accent"
       />
     </div>
 

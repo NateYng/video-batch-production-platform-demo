@@ -15,10 +15,10 @@ const activeTab = ref('全部')
 const sideTab = ref('hot')
 
 const statCards = [
-  { label: '资产总数', value: 32846, trend: 6.2 },
-  { label: '本周新增', value: 1428, trend: 18.4 },
-  { label: '引用次数', value: 48672, trend: 12.8 },
-  { label: '待审核', value: 236, trend: -4.2, color: '#f59e0b' },
+  { label: '资产总数', value: 32846, trend: 6.2, accent: 'cyan' },
+  { label: '本周新增', value: 1428, trend: 18.4, accent: 'indigo' },
+  { label: '引用次数', value: 48672, trend: 12.8, accent: 'emerald' },
+  { label: '待审核', value: 236, trend: -4.2, color: '#f59e0b', accent: 'amber' },
 ]
 
 const categoryCards = [
@@ -104,6 +104,7 @@ function selectCategory(name) {
         :value="card.value"
         :trend="card.trend"
         :color="card.color"
+        :accent="card.accent"
       />
     </div>
 

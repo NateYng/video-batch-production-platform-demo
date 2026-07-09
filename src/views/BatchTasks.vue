@@ -17,10 +17,10 @@ const filterRisk = ref('')
 const keyword = ref('')
 
 const overviewCards = [
-  { label: '排队中', value: 12, color: '#64748b' },
-  { label: '生成中', value: 38, color: '#0ea5e9' },
-  { label: '部分失败', value: 7, color: '#f59e0b' },
-  { label: '今日完成', value: 64, color: '#22c55e' },
+  { label: '排队中', value: 12, accent: 'slate' },
+  { label: '生成中', value: 38, accent: 'cyan' },
+  { label: '部分失败', value: 7, accent: 'amber', color: '#f59e0b' },
+  { label: '今日完成', value: 64, accent: 'emerald', color: '#22c55e' },
 ]
 
 const statusOptions = [
@@ -125,6 +125,7 @@ function viewTask(row) {
         :label="card.label"
         :value="card.value"
         :color="card.color"
+        :accent="card.accent"
       />
     </div>
 

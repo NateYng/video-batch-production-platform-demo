@@ -276,32 +276,6 @@ function submitTask() {
   margin-bottom: 10px;
 }
 
-.type-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
-  gap: 10px;
-}
-
-.type-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 12px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  position: relative;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.type-card.active {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 8%, white);
-}
-
 .check-icon {
   position: absolute;
   top: 4px;
