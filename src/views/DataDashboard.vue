@@ -8,11 +8,15 @@ import {
   TooltipComponent,
   LegendComponent,
   GridComponent,
+  TitleComponent,
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import MetricCard from '@/components/MetricCard.vue'
+import { useAppStore } from '@/stores'
 
-use([BarChart, PieChart, TooltipComponent, LegendComponent, GridComponent, CanvasRenderer])
+use([BarChart, PieChart, TooltipComponent, LegendComponent, GridComponent, TitleComponent, CanvasRenderer])
+
+const appStore = useAppStore()
 
 const activeTab = ref('生产效率')
 const timeRange = ref('近7天')
@@ -28,25 +32,43 @@ const kpiCards = [
   { label: '单条成本', value: '¥1.86', trend: -3.1, accent: 'amber' },
 ]
 
+const isDark = () => appStore.colorMode === 'dark'
 const axisText = '#8a92a6'
-const splitLine = { lineStyle: { color: 'rgba(255, 255, 255, 0.06)' } }
-const darkTooltip = {
-  backgroundColor: '#161927',
-  borderColor: 'rgba(255,255,255,0.12)',
-  textStyle: { color: '#e7eaf2', fontSize: 12 },
-}
+const strongText = () => (isDark() ? '#f2f4f8' : '#0c1222')
+const legendText = () => (isDark() ? '#c9d0e0' : '#3d4a63')
+const lineColor = () => (isDark() ? 'rgba(255,255,255,0.12)' : 'rgba(12,18,34,0.14)')
+const splitLine = () => ({ lineStyle: { color: isDark() ? 'rgba(255,255,255,0.06)' : 'rgba(12,18,34,0.07)' } })
+const pieBorder = () => (isDark() ? 'rgba(17, 19, 28, 0.9)' : '#ffffff')
+const tooltipStyle = () =>
+  isDark()
+    ? {
+        backgroundColor: '#161927',
+        borderColor: 'rgba(255,255,255,0.12)',
+        textStyle: { color: '#e7eaf2', fontSize: 12 },
+      }
+    : { textStyle: { fontSize: 12 } }
+
+const topLegend = () => ({
+  top: 0,
+  right: 0,
+  itemWidth: 10,
+  itemHeight: 4,
+  itemGap: 14,
+  icon: 'roundRect',
+  textStyle: { fontSize: 11, color: axisText },
+})
 
 const productionTrendOption = computed(() => ({
-  tooltip: { trigger: 'axis', ...darkTooltip },
-  legend: { data: ['生成量', '成功量', '失败量'], bottom: 0, textStyle: { fontSize: 11, color: axisText } },
-  grid: { left: 40, right: 16, top: 24, bottom: 36 },
+  tooltip: { trigger: 'axis', ...tooltipStyle() },
+  legend: { ...topLegend(), data: ['生成量', '成功量', '失败量'] },
+  grid: { left: 40, right: 16, top: 32, bottom: 24 },
   xAxis: {
     type: 'category',
     data: ['07-03', '07-04', '07-05', '07-06', '07-07', '07-08', '07-09'],
     axisLabel: { fontSize: 11, color: axisText },
-    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } },
+    axisLine: { lineStyle: { color: lineColor() } },
   },
-  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
+  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine: splitLine() },
   series: [
     { name: '生成量', type: 'bar', data: [8200, 9100, 7800, 10200, 9600, 11200, 8420], itemStyle: { color: '#6e79f7', borderRadius: [3, 3, 0, 0] } },
     { name: '成功量', type: 'bar', data: [7680, 8520, 7320, 9580, 9020, 10480, 7880], itemStyle: { color: '#34d399', borderRadius: [3, 3, 0, 0] } },
@@ -54,27 +76,48 @@ const productionTrendOption = computed(() => ({
   ],
 }))
 
-const pieLegend = {
-  orient: 'vertical',
-  right: 0,
-  top: 'middle',
-  itemWidth: 8,
-  itemHeight: 8,
-  itemGap: 6,
-  textStyle: { fontSize: 10, color: axisText },
+/** 企业级环形图：粗环 + 环心汇总 + 带数值的图例 */
+function makeDonut(data, colors, { centerValue, centerLabel, unit = '%' }) {
+  const nameMap = Object.fromEntries(data.map((d) => [d.name, d.value]))
+  return {
+    tooltip: { trigger: 'item', formatter: `{b}: {c}${unit === '%' ? '%' : ''} ({d}%)`, ...tooltipStyle() },
+    legend: {
+      orient: 'vertical',
+      right: 0,
+      top: 'middle',
+      itemWidth: 10,
+      itemHeight: 10,
+      itemGap: 10,
+      icon: 'roundRect',
+      formatter: (name) => `${name}  ${nameMap[name]}${unit}`,
+      textStyle: { fontSize: 11, color: legendText() },
+    },
+    title: {
+      text: centerValue,
+      subtext: centerLabel,
+      left: '31%',
+      top: '38%',
+      textAlign: 'center',
+      textStyle: { fontSize: 22, fontWeight: 700, color: strongText(), fontFamily: 'inherit' },
+      subtextStyle: { fontSize: 11, color: axisText },
+      itemGap: 4,
+    },
+    series: [{
+      type: 'pie',
+      radius: ['58%', '82%'],
+      center: ['32%', '50%'],
+      data,
+      label: { show: false },
+      emphasis: { scaleSize: 3 },
+      itemStyle: { borderColor: pieBorder(), borderWidth: 2 },
+      color: colors,
+    }],
+  }
 }
 
-const failureReasonOption = computed(() => ({
-  tooltip: { trigger: 'item', formatter: '{b}: {d}%', ...darkTooltip },
-  legend: {
-    ...pieLegend,
-    data: ['素材加载', '视频合成', '语音合成', '字幕生成', '风险拦截', '其他'],
-  },
-  series: [{
-    type: 'pie',
-    radius: ['28%', '48%'],
-    center: ['30%', '50%'],
-    data: [
+const failureReasonOption = computed(() =>
+  makeDonut(
+    [
       { name: '素材加载', value: 32.6 },
       { name: '视频合成', value: 27.8 },
       { name: '语音合成', value: 16.2 },
@@ -82,39 +125,29 @@ const failureReasonOption = computed(() => ({
       { name: '风险拦截', value: 6.1 },
       { name: '其他', value: 4.8 },
     ],
-    label: { show: false },
-    itemStyle: { borderColor: 'rgba(17, 19, 28, 0.9)', borderWidth: 2, borderRadius: 4 },
-    color: ['#6e79f7', '#fbbf24', '#fb7185', '#8b5cf6', '#34d399', '#5d6472'],
-  }],
-}))
+    ['#6e79f7', '#60a5fa', '#22d3ee', '#8b5cf6', '#34d399', '#5d6472'],
+    { centerValue: '214', centerLabel: '失败总数' }
+  )
+)
 
-const riskLevelOption = computed(() => ({
-  tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)', ...darkTooltip },
-  legend: {
-    ...pieLegend,
-    data: ['高风险', '中风险', '低风险'],
-  },
-  series: [{
-    type: 'pie',
-    radius: ['28%', '48%'],
-    center: ['30%', '50%'],
-    data: [
+const riskLevelOption = computed(() =>
+  makeDonut(
+    [
       { name: '高风险', value: 420 },
       { name: '中风险', value: 1860 },
       { name: '低风险', value: 7720 },
     ],
-    label: { show: false },
-    itemStyle: { borderColor: 'rgba(17, 19, 28, 0.9)', borderWidth: 2, borderRadius: 4 },
-    color: ['#fb7185', '#fbbf24', '#34d399'],
-  }],
-}))
+    ['#fb7185', '#fbbf24', '#34d399'],
+    { centerValue: '4.2%', centerLabel: '高风险占比', unit: '' }
+  )
+)
 
 const channelCompareOption = computed(() => ({
-  tooltip: { trigger: 'axis', ...darkTooltip },
-  legend: { data: ['播放量(万)', '完播率(%)', '互动率(%)'], bottom: 0, textStyle: { fontSize: 11, color: axisText } },
-  grid: { left: 40, right: 16, top: 24, bottom: 36 },
-  xAxis: { type: 'category', data: ['抖音', '视频号', '官网'], axisLabel: { fontSize: 11, color: axisText }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } } },
-  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
+  tooltip: { trigger: 'axis', ...tooltipStyle() },
+  legend: { ...topLegend(), data: ['播放量(万)', '完播率(%)', '互动率(%)'] },
+  grid: { left: 40, right: 16, top: 32, bottom: 24 },
+  xAxis: { type: 'category', data: ['抖音', '视频号', '官网'], axisLabel: { fontSize: 11, color: axisText }, axisLine: { lineStyle: { color: lineColor() } } },
+  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine: splitLine() },
   series: [
     { name: '播放量(万)', type: 'bar', data: [256.8, 128.6, 32.4], itemStyle: { color: '#6e79f7', borderRadius: [3, 3, 0, 0] } },
     { name: '完播率(%)', type: 'bar', data: [42.3, 38.6, 56.2], itemStyle: { color: '#34d399', borderRadius: [3, 3, 0, 0] } },
@@ -123,15 +156,15 @@ const channelCompareOption = computed(() => ({
 }))
 
 const completionDistOption = computed(() => ({
-  tooltip: { trigger: 'axis', ...darkTooltip },
+  tooltip: { trigger: 'axis', ...tooltipStyle() },
   grid: { left: 40, right: 16, top: 16, bottom: 28 },
   xAxis: {
     type: 'category',
     data: ['0-20%', '20-40%', '40-60%', '60-80%', '80-100%'],
     axisLabel: { fontSize: 11, color: axisText },
-    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } },
+    axisLine: { lineStyle: { color: lineColor() } },
   },
-  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
+  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine: splitLine() },
   series: [{
     type: 'bar',
     data: [1280, 2860, 4520, 6280, 8420],
@@ -143,14 +176,14 @@ const completionDistOption = computed(() => ({
 }))
 
 const templateTop5Option = computed(() => ({
-  tooltip: { trigger: 'axis', ...darkTooltip },
+  tooltip: { trigger: 'axis', ...tooltipStyle() },
   grid: { left: 100, right: 24, top: 8, bottom: 8 },
-  xAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
+  xAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine: splitLine() },
   yAxis: {
     type: 'category',
     data: ['营销活动宣传', '品牌宣传片', '科普短视频', '企业新闻播报', '数字人讲解'].reverse(),
     axisLabel: { fontSize: 11, color: axisText },
-    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } },
+    axisLine: { lineStyle: { color: lineColor() } },
   },
   series: [{
     type: 'bar',
