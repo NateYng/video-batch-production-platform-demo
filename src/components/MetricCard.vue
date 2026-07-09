@@ -13,7 +13,7 @@ defineProps({
 <template>
   <div class="metric-card page-card" :class="`accent-${accent}`">
     <div class="card-accent" />
-    <div class="card-inner">
+    <div class="card-inner" :class="{ 'has-trend': trend !== undefined }">
       <div class="label">{{ label }}</div>
       <div class="value" :class="{ 'has-color': !!color }" :style="color ? { color, WebkitTextFillColor: color } : {}">
         {{ prefix }}{{ typeof value === 'number' ? value.toLocaleString() : value }}{{ suffix }}

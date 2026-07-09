@@ -278,22 +278,23 @@ function submitTask() {
 
 .type-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: 10px;
 }
 
 .type-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 12px 8px;
+  gap: 8px;
+  padding: 16px 12px;
   border: 2px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
   position: relative;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
+  text-align: center;
 }
 
 .type-card.active {

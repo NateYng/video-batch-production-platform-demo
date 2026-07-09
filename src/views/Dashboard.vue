@@ -75,7 +75,7 @@ function viewTask(row) {
 
 <template>
   <div class="page-shell dashboard">
-    <div class="metric-grid compact">
+    <div class="metric-grid compact kpi-4">
       <MetricCard label="今日生成" :value="taskStore.overview.todayGenerated" :trend="taskStore.overview.todayGeneratedTrend" />
       <MetricCard label="待审核" :value="taskStore.overview.pendingAudit" :trend="taskStore.overview.pendingAuditTrend" color="var(--warning)" />
       <MetricCard label="发布成功率" :value="taskStore.overview.publishSuccessRate" suffix="%" :trend="taskStore.overview.publishSuccessRateTrend" color="var(--success)" />

@@ -79,7 +79,7 @@ const recentLogs = [
       </div>
     </div>
 
-    <div class="metric-grid compact cols-6">
+    <div class="metric-grid compact kpi-6">
       <MetricCard label="总量" :value="task.total" />
       <MetricCard label="已完成" :value="task.completed" color="#22c55e" />
       <MetricCard label="失败" :value="task.failed" color="#ef4444" />
@@ -265,7 +265,7 @@ const recentLogs = [
 
 .preview-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
   gap: 8px;
   padding: 4px 0;
 }

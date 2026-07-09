@@ -187,21 +187,21 @@ const lowEfficiencyAssets = [
       </div>
     </div>
 
+    <div class="metric-grid dash-kpi kpi-6">
+      <MetricCard
+        v-for="card in kpiCards"
+        :key="card.label"
+        :label="card.label"
+        :value="card.value"
+        :trend="card.trend"
+        :color="card.color"
+        :prefix="card.prefix"
+        :suffix="card.suffix"
+      />
+    </div>
+
     <div class="page-split">
       <div class="page-split-main">
-        <div class="metric-grid dash-kpi cols-6">
-          <MetricCard
-            v-for="card in kpiCards"
-            :key="card.label"
-            :label="card.label"
-            :value="card.value"
-            :trend="card.trend"
-            :color="card.color"
-            :prefix="card.prefix"
-            :suffix="card.suffix"
-          />
-        </div>
-
         <div class="charts-grid dash-charts">
           <div class="page-card chart-card dash-chart chart-wide chart-bar">
             <h4>生产量趋势</h4>

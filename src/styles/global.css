@@ -90,19 +90,28 @@ a {
 }
 
 .metric-grid {
+  --card-min: 200px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min)), 1fr));
   gap: 10px;
   margin-bottom: 0;
   flex-shrink: 0;
 }
 
+.metric-grid.kpi-4 {
+  --card-min: 220px;
+}
+
+.metric-grid.kpi-6 {
+  --card-min: 160px;
+}
+
 .metric-grid.cols-6 {
-  grid-template-columns: repeat(6, 1fr);
+  --card-min: 160px;
 }
 
 .metric-grid.cols-3 {
-  grid-template-columns: repeat(3, 1fr);
+  --card-min: 260px;
 }
 
 /* 风险标签 */

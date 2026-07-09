@@ -96,7 +96,7 @@ function selectCategory(name) {
       </div>
     </div>
 
-    <div class="metric-grid compact" style="grid-template-columns: repeat(4, 1fr)">
+    <div class="metric-grid compact kpi-4">
       <MetricCard
         v-for="card in statCards"
         :key="card.label"
@@ -195,15 +195,7 @@ function selectCategory(name) {
 .category-chip {
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
-  min-width: 0;
-}
-
-.category-chip span:not(.cat-count) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
+  gap: 4px;
 }
 
 .filter-label {

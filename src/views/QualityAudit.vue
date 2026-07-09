@@ -152,36 +152,6 @@ function partialRegen() {
 </template>
 
 <style scoped>
-.count-cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.count-cards.compact .count-card {
-  padding: 8px 12px;
-  text-align: center;
-}
-
-.count-card .count {
-  display: block;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.count-card .label {
-  font-size: 11px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-.count-card.high .count { color: #ef4444; }
-.count-card.medium .count { color: #f59e0b; }
-.count-card.low .count { color: #22c55e; }
-.count-card.passed .count { color: var(--primary); }
-
 .tab-badge { margin-left: 4px; }
 
 .sidebar-block {

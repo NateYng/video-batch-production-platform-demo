@@ -118,7 +118,7 @@ function viewTask(row) {
       <el-button type="primary" size="small" :icon="Plus" @click="router.push('/create-task')">创建任务</el-button>
     </div>
 
-    <div class="metric-grid compact">
+    <div class="metric-grid compact kpi-4">
       <MetricCard
         v-for="card in overviewCards"
         :key="card.label"
