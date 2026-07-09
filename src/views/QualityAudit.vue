@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useAuditStore } from '@/stores'
 import { auditRules } from '@/mock'
 import { ElMessage } from 'element-plus'
-import { VideoPlay } from '@element-plus/icons-vue'
+import { videoMedia } from '@/mock/media'
 
 const auditStore = useAuditStore()
 
@@ -23,9 +23,9 @@ const filteredItems = computed(() => {
 })
 
 const scoreColor = (score) => {
-  if (score < 70) return '#ef4444'
-  if (score < 85) return '#f59e0b'
-  return '#22c55e'
+  if (score < 70) return '#fb7185'
+  if (score < 85) return '#fbbf24'
+  return '#34d399'
 }
 
 function selectItem(row) {
@@ -126,10 +126,15 @@ function partialRegen() {
 
       <aside v-if="selectedItem" class="page-split-side audit-sidebar">
         <div class="page-card fill-card sidebar-block">
-          <div class="preview-box">
-            <el-icon :size="32"><VideoPlay /></el-icon>
-            <span>审核预览</span>
-          </div>
+          <video
+            :key="selectedItem.id"
+            class="audit-player"
+            :src="videoMedia(selectedItem.id, selectedItem.title).src"
+            :poster="videoMedia(selectedItem.id, selectedItem.title).poster"
+            controls
+            preload="metadata"
+            muted
+          />
           <h3 class="side-title">{{ selectedItem.title }}</h3>
           <p class="item-meta">{{ selectedItem.id }} · {{ selectedItem.type }}</p>
           <div class="score-badge" :style="{ borderColor: scoreColor(selectedItem.score) }">
@@ -163,10 +168,20 @@ function partialRegen() {
   margin: 8px 0 4px;
 }
 
+.audit-player {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  background: #000;
+  border: 1px solid var(--border);
+  display: block;
+  object-fit: cover;
+}
+
 .preview-box {
   aspect-ratio: 16/9;
   max-height: 100px;
-  background: rgba(99, 102, 241, 0.06);
+  background: rgba(148, 155, 175, 0.07);
   border-radius: 6px;
   display: flex;
   flex-direction: column;

@@ -5,9 +5,8 @@ import { useTaskStore } from '@/stores'
 import MetricCard from '@/components/MetricCard.vue'
 import DonutChart from '@/components/DonutChart.vue'
 import { operationLogs } from '@/mock'
+import { videoMedia } from '@/mock/media'
 import { ElMessage } from 'element-plus'
-import { VideoPlay } from '@element-plus/icons-vue'
-
 const route = useRoute()
 const router = useRouter()
 const taskStore = useTaskStore()
@@ -81,10 +80,10 @@ const recentLogs = [
 
     <div class="metric-grid compact kpi-6">
       <MetricCard label="总量" :value="task.total" accent="indigo" />
-      <MetricCard label="已完成" :value="task.completed" color="#22c55e" accent="emerald" />
-      <MetricCard label="失败" :value="task.failed" color="#ef4444" accent="rose" />
-      <MetricCard label="待审核" :value="task.pendingAudit" color="#f59e0b" accent="amber" />
-      <MetricCard label="待发布" :value="task.pendingPublish" color="#0ea5e9" accent="cyan" />
+      <MetricCard label="已完成" :value="task.completed" color="#34d399" accent="emerald" />
+      <MetricCard label="失败" :value="task.failed" color="#fb7185" accent="rose" />
+      <MetricCard label="待审核" :value="task.pendingAudit" color="#fbbf24" accent="amber" />
+      <MetricCard label="待发布" :value="task.pendingPublish" color="#22d3ee" accent="cyan" />
       <MetricCard label="完成率" :value="task.progress" suffix="%" accent="violet" />
     </div>
 
@@ -117,10 +116,15 @@ const recentLogs = [
             <el-tab-pane label="输出预览" name="preview">
               <div class="preview-grid">
                 <div v-for="n in 6" :key="n" class="preview-item">
-                  <div class="preview-thumb">
-                    <el-icon :size="24"><VideoPlay /></el-icon>
-                  </div>
-                  <span>#{{ n }}</span>
+                  <video
+                    class="preview-video"
+                    :src="videoMedia(`${task.id}-${n}`, `输出样片 #${n}`).src"
+                    :poster="videoMedia(`${task.id}-${n}`, `输出样片 #${n}`).poster"
+                    controls
+                    preload="none"
+                    muted
+                  />
+                  <span>样片 #{{ n }}</span>
                 </div>
               </div>
             </el-tab-pane>
@@ -265,26 +269,25 @@ const recentLogs = [
 
 .preview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
   padding: 4px 0;
 }
 
 .preview-item {
   text-align: center;
   font-size: 11px;
+  color: var(--text-secondary);
 }
 
-.preview-thumb {
-  aspect-ratio: 9/16;
-  max-height: 80px;
-  background: rgba(99, 102, 241, 0.08);
+.preview-video {
+  width: 100%;
+  aspect-ratio: 16/9;
   border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary);
-  margin-bottom: 4px;
+  background: #000;
   border: 1px solid var(--border);
+  display: block;
+  object-fit: cover;
+  margin-bottom: 4px;
 }
 </style>

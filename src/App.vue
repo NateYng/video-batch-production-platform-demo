@@ -6,7 +6,7 @@ import { useAppStore } from '@/stores'
 const appStore = useAppStore()
 
 onMounted(() => {
-  document.documentElement.setAttribute('data-theme', appStore.colorMode)
+  appStore.setColorMode(appStore.colorMode)
 })
 </script>
 

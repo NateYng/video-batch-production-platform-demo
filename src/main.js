@@ -3,15 +3,15 @@ import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
 import './styles/global.css'
 
-document.documentElement.setAttribute(
-  'data-theme',
-  localStorage.getItem('vbpp-color-mode') || 'light'
-)
+const mode = localStorage.getItem('vbpp-color-mode') || 'dark'
+document.documentElement.setAttribute('data-theme', mode)
+document.documentElement.classList.toggle('dark', mode === 'dark')
 
 const app = createApp(App)
 const pinia = createPinia()

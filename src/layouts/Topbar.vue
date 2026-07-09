@@ -69,10 +69,10 @@ function goCreate() {
   align-items: center;
   justify-content: space-between;
   padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--topbar-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+  border-bottom: 1px solid var(--topbar-border);
   gap: 12px;
   flex-shrink: 0;
   z-index: 50;
@@ -143,7 +143,7 @@ function goCreate() {
 }
 
 .search-input :deep(.el-input__wrapper) {
-  background: rgba(99, 102, 241, 0.04);
+  background: rgba(148, 155, 175, 0.06);
   border-radius: 20px !important;
 }
 
@@ -160,13 +160,14 @@ function goCreate() {
 }
 
 .icon-circle {
-  background: rgba(99, 102, 241, 0.06) !important;
-  border: 1px solid rgba(99, 102, 241, 0.1) !important;
+  background: rgba(148, 155, 175, 0.07) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-secondary) !important;
 }
 
 .theme-toggle:hover {
-  border-color: rgba(0, 180, 216, 0.35) !important;
-  color: var(--primary) !important;
+  border-color: rgba(110, 121, 247, 0.45) !important;
+  color: var(--primary-light) !important;
 }
 
 .user-info {
@@ -180,11 +181,11 @@ function goCreate() {
 }
 
 .user-info:hover {
-  background: rgba(99, 102, 241, 0.06);
+  background: rgba(148, 155, 175, 0.08);
 }
 
 .user-avatar {
-  background: linear-gradient(135deg, #00b4d8, #6366f1) !important;
+  background: linear-gradient(135deg, #6e79f7, #22d3ee) !important;
   font-size: 12px;
   font-weight: 700;
 }

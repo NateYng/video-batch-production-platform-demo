@@ -15,7 +15,7 @@ import {
 export const useAppStore = defineStore('app', () => {
   const sidebarCollapsed = ref(false)
   const pendingAuditCount = ref(316)
-  const colorMode = ref(localStorage.getItem('vbpp-color-mode') || 'light')
+  const colorMode = ref(localStorage.getItem('vbpp-color-mode') || 'dark')
 
   function toggleSidebar() {
     sidebarCollapsed.value = !sidebarCollapsed.value
@@ -25,6 +25,7 @@ export const useAppStore = defineStore('app', () => {
     colorMode.value = mode
     localStorage.setItem('vbpp-color-mode', mode)
     document.documentElement.setAttribute('data-theme', mode)
+    document.documentElement.classList.toggle('dark', mode === 'dark')
   }
 
   function toggleColorMode() {

@@ -1,71 +1,127 @@
 :root {
-  /* 主色：青蓝 × 靛紫 中台科技风 */
-  --primary: #00b4d8;
-  --primary-light: #48cae4;
-  --primary-dark: #0096c7;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
-  --gradient-primary: linear-gradient(135deg, #00b4d8 0%, #6366f1 100%);
-  --gradient-glow: linear-gradient(135deg, rgba(0, 180, 216, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+  /* ===== Linear 暗色科技风（默认深色） ===== */
+  --primary: #6e79f7;
+  --primary-light: #8f98ff;
+  --primary-dark: #5a64e8;
+  --accent: #22d3ee;
+  --accent-light: #67e8f9;
+  --gradient-primary: linear-gradient(135deg, #6e79f7 0%, #22d3ee 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(110, 121, 247, 0.16) 0%, rgba(34, 211, 238, 0.12) 100%);
 
   /* 侧栏 */
-  --sidebar-bg: linear-gradient(180deg, #060d1f 0%, #0a1628 50%, #0d1a2d 100%);
-  --sidebar-border: rgba(0, 180, 216, 0.12);
-  --sidebar-hover: rgba(0, 180, 216, 0.08);
-  --sidebar-active: rgba(0, 180, 216, 0.18);
-  --sidebar-text: #94a3b8;
-  --sidebar-text-active: #e0f7fa;
+  --sidebar-bg: #0a0b10;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-hover: rgba(255, 255, 255, 0.04);
+  --sidebar-active: rgba(110, 121, 247, 0.14);
+  --sidebar-text: #8a8f9d;
+  --sidebar-text-active: #f2f4f8;
+
+  /* 顶栏 */
+  --topbar-bg: rgba(11, 12, 18, 0.72);
+  --topbar-border: rgba(255, 255, 255, 0.06);
 
   /* 页面 */
-  --bg-page: #eef2f8;
-  --bg-page-mesh: radial-gradient(ellipse at 20% 0%, rgba(0, 180, 216, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-    #eef2f8;
+  --bg-page: #08090e;
+  --bg-page-mesh: radial-gradient(ellipse 60% 40% at 18% 0%, rgba(110, 121, 247, 0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 100%, rgba(34, 211, 238, 0.06) 0%, transparent 60%),
+    #08090e;
+  --grid-line: rgba(255, 255, 255, 0.025);
+  --bg-card: rgba(255, 255, 255, 0.028);
+  --bg-card-solid: #11131c;
+  --text-primary: #f2f4f8;
+  --text-secondary: #9aa2b5;
+  --text-tertiary: #5d6472;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* 状态色 */
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #fb7185;
+  --info: #60a5fa;
+
+  /* 形状与阴影 */
+  --radius: 10px;
+  --radius-lg: 12px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(110, 121, 247, 0.12);
+  --shadow-glow: 0 0 24px rgba(110, 121, 247, 0.18);
+
+  /* Element Plus 覆盖 */
+  --el-color-primary: #6e79f7;
+  --el-color-primary-light-3: #8f98ff;
+  --el-color-primary-light-5: #aab1ff;
+  --el-color-primary-light-7: #2a2f52;
+  --el-color-primary-light-9: #1a1d33;
+  --el-color-primary-dark-2: #5a64e8;
+  --el-border-radius-base: 8px;
+  --el-border-radius-small: 6px;
+}
+
+/* EP html.dark 的变量优先级更高，需同步覆盖主色 */
+html.dark {
+  --el-color-primary: #6e79f7;
+  --el-color-primary-light-3: #8f98ff;
+  --el-color-primary-light-5: #aab1ff;
+  --el-color-primary-light-7: #2a2f52;
+  --el-color-primary-light-9: #1a1d33;
+  --el-color-primary-dark-2: #5a64e8;
+  --el-bg-color: #11131c;
+  --el-bg-color-overlay: #161927;
+  --el-fill-color-blank: #11131c;
+  --el-border-color: rgba(255, 255, 255, 0.1);
+  --el-border-color-light: rgba(255, 255, 255, 0.08);
+  --el-border-color-lighter: rgba(255, 255, 255, 0.06);
+  --el-text-color-primary: #f2f4f8;
+  --el-text-color-regular: #9aa2b5;
+}
+
+[data-theme='light'] {
+  --primary: #5a64e8;
+  --primary-light: #8f98ff;
+  --primary-dark: #4750c9;
+  --accent: #0891b2;
+  --accent-light: #22d3ee;
+  --gradient-primary: linear-gradient(135deg, #5a64e8 0%, #0891b2 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(90, 100, 232, 0.12) 0%, rgba(8, 145, 178, 0.1) 100%);
+
+  --sidebar-bg: #0a0b10;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-hover: rgba(255, 255, 255, 0.04);
+  --sidebar-active: rgba(110, 121, 247, 0.14);
+  --sidebar-text: #8a8f9d;
+  --sidebar-text-active: #f2f4f8;
+
+  --topbar-bg: rgba(255, 255, 255, 0.78);
+  --topbar-border: rgba(90, 100, 232, 0.1);
+
+  --bg-page: #eef0f7;
+  --bg-page-mesh: radial-gradient(ellipse at 20% 0%, rgba(90, 100, 232, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(8, 145, 178, 0.05) 0%, transparent 50%),
+    #eef0f7;
+  --grid-line: rgba(90, 100, 232, 0.03);
   --bg-card: rgba(255, 255, 255, 0.88);
   --bg-card-solid: #ffffff;
   --text-primary: #0c1222;
   --text-secondary: #5c6b82;
   --text-tertiary: #8b9ab5;
-  --border: rgba(99, 102, 241, 0.1);
-  --border-strong: rgba(99, 102, 241, 0.18);
+  --border: rgba(90, 100, 232, 0.1);
+  --border-strong: rgba(90, 100, 232, 0.2);
 
-  /* 状态色 */
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #f43f5e;
   --info: #3b82f6;
 
-  /* 形状与阴影 */
-  --radius: 10px;
-  --radius-lg: 14px;
-  --radius-sm: 6px;
-  --shadow: 0 1px 2px rgba(12, 18, 34, 0.04), 0 4px 16px rgba(99, 102, 241, 0.06);
-  --shadow-hover: 0 4px 8px rgba(12, 18, 34, 0.06), 0 12px 32px rgba(0, 180, 216, 0.12);
-  --shadow-glow: 0 0 20px rgba(0, 180, 216, 0.15);
+  --shadow: 0 1px 2px rgba(12, 18, 34, 0.04), 0 4px 16px rgba(90, 100, 232, 0.06);
+  --shadow-hover: 0 4px 8px rgba(12, 18, 34, 0.06), 0 12px 32px rgba(90, 100, 232, 0.12);
+  --shadow-glow: 0 0 20px rgba(90, 100, 232, 0.15);
 
-  /* Element Plus 覆盖 */
-  --el-color-primary: #00b4d8;
-  --el-color-primary-light-3: #48cae4;
-  --el-color-primary-light-5: #90e0ef;
-  --el-color-primary-light-7: #caf0f8;
-  --el-color-primary-light-9: #e8f8fc;
-  --el-color-primary-dark-2: #0096c7;
-  --el-border-radius-base: 8px;
-  --el-border-radius-small: 6px;
-}
-
-[data-theme='dark'] {
-  --bg-page: #050a14;
-  --bg-page-mesh: radial-gradient(ellipse at 30% 0%, rgba(0, 180, 216, 0.08) 0%, transparent 55%),
-    radial-gradient(ellipse at 70% 100%, rgba(99, 102, 241, 0.06) 0%, transparent 55%),
-    #050a14;
-  --bg-card: rgba(12, 20, 36, 0.85);
-  --bg-card-solid: #0c1424;
-  --text-primary: #e8edf5;
-  --text-secondary: #8b9cb8;
-  --text-tertiary: #5c6b82;
-  --border: rgba(0, 180, 216, 0.12);
-  --border-strong: rgba(0, 180, 216, 0.22);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 20px rgba(0, 0, 0, 0.25);
-  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 24px rgba(0, 180, 216, 0.1);
+  --el-color-primary: #5a64e8;
+  --el-color-primary-light-3: #8f98ff;
+  --el-color-primary-light-5: #b3b9ff;
+  --el-color-primary-light-7: #d6d9ff;
+  --el-color-primary-light-9: #eff0ff;
+  --el-color-primary-dark-2: #4750c9;
 }

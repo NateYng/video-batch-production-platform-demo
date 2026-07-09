@@ -113,13 +113,13 @@ function navigate(path) {
   top: 0;
   bottom: 0;
   width: 232px;
-  background: linear-gradient(180deg, #060d1f 0%, #0a1628 50%, #0d1a2d 100%);
-  color: #94a3b8;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
   z-index: 100;
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  border-right: 1px solid rgba(0, 180, 216, 0.1);
+  border-right: 1px solid var(--sidebar-border);
   overflow: hidden;
 }
 
@@ -127,9 +127,9 @@ function navigate(path) {
   position: absolute;
   top: -60px;
   left: -40px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(0, 180, 216, 0.12) 0%, transparent 70%);
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(110, 121, 247, 0.14) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -142,7 +142,7 @@ function navigate(path) {
   align-items: center;
   gap: 12px;
   padding: 18px 16px;
-  border-bottom: 1px solid rgba(0, 180, 216, 0.08);
+  border-bottom: 1px solid var(--sidebar-border);
   position: relative;
   z-index: 1;
 }
@@ -151,13 +151,13 @@ function navigate(path) {
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #00b4d8 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #6e79f7 0%, #22d3ee 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.35);
+  box-shadow: 0 4px 14px rgba(110, 121, 247, 0.4);
 }
 
 .logo-text-wrap {
@@ -170,14 +170,14 @@ function navigate(path) {
 .logo-text {
   font-size: 14px;
   font-weight: 700;
-  color: #e8edf5;
+  color: #f2f4f8;
   white-space: nowrap;
   letter-spacing: 0.3px;
 }
 
 .logo-sub {
   font-size: 9px;
-  color: rgba(0, 180, 216, 0.6);
+  color: rgba(34, 211, 238, 0.65);
   letter-spacing: 1px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -201,7 +201,7 @@ function navigate(path) {
   gap: 8px;
   font-size: 10px;
   padding: 10px 12px 6px;
-  color: #4a5d78;
+  color: #4b515e;
   letter-spacing: 1.2px;
   text-transform: uppercase;
   font-weight: 600;
@@ -211,7 +211,7 @@ function navigate(path) {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #00b4d8, #6366f1);
+  background: linear-gradient(135deg, #6e79f7, #22d3ee);
   flex-shrink: 0;
 }
 
@@ -226,7 +226,7 @@ function navigate(path) {
   transition: all 0.2s;
   position: relative;
   border-radius: 8px;
-  color: #8b9cb8;
+  color: #8a8f9d;
 }
 
 .nav-icon-wrap {
@@ -241,24 +241,24 @@ function navigate(path) {
 }
 
 .nav-item:hover {
-  background: rgba(0, 180, 216, 0.06);
-  color: #c8e6f0;
+  background: rgba(255, 255, 255, 0.045);
+  color: #d5d9e2;
 }
 
 .nav-item:hover .nav-icon-wrap {
-  background: rgba(0, 180, 216, 0.1);
-  color: #48cae4;
+  background: rgba(255, 255, 255, 0.06);
+  color: #aab1ff;
 }
 
 .nav-item.active {
-  background: rgba(0, 180, 216, 0.12);
-  color: #e0f7fa;
+  background: rgba(110, 121, 247, 0.14);
+  color: #f2f4f8;
 }
 
 .nav-item.active .nav-icon-wrap {
-  background: linear-gradient(135deg, rgba(0, 180, 216, 0.25) 0%, rgba(99, 102, 241, 0.2) 100%);
-  color: #48cae4;
-  box-shadow: 0 0 12px rgba(0, 180, 216, 0.2);
+  background: linear-gradient(135deg, rgba(110, 121, 247, 0.3) 0%, rgba(34, 211, 238, 0.2) 100%);
+  color: #aab1ff;
+  box-shadow: 0 0 12px rgba(110, 121, 247, 0.25);
 }
 
 .active-indicator {
@@ -268,9 +268,9 @@ function navigate(path) {
   transform: translateY(-50%);
   width: 3px;
   height: 20px;
-  background: linear-gradient(180deg, #00b4d8, #6366f1);
+  background: linear-gradient(180deg, #6e79f7, #22d3ee);
   border-radius: 0 3px 3px 0;
-  box-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
+  box-shadow: 0 0 8px rgba(110, 121, 247, 0.55);
 }
 
 .badge {
@@ -279,12 +279,12 @@ function navigate(path) {
 
 .collapse-btn {
   padding: 14px 16px;
-  border-top: 1px solid rgba(0, 180, 216, 0.08);
+  border-top: 1px solid var(--sidebar-border);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #5c6b82;
+  color: #5d6472;
   font-size: 12px;
   transition: color 0.2s;
   position: relative;
@@ -292,7 +292,7 @@ function navigate(path) {
 }
 
 .collapse-btn:hover {
-  color: #94a3b8;
+  color: #9aa2b5;
 }
 
 .sidebar.collapsed .nav-item {

@@ -51,7 +51,7 @@ const typeIcons = {
   企业新闻播报: Microphone,
 }
 
-const typeColors = ['#0ea5e9', '#8b5cf6', '#22c55e', '#f59e0b', '#ef4444']
+const typeColors = ['#22d3ee', '#8b5cf6', '#34d399', '#fbbf24', '#fb7185']
 
 const steps = ['选择类型', '上传素材', '生产配置', '审核策略', '发布配置']
 
@@ -290,7 +290,7 @@ function submitTask() {
   gap: 6px;
   padding: 20px;
   border: 2px dashed var(--border);
-  background: rgba(99, 102, 241, 0.03);
+  background: rgba(148, 155, 175, 0.04);
   border-radius: var(--radius);
 }
 

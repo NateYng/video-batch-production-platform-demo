@@ -14,12 +14,18 @@ const props = defineProps({
   height: { type: String, default: '180px' },
   colors: {
     type: Array,
-    default: () => ['#0ea5e9', '#f59e0b', '#ef4444', '#22c55e', '#8b5cf6', '#64748b'],
+    default: () => ['#6e79f7', '#fbbf24', '#fb7185', '#34d399', '#8b5cf6', '#5d6472'],
   },
 })
 
 const option = computed(() => ({
-  tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: {c} ({d}%)',
+    backgroundColor: '#161927',
+    borderColor: 'rgba(255,255,255,0.12)',
+    textStyle: { color: '#e7eaf2', fontSize: 12 },
+  },
   legend: { show: false },
   series: [
     {
@@ -28,7 +34,7 @@ const option = computed(() => ({
       center: ['50%', '50%'],
       data: props.data,
       label: { show: false },
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+      itemStyle: { borderRadius: 4, borderColor: 'rgba(17, 19, 28, 0.9)', borderWidth: 2 },
       color: props.colors,
     },
   ],

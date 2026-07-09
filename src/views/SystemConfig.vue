@@ -67,7 +67,7 @@ const costDonutOption = computed(() => ({
     center: ['50%', '50%'],
     data: costBreakdown,
     label: { show: false },
-    color: ['#0ea5e9', '#22c55e', '#8b5cf6', '#f59e0b', '#64748b'],
+    color: ['#22d3ee', '#34d399', '#8b5cf6', '#fbbf24', '#5d6472'],
   }],
 }))
 
@@ -345,7 +345,7 @@ const configTab = ref('roles')
 
 .connection-sidebar {
   padding: 10px;
-  background: rgba(99, 102, 241, 0.04);
+  background: rgba(148, 155, 175, 0.05);
   border-radius: 8px;
   border: 1px solid var(--border);
 }
@@ -362,16 +362,16 @@ const configTab = ref('roles')
   gap: 8px;
   padding: 8px;
   border-radius: 6px;
-  background: #fef2f2;
-  color: #ef4444;
+  background: rgba(251, 113, 133, 0.1);
+  color: #fb7185;
   margin-bottom: 8px;
   font-size: 12px;
   font-weight: 500;
 }
 
 .conn-status.ok {
-  background: #f0fdf4;
-  color: #22c55e;
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
 }
 
 .conn-meta {
@@ -395,7 +395,7 @@ const configTab = ref('roles')
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background: rgba(99, 102, 241, 0.04);
+  background: rgba(148, 155, 175, 0.05);
   border-radius: 6px;
   border: 1px solid var(--border);
 }
@@ -441,7 +441,7 @@ const configTab = ref('roles')
 
 .cost-card-item {
   padding: 10px;
-  background: rgba(99, 102, 241, 0.04);
+  background: rgba(148, 155, 175, 0.05);
   border-radius: 6px;
   border: 1px solid var(--border);
 }
@@ -457,7 +457,7 @@ const configTab = ref('roles')
   margin: 2px 0;
 }
 
-.cc-trend.down { color: #22c55e; font-size: 11px; }
+.cc-trend.down { color: #34d399; font-size: 11px; }
 .cc-sub { font-size: 11px; color: var(--text-secondary); }
 
 .cost-chart h4,

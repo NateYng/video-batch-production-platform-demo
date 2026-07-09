@@ -21,27 +21,36 @@ const tabs = ['生产效率', '内容质量', '发布效果', '资产复用']
 
 const kpiCards = [
   { label: '生成成功率', value: '93.6%', trend: 2.4, accent: 'emerald' },
-  { label: '高风险占比', value: '4.2%', trend: -0.8, color: '#ef4444', accent: 'rose' },
+  { label: '高风险占比', value: '4.2%', trend: -0.8, color: '#fb7185', accent: 'rose' },
   { label: '近7日播放', value: '128万', trend: 18.6, accent: 'cyan' },
   { label: '模板复用', value: '62%', trend: 5.2, accent: 'indigo' },
   { label: '平均耗时', value: '2m18s', trend: -6.3, accent: 'violet' },
   { label: '单条成本', value: '¥1.86', trend: -3.1, accent: 'amber' },
 ]
 
+const axisText = '#8a92a6'
+const splitLine = { lineStyle: { color: 'rgba(255, 255, 255, 0.06)' } }
+const darkTooltip = {
+  backgroundColor: '#161927',
+  borderColor: 'rgba(255,255,255,0.12)',
+  textStyle: { color: '#e7eaf2', fontSize: 12 },
+}
+
 const productionTrendOption = computed(() => ({
-  tooltip: { trigger: 'axis' },
-  legend: { data: ['生成量', '成功量', '失败量'], bottom: 0, textStyle: { fontSize: 11 } },
+  tooltip: { trigger: 'axis', ...darkTooltip },
+  legend: { data: ['生成量', '成功量', '失败量'], bottom: 0, textStyle: { fontSize: 11, color: axisText } },
   grid: { left: 40, right: 16, top: 24, bottom: 36 },
   xAxis: {
     type: 'category',
     data: ['07-03', '07-04', '07-05', '07-06', '07-07', '07-08', '07-09'],
-    axisLabel: { fontSize: 11 },
+    axisLabel: { fontSize: 11, color: axisText },
+    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } },
   },
-  yAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
   series: [
-    { name: '生成量', type: 'bar', data: [8200, 9100, 7800, 10200, 9600, 11200, 8420], itemStyle: { color: '#00b4d8' } },
-    { name: '成功量', type: 'bar', data: [7680, 8520, 7320, 9580, 9020, 10480, 7880], itemStyle: { color: '#22c55e' } },
-    { name: '失败量', type: 'bar', data: [520, 580, 480, 620, 580, 720, 540], itemStyle: { color: '#ef4444' } },
+    { name: '生成量', type: 'bar', data: [8200, 9100, 7800, 10200, 9600, 11200, 8420], itemStyle: { color: '#6e79f7', borderRadius: [3, 3, 0, 0] } },
+    { name: '成功量', type: 'bar', data: [7680, 8520, 7320, 9580, 9020, 10480, 7880], itemStyle: { color: '#34d399', borderRadius: [3, 3, 0, 0] } },
+    { name: '失败量', type: 'bar', data: [520, 580, 480, 620, 580, 720, 540], itemStyle: { color: '#fb7185', borderRadius: [3, 3, 0, 0] } },
   ],
 }))
 
@@ -52,11 +61,11 @@ const pieLegend = {
   itemWidth: 8,
   itemHeight: 8,
   itemGap: 6,
-  textStyle: { fontSize: 10, color: '#64748b' },
+  textStyle: { fontSize: 10, color: axisText },
 }
 
 const failureReasonOption = computed(() => ({
-  tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
+  tooltip: { trigger: 'item', formatter: '{b}: {d}%', ...darkTooltip },
   legend: {
     ...pieLegend,
     data: ['素材加载', '视频合成', '语音合成', '字幕生成', '风险拦截', '其他'],
@@ -74,12 +83,13 @@ const failureReasonOption = computed(() => ({
       { name: '其他', value: 4.8 },
     ],
     label: { show: false },
-    color: ['#00b4d8', '#f59e0b', '#ef4444', '#8b5cf6', '#22c55e', '#64748b'],
+    itemStyle: { borderColor: 'rgba(17, 19, 28, 0.9)', borderWidth: 2, borderRadius: 4 },
+    color: ['#6e79f7', '#fbbf24', '#fb7185', '#8b5cf6', '#34d399', '#5d6472'],
   }],
 }))
 
 const riskLevelOption = computed(() => ({
-  tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+  tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)', ...darkTooltip },
   legend: {
     ...pieLegend,
     data: ['高风险', '中风险', '低风险'],
@@ -94,55 +104,58 @@ const riskLevelOption = computed(() => ({
       { name: '低风险', value: 7720 },
     ],
     label: { show: false },
-    color: ['#ef4444', '#f59e0b', '#22c55e'],
+    itemStyle: { borderColor: 'rgba(17, 19, 28, 0.9)', borderWidth: 2, borderRadius: 4 },
+    color: ['#fb7185', '#fbbf24', '#34d399'],
   }],
 }))
 
 const channelCompareOption = computed(() => ({
-  tooltip: { trigger: 'axis' },
-  legend: { data: ['播放量(万)', '完播率(%)', '互动率(%)'], bottom: 0, textStyle: { fontSize: 11 } },
+  tooltip: { trigger: 'axis', ...darkTooltip },
+  legend: { data: ['播放量(万)', '完播率(%)', '互动率(%)'], bottom: 0, textStyle: { fontSize: 11, color: axisText } },
   grid: { left: 40, right: 16, top: 24, bottom: 36 },
-  xAxis: { type: 'category', data: ['抖音', '视频号', '官网'], axisLabel: { fontSize: 11 } },
-  yAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+  xAxis: { type: 'category', data: ['抖音', '视频号', '官网'], axisLabel: { fontSize: 11, color: axisText }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } } },
+  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
   series: [
-    { name: '播放量(万)', type: 'bar', data: [256.8, 128.6, 32.4], itemStyle: { color: '#00b4d8' } },
-    { name: '完播率(%)', type: 'bar', data: [42.3, 38.6, 56.2], itemStyle: { color: '#22c55e' } },
-    { name: '互动率(%)', type: 'bar', data: [8.6, 6.2, 4.8], itemStyle: { color: '#f59e0b' } },
+    { name: '播放量(万)', type: 'bar', data: [256.8, 128.6, 32.4], itemStyle: { color: '#6e79f7', borderRadius: [3, 3, 0, 0] } },
+    { name: '完播率(%)', type: 'bar', data: [42.3, 38.6, 56.2], itemStyle: { color: '#34d399', borderRadius: [3, 3, 0, 0] } },
+    { name: '互动率(%)', type: 'bar', data: [8.6, 6.2, 4.8], itemStyle: { color: '#fbbf24', borderRadius: [3, 3, 0, 0] } },
   ],
 }))
 
 const completionDistOption = computed(() => ({
-  tooltip: { trigger: 'axis' },
+  tooltip: { trigger: 'axis', ...darkTooltip },
   grid: { left: 40, right: 16, top: 16, bottom: 28 },
   xAxis: {
     type: 'category',
     data: ['0-20%', '20-40%', '40-60%', '60-80%', '80-100%'],
-    axisLabel: { fontSize: 11 },
+    axisLabel: { fontSize: 11, color: axisText },
+    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } },
   },
-  yAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+  yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
   series: [{
     type: 'bar',
     data: [1280, 2860, 4520, 6280, 8420],
     itemStyle: {
-      color: (params) => ['#ef4444', '#f59e0b', '#eab308', '#84cc16', '#22c55e'][params.dataIndex],
+      color: (params) => ['#fb7185', '#fbbf24', '#facc15', '#a3e635', '#34d399'][params.dataIndex],
       borderRadius: [4, 4, 0, 0],
     },
   }],
 }))
 
 const templateTop5Option = computed(() => ({
-  tooltip: { trigger: 'axis' },
+  tooltip: { trigger: 'axis', ...darkTooltip },
   grid: { left: 100, right: 24, top: 8, bottom: 8 },
-  xAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+  xAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine },
   yAxis: {
     type: 'category',
     data: ['营销活动宣传', '品牌宣传片', '科普短视频', '企业新闻播报', '数字人讲解'].reverse(),
-    axisLabel: { fontSize: 11 },
+    axisLabel: { fontSize: 11, color: axisText },
+    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.12)' } },
   },
   series: [{
     type: 'bar',
     data: [86, 128, 186, 256, 428].reverse(),
-    itemStyle: { color: '#00b4d8', borderRadius: [0, 4, 4, 0] },
+    itemStyle: { color: '#22d3ee', borderRadius: [0, 4, 4, 0] },
   }],
 }))
 
@@ -322,8 +335,8 @@ const lowEfficiencyAssets = [
   color: var(--text-secondary);
 }
 
-.alert-item.high { color: #ef4444; }
-.alert-item.medium { color: #f59e0b; }
+.alert-item.high { color: #fb7185; }
+.alert-item.medium { color: #fbbf24; }
 
 .asset-row {
   display: flex;
@@ -344,6 +357,6 @@ const lowEfficiencyAssets = [
   margin-right: 6px;
 }
 
-.ar-metric.good { color: #22c55e; flex-shrink: 0; }
-.ar-metric.bad { color: #ef4444; flex-shrink: 0; }
+.ar-metric.good { color: #34d399; flex-shrink: 0; }
+.ar-metric.bad { color: #fb7185; flex-shrink: 0; }
 </style>

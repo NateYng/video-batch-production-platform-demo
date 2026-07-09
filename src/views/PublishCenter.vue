@@ -13,10 +13,10 @@ const selectedDate = ref('2025-07-09')
 const sideTab = ref('check')
 
 const channelOverview = [
-  { name: '抖音', pending: 3600, todayPublished: 1260, trend: 12, successRate: 96.2, color: '#0ea5e9' },
-  { name: '视频号', pending: 1860, todayPublished: 642, trend: 8.4, successRate: 97.1, color: '#22c55e' },
+  { name: '抖音', pending: 3600, todayPublished: 1260, trend: 12, successRate: 96.2, color: '#22d3ee' },
+  { name: '视频号', pending: 1860, todayPublished: 642, trend: 8.4, successRate: 97.1, color: '#34d399' },
   { name: '官网', pending: 120, todayPublished: 28, trend: -2.1, successRate: 100, color: '#8b5cf6' },
-  { name: '发布成功率', pending: null, todayPublished: null, trend: 2.1, successRate: 96.8, color: '#f59e0b', isSummary: true },
+  { name: '发布成功率', pending: null, todayPublished: null, trend: 2.1, successRate: 96.8, color: '#fbbf24', isSummary: true },
 ]
 
 const timeSlots = ['10:00', '14:00', '18:00']
@@ -223,8 +223,8 @@ function handleChannelAction(row, action) {
             <el-tab-pane label="校验" name="check">
               <ul class="checklist">
                 <li v-for="item in checklist" :key="item.label" :class="{ fail: !item.ok }">
-                  <el-icon v-if="item.ok" color="#22c55e"><CircleCheck /></el-icon>
-                  <el-icon v-else color="#ef4444"><CircleClose /></el-icon>
+                  <el-icon v-if="item.ok" color="#34d399"><CircleCheck /></el-icon>
+                  <el-icon v-else color="#fb7185"><CircleClose /></el-icon>
                   <span class="ck-label">{{ item.label }}</span>
                   <span class="ck-value">{{ item.value }}</span>
                 </li>
@@ -311,7 +311,7 @@ function handleChannelAction(row, action) {
 }
 
 .grid-header {
-  background: rgba(99, 102, 241, 0.04);
+  background: rgba(148, 155, 175, 0.05);
   font-size: 11px;
   font-weight: 600;
   color: var(--text-secondary);
@@ -343,9 +343,9 @@ function handleChannelAction(row, action) {
   min-height: 36px;
 }
 
-.schedule-card.ready { background: #f0fdf4; border: 1px solid #bbf7d0; }
-.schedule-card.queuing { background: #fffbeb; border: 1px solid #fde68a; }
-.schedule-card.published { background: #f0f9ff; border: 1px solid #bae6fd; }
+.schedule-card.ready { background: rgba(52, 211, 153, 0.09); border: 1px solid rgba(52, 211, 153, 0.28); }
+.schedule-card.queuing { background: rgba(251, 191, 36, 0.09); border: 1px solid rgba(251, 191, 36, 0.28); }
+.schedule-card.published { background: rgba(96, 165, 250, 0.09); border: 1px solid rgba(96, 165, 250, 0.28); }
 
 .sc-title {
   font-weight: 500;
@@ -381,7 +381,7 @@ function handleChannelAction(row, action) {
   border-bottom: 1px solid var(--border);
 }
 
-.checklist li.fail .ck-value { color: #ef4444; }
+.checklist li.fail .ck-value { color: #fb7185; }
 
 .ck-label { flex: 1; }
 .ck-value { color: var(--text-secondary); font-size: 10px; }
@@ -394,7 +394,7 @@ function handleChannelAction(row, action) {
 
 .effect-item {
   padding: 6px;
-  background: rgba(99, 102, 241, 0.04);
+  background: rgba(148, 155, 175, 0.05);
   border-radius: 6px;
 }
 

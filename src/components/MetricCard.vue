@@ -35,15 +35,17 @@ defineProps({
 
 <style scoped>
 .metric-card {
-  --metric-accent: #00b4d8;
-  --metric-glow: rgba(0, 180, 216, 0.1);
+  --metric-accent: #22d3ee;
+  --metric-glow: rgba(34, 211, 238, 0.12);
   position: relative;
   min-height: 100px;
   padding: 18px 20px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: linear-gradient(145deg, var(--bg-card-solid) 0%, color-mix(in srgb, var(--bg-card-solid) 92%, var(--metric-accent)) 100%);
-  box-shadow: var(--shadow);
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), var(--shadow);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -58,9 +60,10 @@ defineProps({
   left: 0;
   top: 12px;
   bottom: 12px;
-  width: 4px;
-  border-radius: 0 4px 4px 0;
-  background: linear-gradient(180deg, var(--metric-accent), color-mix(in srgb, var(--metric-accent) 60%, white));
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--metric-accent);
+  box-shadow: 0 0 10px var(--metric-glow);
 }
 
 .metric-card::after {
@@ -68,8 +71,8 @@ defineProps({
   position: absolute;
   right: -24px;
   top: -32px;
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   background: radial-gradient(circle, var(--metric-glow) 0%, transparent 72%);
   pointer-events: none;
@@ -77,18 +80,18 @@ defineProps({
 
 .metric-card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-  border-color: color-mix(in srgb, var(--metric-accent) 35%, var(--border));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), var(--shadow-hover);
+  border-color: color-mix(in srgb, var(--metric-accent) 40%, var(--border));
 }
 
-.accent-cyan { --metric-accent: #00b4d8; --metric-glow: rgba(0, 180, 216, 0.14); }
-.accent-indigo { --metric-accent: #6366f1; --metric-glow: rgba(99, 102, 241, 0.14); }
-.accent-emerald { --metric-accent: #10b981; --metric-glow: rgba(16, 185, 129, 0.14); }
-.accent-amber { --metric-accent: #f59e0b; --metric-glow: rgba(245, 158, 11, 0.14); }
-.accent-rose { --metric-accent: #f43f5e; --metric-glow: rgba(244, 63, 94, 0.14); }
-.accent-slate { --metric-accent: #64748b; --metric-glow: rgba(100, 116, 139, 0.12); }
-.accent-blue { --metric-accent: #3b82f6; --metric-glow: rgba(59, 130, 246, 0.14); }
-.accent-violet { --metric-accent: #8b5cf6; --metric-glow: rgba(139, 92, 246, 0.14); }
+.accent-cyan { --metric-accent: #22d3ee; --metric-glow: rgba(34, 211, 238, 0.16); }
+.accent-indigo { --metric-accent: #6e79f7; --metric-glow: rgba(110, 121, 247, 0.18); }
+.accent-emerald { --metric-accent: #34d399; --metric-glow: rgba(52, 211, 153, 0.16); }
+.accent-amber { --metric-accent: #fbbf24; --metric-glow: rgba(251, 191, 36, 0.14); }
+.accent-rose { --metric-accent: #fb7185; --metric-glow: rgba(251, 113, 133, 0.16); }
+.accent-slate { --metric-accent: #94a3b8; --metric-glow: rgba(148, 163, 184, 0.12); }
+.accent-blue { --metric-accent: #60a5fa; --metric-glow: rgba(96, 165, 250, 0.16); }
+.accent-violet { --metric-accent: #8b5cf6; --metric-glow: rgba(139, 92, 246, 0.16); }
 
 .metric-top {
   display: flex;
@@ -116,13 +119,27 @@ defineProps({
 }
 
 .trend-badge.up {
-  color: #047857;
-  background: rgba(16, 185, 129, 0.14);
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.2);
 }
 
 .trend-badge.down {
-  color: #b91c1c;
-  background: rgba(244, 63, 94, 0.12);
+  color: #fb7185;
+  background: rgba(251, 113, 133, 0.1);
+  border: 1px solid rgba(251, 113, 133, 0.2);
+}
+
+[data-theme='light'] .trend-badge.up {
+  color: #047857;
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.22);
+}
+
+[data-theme='light'] .trend-badge.down {
+  color: #be123c;
+  background: rgba(244, 63, 94, 0.1);
+  border-color: rgba(244, 63, 94, 0.22);
 }
 
 .value {
@@ -140,17 +157,7 @@ defineProps({
   color: var(--value-color);
 }
 
-[data-theme='dark'] .metric-card {
-  background: linear-gradient(145deg, var(--bg-card) 0%, color-mix(in srgb, var(--bg-card) 88%, var(--metric-accent)) 100%);
-}
-
-[data-theme='dark'] .trend-badge.up {
-  color: #34d399;
-  background: rgba(16, 185, 129, 0.2);
-}
-
-[data-theme='dark'] .trend-badge.down {
-  color: #fb7185;
-  background: rgba(244, 63, 94, 0.2);
+[data-theme='light'] .metric-card {
+  box-shadow: var(--shadow);
 }
 </style>

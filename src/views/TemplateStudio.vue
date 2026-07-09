@@ -6,6 +6,7 @@ import {
 } from '@element-plus/icons-vue'
 import { useAssetStore } from '@/stores'
 import { templateRecords } from '@/mock'
+import { makePoster } from '@/mock/media'
 
 const router = useRouter()
 const assetStore = useAssetStore()
@@ -34,10 +35,10 @@ const recordStatusMap = {
 }
 
 const badgeColors = {
-  已发布: '#22c55e',
-  高复用: '#0ea5e9',
+  已发布: '#34d399',
+  高复用: '#22d3ee',
   草稿: '#94a3b8',
-  待优化: '#f59e0b',
+  待优化: '#fbbf24',
 }
 
 const templateVariables = [
@@ -87,7 +88,7 @@ if (assetStore.templateList.length && !selectedTemplate.value) {
             @click="selectTemplate(tpl)"
           >
             <div class="tpl-preview">
-              <el-icon :size="28" color="#94a3b8"><DocumentCopy /></el-icon>
+              <img :src="makePoster(tpl.type, { seed: tpl.id, subtitle: tpl.duration + ' · ' + tpl.resolution, play: false })" class="tpl-cover" alt="" />
               <span class="tpl-badge" :style="{ background: badgeColors[tpl.badge] || '#64748b' }">{{ tpl.badge }}</span>
             </div>
             <div class="tpl-body">
@@ -215,7 +216,7 @@ if (assetStore.templateList.length && !selectedTemplate.value) {
 
 .variable-item {
   padding: 6px;
-  background: rgba(99, 102, 241, 0.04);
+  background: rgba(148, 155, 175, 0.05);
   border-radius: 4px;
   margin-bottom: 6px;
 }

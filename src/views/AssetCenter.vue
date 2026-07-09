@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useAssetStore } from '@/stores'
 import { assetRankings } from '@/mock'
+import { makePoster } from '@/mock/media'
 import MetricCard from '@/components/MetricCard.vue'
 import {
   Picture, VideoCamera, User, Reading, Link, Checked,
@@ -18,16 +19,16 @@ const statCards = [
   { label: '资产总数', value: 32846, trend: 6.2, accent: 'cyan' },
   { label: '本周新增', value: 1428, trend: 18.4, accent: 'indigo' },
   { label: '引用次数', value: 48672, trend: 12.8, accent: 'emerald' },
-  { label: '待审核', value: 236, trend: -4.2, color: '#f59e0b', accent: 'amber' },
+  { label: '待审核', value: 236, trend: -4.2, color: '#fbbf24', accent: 'amber' },
 ]
 
 const categoryCards = [
-  { name: '品牌资产', count: 1286, icon: Picture, color: '#0ea5e9', desc: 'LOGO/片头/品牌规范' },
-  { name: '媒体素材', count: 18420, icon: VideoCamera, color: '#22c55e', desc: '视频/B-roll/音效' },
+  { name: '品牌资产', count: 1286, icon: Picture, color: '#22d3ee', desc: 'LOGO/片头/品牌规范' },
+  { name: '媒体素材', count: 18420, icon: VideoCamera, color: '#34d399', desc: '视频/B-roll/音效' },
   { name: '数字人资产', count: 86, icon: User, color: '#8b5cf6', desc: '数字人形象与音色' },
-  { name: '知识库', count: 3420, icon: Reading, color: '#f59e0b', desc: '文档/白皮书/FAQ' },
+  { name: '知识库', count: 3420, icon: Reading, color: '#fbbf24', desc: '文档/白皮书/FAQ' },
   { name: '账号与渠道', count: 48, icon: Link, color: '#ec4899', desc: '渠道授权与账号' },
-  { name: '素材审核', count: 236, icon: Checked, color: '#ef4444', desc: '待审/驳回/已通过' },
+  { name: '素材审核', count: 236, icon: Checked, color: '#fb7185', desc: '待审/驳回/已通过' },
 ]
 
 const knowledgeRankings = [
@@ -64,6 +65,9 @@ function handleBatchAudit() {
 function selectCategory(name) {
   activeTab.value = name
 }
+
+const assetThumb = (row) =>
+  makePoster(row.type, { seed: row.id, width: 128, height: 72, play: false, subtitle: '' })
 </script>
 
 <template>
@@ -118,6 +122,11 @@ function selectCategory(name) {
           <div class="table-flex">
             <el-table :data="filteredAssets" stripe size="small">
               <el-table-column type="selection" width="36" />
+              <el-table-column label="预览" width="72">
+                <template #default="{ row }">
+                  <img :src="assetThumb(row)" class="asset-thumb" alt="" />
+                </template>
+              </el-table-column>
               <el-table-column prop="id" label="ID" width="130" show-overflow-tooltip />
               <el-table-column prop="name" label="名称" min-width="130" show-overflow-tooltip />
               <el-table-column prop="type" label="类型" width="100">
@@ -204,6 +213,15 @@ function selectCategory(name) {
   font-weight: 600;
 }
 
+.asset-thumb {
+  width: 56px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--border);
+}
+
 .tag-item {
   margin-right: 4px;
 }
@@ -223,7 +241,7 @@ function selectCategory(name) {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  background: rgba(99, 102, 241, 0.08);
+  background: rgba(110, 121, 247, 0.12);
   color: var(--text-secondary);
   font-size: 10px;
   font-weight: 600;
@@ -233,7 +251,7 @@ function selectCategory(name) {
   flex-shrink: 0;
 }
 
-.rank-no.top1 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.rank-no.top1 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
 .rank-no.top2 { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
 .rank-no.top3 { background: rgba(180, 83, 9, 0.15); color: #d97706; }
 

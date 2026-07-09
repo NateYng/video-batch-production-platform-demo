@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useVideoStore } from '@/stores'
 import { ElMessage } from 'element-plus'
-import { VideoPlay } from '@element-plus/icons-vue'
+import { videoMedia, makePoster } from '@/mock/media'
 
 const videoStore = useVideoStore()
 
@@ -68,6 +68,19 @@ function batchSubmitAudit() {
   videoStore.submitAudit(ids)
   ElMessage.success(`已提交 ${ids.length} 条视频至审核队列`)
 }
+
+const selectedMedia = computed(() =>
+  selectedVideo.value ? videoMedia(selectedVideo.value.id, selectedVideo.value.title) : null
+)
+
+const rowThumb = (row) => makePoster(row.title, { seed: row.id, width: 128, height: 72, play: false, subtitle: '' })
+
+const coverOptions = computed(() => {
+  if (!selectedVideo.value) return []
+  return [1, 2, 3, 4].map((n) =>
+    makePoster(selectedVideo.value.title, { seed: `${selectedVideo.value.id}-c${n}`, subtitle: `封面方案 ${n}` })
+  )
+})
 </script>
 
 <template>
@@ -109,6 +122,11 @@ function batchSubmitAudit() {
               @row-click="selectRow"
             >
           <el-table-column type="selection" width="40" />
+          <el-table-column label="预览" width="76">
+            <template #default="{ row }">
+              <img :src="rowThumb(row)" class="row-thumb" alt="" />
+            </template>
+          </el-table-column>
           <el-table-column prop="id" label="视频 ID" width="160" />
           <el-table-column prop="title" label="标题" min-width="180" show-overflow-tooltip />
           <el-table-column prop="template" label="模板" width="130" />
@@ -137,10 +155,15 @@ function batchSubmitAudit() {
 
       <aside class="page-split-side">
       <div v-if="selectedVideo" class="page-card fill-card preview-panel">
-        <div class="video-placeholder">
-          <el-icon :size="36"><VideoPlay /></el-icon>
-          <span>{{ selectedVideo.duration }}</span>
-        </div>
+        <video
+          :key="selectedVideo.id"
+          class="video-player"
+          :src="selectedMedia.src"
+          :poster="selectedMedia.poster"
+          controls
+          preload="metadata"
+          muted
+        />
         <h3 class="pv-title">{{ selectedVideo.title }}</h3>
         <p class="meta">{{ selectedVideo.id }}</p>
 
@@ -169,7 +192,7 @@ function batchSubmitAudit() {
           </el-tab-pane>
           <el-tab-pane label="封面" name="cover">
             <div class="cover-preview">
-              <div class="cover-thumb">封面预览</div>
+              <img :src="selectedMedia.poster" class="cover-thumb-img" alt="封面预览" />
               <el-button size="small" type="primary" plain @click="changeCover">重新生成封面</el-button>
             </div>
           </el-tab-pane>
@@ -196,9 +219,16 @@ function batchSubmitAudit() {
       </template>
     </el-dialog>
 
-    <el-dialog v-model="coverDialogVisible" title="更换封面" width="400px">
+    <el-dialog v-model="coverDialogVisible" title="更换封面" width="440px">
       <div class="cover-options">
-        <div v-for="n in 4" :key="n" class="cover-option" :class="{ active: n === 1 }">封面 {{ n }}</div>
+        <img
+          v-for="(cover, i) in coverOptions"
+          :key="i"
+          :src="cover"
+          class="cover-option"
+          :class="{ active: i === 0 }"
+          alt=""
+        />
       </div>
       <template #footer>
         <el-button @click="coverDialogVisible = false">取消</el-button>
@@ -218,18 +248,23 @@ function batchSubmitAudit() {
   overflow-y: auto;
 }
 
-.video-placeholder {
+.video-player {
+  width: 100%;
   aspect-ratio: 16/9;
-  max-height: 120px;
-  background: rgba(99, 102, 241, 0.06);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  color: var(--text-tertiary);
+  border-radius: 8px;
+  background: #000;
   margin-bottom: 8px;
+  border: 1px solid var(--border);
+  display: block;
+  object-fit: cover;
+}
+
+.row-thumb {
+  width: 60px;
+  height: 34px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
   border: 1px solid var(--border);
 }
 
@@ -262,18 +297,14 @@ function batchSubmitAudit() {
   margin-bottom: 4px;
 }
 
-.cover-thumb {
+.cover-thumb-img {
+  width: 100%;
   aspect-ratio: 16/9;
-  max-height: 80px;
-  background: rgba(99, 102, 241, 0.06);
+  object-fit: cover;
   border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-tertiary);
   margin-bottom: 6px;
-  font-size: 11px;
   border: 1px solid var(--border);
+  display: block;
 }
 
 .empty-preview {
@@ -289,15 +320,18 @@ function batchSubmitAudit() {
 }
 
 .cover-option {
+  width: 100%;
   aspect-ratio: 16/9;
-  background: rgba(99, 102, 241, 0.06);
+  object-fit: cover;
   border: 2px solid var(--border);
   border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
   cursor: pointer;
+  display: block;
+  transition: border-color 0.15s;
+}
+
+.cover-option:hover {
+  border-color: var(--border-strong);
 }
 
 .cover-option.active {
