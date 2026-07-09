@@ -8,6 +8,11 @@ import App from './App.vue'
 import router from './router'
 import './styles/global.css'
 
+document.documentElement.setAttribute(
+  'data-theme',
+  localStorage.getItem('vbpp-color-mode') || 'light'
+)
+
 const app = createApp(App)
 const pinia = createPinia()
 

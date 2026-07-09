@@ -67,7 +67,7 @@ function selectCategory(name) {
 </script>
 
 <template>
-  <div class="asset-center dark-page">
+  <div class="asset-center">
     <div class="page-header">
       <div>
         <h1>资产中心</h1>
@@ -199,20 +199,6 @@ function selectCategory(name) {
 </template>
 
 <style scoped>
-.asset-center.dark-page {
-  --bg-card: #111827;
-  --border: #1f2937;
-  color: #e2e8f0;
-}
-
-.asset-center :deep(.page-header h1) {
-  color: #f1f5f9;
-}
-
-.asset-center :deep(.page-header p) {
-  color: #94a3b8;
-}
-
 .header-actions {
   display: flex;
   gap: 8px;
@@ -242,18 +228,16 @@ function selectCategory(name) {
   padding: 14px 16px;
   cursor: pointer;
   transition: border-color 0.15s, transform 0.15s;
-  background: #111827;
-  border-color: #1f2937;
 }
 
 .category-card:hover {
-  border-color: #0ea5e9;
+  border-color: var(--primary);
   transform: translateY(-1px);
 }
 
 .category-card.active {
-  border-color: #0ea5e9;
-  box-shadow: 0 0 0 1px #0ea5e9;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
 }
 
 .cat-icon {
@@ -269,25 +253,22 @@ function selectCategory(name) {
 .cat-name {
   font-size: 13px;
   font-weight: 600;
-  color: #f1f5f9;
 }
 
 .cat-count {
   font-size: 20px;
   font-weight: 700;
-  color: #38bdf8;
+  color: var(--primary);
   margin: 2px 0;
 }
 
 .cat-desc {
   font-size: 11px;
-  color: #64748b;
+  color: var(--text-tertiary);
 }
 
 .table-section {
   padding: 16px;
-  background: #111827;
-  border-color: #1f2937;
 }
 
 .section-head {
@@ -300,7 +281,6 @@ function selectCategory(name) {
 .section-head h3 {
   font-size: 15px;
   font-weight: 600;
-  color: #f1f5f9;
 }
 
 .tag-item {
@@ -317,14 +297,11 @@ function selectCategory(name) {
 
 .rank-block {
   padding: 14px 16px;
-  background: #111827;
-  border-color: #1f2937;
 }
 
 .rank-block h3 {
   font-size: 13px;
   font-weight: 600;
-  color: #f1f5f9;
   margin-bottom: 10px;
 }
 
@@ -334,7 +311,7 @@ function selectCategory(name) {
   gap: 8px;
   padding: 6px 0;
   font-size: 12px;
-  border-bottom: 1px solid #1f2937;
+  border-bottom: 1px solid var(--border);
 }
 
 .rank-item:last-child {
@@ -345,8 +322,8 @@ function selectCategory(name) {
   width: 20px;
   height: 20px;
   border-radius: 4px;
-  background: #1f2937;
-  color: #94a3b8;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--text-secondary);
   font-size: 11px;
   font-weight: 600;
   display: flex;
@@ -356,30 +333,29 @@ function selectCategory(name) {
 }
 
 .rank-no.top1 {
-  background: #f59e0b33;
-  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
 }
 
 .rank-no.top2 {
-  background: #94a3b833;
-  color: #cbd5e1;
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
 }
 
 .rank-no.top3 {
-  background: #b4530933;
+  background: rgba(180, 83, 9, 0.15);
   color: #d97706;
 }
 
 .rank-name {
   flex: 1;
-  color: #e2e8f0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .rank-refs {
-  color: #64748b;
+  color: var(--text-tertiary);
   flex-shrink: 0;
 }
 </style>

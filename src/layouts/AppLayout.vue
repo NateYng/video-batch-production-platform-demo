@@ -1,17 +1,13 @@
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useAppStore } from '@/stores'
 import Sidebar from './Sidebar.vue'
 import Topbar from './Topbar.vue'
-import { useAppStore } from '@/stores'
 
-const route = useRoute()
 const appStore = useAppStore()
-const isDark = computed(() => route.meta.theme === 'dark')
 </script>
 
 <template>
-  <div class="app-layout" :class="{ dark: isDark }" :data-theme="isDark ? 'dark-page' : ''">
+  <div class="app-layout" :class="{ dark: appStore.isDark }">
     <Sidebar />
     <div class="main-area" :class="{ collapsed: appStore.sidebarCollapsed }">
       <Topbar />

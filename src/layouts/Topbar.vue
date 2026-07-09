@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from '@/stores'
-import { Bell, QuestionFilled, Search } from '@element-plus/icons-vue'
+import { Bell, QuestionFilled, Search, Sunny, Moon } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -42,6 +42,14 @@ function goCreate() {
         <el-button :icon="Bell" circle class="icon-circle" />
       </el-badge>
       <el-button :icon="QuestionFilled" circle class="icon-circle" />
+      <el-tooltip :content="appStore.isDark ? '切换浅色模式' : '切换深色模式'" placement="bottom">
+        <el-button
+          circle
+          class="icon-circle theme-toggle"
+          :icon="appStore.isDark ? Sunny : Moon"
+          @click="appStore.toggleColorMode()"
+        />
+      </el-tooltip>
       <el-dropdown>
         <div class="user-info">
           <el-avatar :size="34" class="user-avatar">MO</el-avatar>
@@ -162,6 +170,11 @@ function goCreate() {
   border: 1px solid rgba(99, 102, 241, 0.1) !important;
 }
 
+.theme-toggle:hover {
+  border-color: rgba(0, 180, 216, 0.35) !important;
+  color: var(--primary) !important;
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -201,16 +214,5 @@ function goCreate() {
 
 .icon-btn {
   margin: 0;
-}
-
-/* 深色页面顶栏 */
-:global([data-theme='dark-page']) .topbar {
-  background: rgba(8, 14, 28, 0.85);
-  border-bottom-color: rgba(0, 180, 216, 0.1);
-}
-
-:global([data-theme='dark-page']) .page-title,
-:global([data-theme='dark-page']) .user-name {
-  color: #e8edf5;
 }
 </style>

@@ -70,7 +70,7 @@ function batchSubmitAudit() {
 </script>
 
 <template>
-  <div class="video-results dark-page">
+  <div class="video-results">
     <div class="page-header">
       <div>
         <h1>视频结果列表</h1>
@@ -79,7 +79,7 @@ function batchSubmitAudit() {
       <el-button type="primary" @click="batchSubmitAudit">批量提交审核</el-button>
     </div>
 
-    <div class="filter-bar dark-card">
+    <div class="filter-bar page-card">
       <el-input v-model="keyword" placeholder="搜索标题 / ID" clearable style="width: 200px" />
       <el-select v-model="filterRisk" placeholder="风险等级" clearable style="width: 120px">
         <el-option label="高风险" value="high" />
@@ -101,7 +101,7 @@ function batchSubmitAudit() {
     </div>
 
     <div class="content-layout">
-      <div class="table-wrap dark-card">
+      <div class="table-wrap page-card">
         <el-table
           :data="filteredList"
           stripe
@@ -134,7 +134,7 @@ function batchSubmitAudit() {
         </el-table>
       </div>
 
-      <aside v-if="selectedVideo" class="preview-panel dark-card">
+      <aside v-if="selectedVideo" class="preview-panel page-card">
         <div class="video-placeholder">
           <el-icon :size="48"><VideoPlay /></el-icon>
           <span>{{ selectedVideo.duration }}</span>
@@ -180,7 +180,7 @@ function batchSubmitAudit() {
           </el-tab-pane>
         </el-tabs>
       </aside>
-      <aside v-else class="preview-panel dark-card empty-preview">
+      <aside v-else class="preview-panel page-card empty-preview">
         <el-empty description="点击表格行预览视频" />
       </aside>
     </div>
@@ -206,16 +206,6 @@ function batchSubmitAudit() {
 </template>
 
 <style scoped>
-.dark-page {
-  color: #e2e8f0;
-}
-
-.dark-card {
-  background: #111827;
-  border: 1px solid #1f2937;
-  border-radius: 8px;
-}
-
 .filter-bar {
   display: flex;
   align-items: center;
@@ -227,7 +217,7 @@ function batchSubmitAudit() {
 .filter-count {
   margin-left: auto;
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-secondary);
 }
 
 .content-layout {
@@ -249,15 +239,16 @@ function batchSubmitAudit() {
 .video-placeholder {
   aspect-ratio: 9/16;
   max-height: 280px;
-  background: #0f172a;
+  background: rgba(99, 102, 241, 0.06);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #64748b;
+  color: var(--text-tertiary);
   margin-bottom: 12px;
+  border: 1px solid var(--border);
 }
 
 .preview-panel h3 {
@@ -267,7 +258,7 @@ function batchSubmitAudit() {
 
 .meta {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-bottom: 12px;
 }
 
@@ -279,20 +270,21 @@ function batchSubmitAudit() {
 
 .subtitle-preview p {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-bottom: 6px;
 }
 
 .cover-thumb {
   aspect-ratio: 16/9;
-  background: #0f172a;
+  background: rgba(99, 102, 241, 0.06);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: var(--text-tertiary);
   margin-bottom: 8px;
   font-size: 12px;
+  border: 1px solid var(--border);
 }
 
 .empty-preview {
@@ -309,17 +301,18 @@ function batchSubmitAudit() {
 
 .cover-option {
   aspect-ratio: 16/9;
-  background: #0f172a;
-  border: 2px solid #1f2937;
+  background: rgba(99, 102, 241, 0.06);
+  border: 2px solid var(--border);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
   cursor: pointer;
+  transition: border-color 0.2s;
 }
 
 .cover-option.active {
-  border-color: #0ea5e9;
+  border-color: var(--primary);
 }
 </style>

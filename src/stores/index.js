@@ -15,17 +15,33 @@ import {
 export const useAppStore = defineStore('app', () => {
   const sidebarCollapsed = ref(false)
   const pendingAuditCount = ref(316)
-  const darkPage = ref(false)
+  const colorMode = ref(localStorage.getItem('vbpp-color-mode') || 'light')
 
   function toggleSidebar() {
     sidebarCollapsed.value = !sidebarCollapsed.value
   }
 
-  function setDarkPage(val) {
-    darkPage.value = val
+  function setColorMode(mode) {
+    colorMode.value = mode
+    localStorage.setItem('vbpp-color-mode', mode)
+    document.documentElement.setAttribute('data-theme', mode)
   }
 
-  return { sidebarCollapsed, pendingAuditCount, darkPage, toggleSidebar, setDarkPage }
+  function toggleColorMode() {
+    setColorMode(colorMode.value === 'light' ? 'dark' : 'light')
+  }
+
+  const isDark = computed(() => colorMode.value === 'dark')
+
+  return {
+    sidebarCollapsed,
+    pendingAuditCount,
+    colorMode,
+    isDark,
+    toggleSidebar,
+    setColorMode,
+    toggleColorMode,
+  }
 })
 
 export const useTaskStore = defineStore('tasks', () => {

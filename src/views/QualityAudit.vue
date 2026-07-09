@@ -73,7 +73,7 @@ function partialRegen() {
 </script>
 
 <template>
-  <div class="audit-page dark-page">
+  <div class="audit-page">
     <div class="page-header">
       <div>
         <h1>质检与审核台</h1>
@@ -82,19 +82,19 @@ function partialRegen() {
     </div>
 
     <div class="count-cards">
-      <div class="count-card dark-card high">
+      <div class="count-card page-card high">
         <span class="count">42</span>
         <span class="label">高风险待审</span>
       </div>
-      <div class="count-card dark-card medium">
+      <div class="count-card page-card medium">
         <span class="count">318</span>
         <span class="label">中风险待审</span>
       </div>
-      <div class="count-card dark-card low">
+      <div class="count-card page-card low">
         <span class="count">6920</span>
         <span class="label">低风险</span>
       </div>
-      <div class="count-card dark-card passed">
+      <div class="count-card page-card passed">
         <span class="count">1286</span>
         <span class="label">今日通过</span>
       </div>
@@ -102,7 +102,7 @@ function partialRegen() {
 
     <div class="main-layout">
       <div class="audit-main">
-        <div class="dark-card table-section">
+        <div class="page-card table-section">
           <el-tabs v-model="activeRiskTab">
             <el-tab-pane v-for="tab in riskTabs" :key="tab.key" :name="tab.key">
               <template #label>
@@ -142,7 +142,7 @@ function partialRegen() {
         <div class="rule-cards">
           <h3>审核规则配置</h3>
           <div class="rule-grid">
-            <div v-for="rule in auditRules" :key="rule.name" class="rule-card dark-card">
+            <div v-for="rule in auditRules" :key="rule.name" class="rule-card page-card">
               <div class="rule-name">{{ rule.name }}</div>
               <div class="rule-scope">{{ rule.scope }}</div>
               <div class="rule-meta">
@@ -155,7 +155,7 @@ function partialRegen() {
       </div>
 
       <aside v-if="selectedItem" class="audit-sidebar">
-        <div class="dark-card sidebar-block">
+        <div class="page-card sidebar-block">
           <div class="preview-box">
             <el-icon :size="40"><VideoPlay /></el-icon>
             <span>审核预览</span>
@@ -167,7 +167,7 @@ function partialRegen() {
           </div>
         </div>
 
-        <div class="dark-card sidebar-block">
+        <div class="page-card sidebar-block">
           <h4>风险明细</h4>
           <el-table :data="riskDetails" size="small">
             <el-table-column prop="rule" label="规则" show-overflow-tooltip />
@@ -177,7 +177,7 @@ function partialRegen() {
           </el-table>
         </div>
 
-        <div class="dark-card sidebar-block">
+        <div class="page-card sidebar-block">
           <h4>审核历史</h4>
           <el-timeline>
             <el-timeline-item
@@ -191,7 +191,7 @@ function partialRegen() {
           </el-timeline>
         </div>
 
-        <div class="action-bar dark-card">
+        <div class="action-bar page-card">
           <el-button type="success" @click="approve">通过</el-button>
           <el-button type="danger" @click="reject">驳回</el-button>
           <el-button type="warning" plain @click="returnForEdit">打回修改</el-button>
@@ -203,16 +203,6 @@ function partialRegen() {
 </template>
 
 <style scoped>
-.dark-page {
-  color: #e2e8f0;
-}
-
-.dark-card {
-  background: #111827;
-  border: 1px solid #1f2937;
-  border-radius: 8px;
-}
-
 .count-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -234,14 +224,14 @@ function partialRegen() {
 
 .count-card .label {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-top: 4px;
 }
 
 .count-card.high .count { color: #ef4444; }
 .count-card.medium .count { color: #f59e0b; }
 .count-card.low .count { color: #22c55e; }
-.count-card.passed .count { color: #0ea5e9; }
+.count-card.passed .count { color: var(--primary); }
 
 .main-layout {
   display: grid;
@@ -281,7 +271,7 @@ function partialRegen() {
 
 .rule-scope {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-bottom: 8px;
 }
 
@@ -290,7 +280,7 @@ function partialRegen() {
   align-items: center;
   justify-content: space-between;
   font-size: 11px;
-  color: #64748b;
+  color: var(--text-tertiary);
 }
 
 .audit-sidebar {
@@ -315,20 +305,21 @@ function partialRegen() {
 
 .preview-box {
   aspect-ratio: 16/9;
-  background: #0f172a;
+  background: rgba(99, 102, 241, 0.06);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  color: #64748b;
+  color: var(--text-tertiary);
   font-size: 12px;
+  border: 1px solid var(--border);
 }
 
 .item-meta {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-bottom: 10px;
 }
 
