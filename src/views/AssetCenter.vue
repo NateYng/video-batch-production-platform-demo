@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useAssetStore } from '@/stores'
 import { assetRankings } from '@/mock'
-import { makePoster } from '@/mock/media'
+import { coverFor } from '@/mock/media'
 import MetricCard from '@/components/MetricCard.vue'
 import {
   Picture, VideoCamera, User, Reading, Link, Checked,
@@ -66,8 +66,7 @@ function selectCategory(name) {
   activeTab.value = name
 }
 
-const assetThumb = (row) =>
-  makePoster(row.type, { seed: row.id, width: 128, height: 72, play: false, subtitle: '' })
+const assetThumb = (row) => coverFor(row.id)
 </script>
 
 <template>

@@ -118,8 +118,8 @@ const recentLogs = [
                 <div v-for="n in 6" :key="n" class="preview-item">
                   <video
                     class="preview-video"
-                    :src="videoMedia(`${task.id}-${n}`, `输出样片 #${n}`).src"
-                    :poster="videoMedia(`${task.id}-${n}`, `输出样片 #${n}`).poster"
+                    :src="videoMedia(`${task.id}-${n}`).src"
+                    :poster="videoMedia(`${task.id}-${n}`).poster"
                     controls
                     preload="none"
                     muted

@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useVideoStore } from '@/stores'
 import { ElMessage } from 'element-plus'
-import { videoMedia, makePoster } from '@/mock/media'
+import { videoMedia, coverFor } from '@/mock/media'
 
 const videoStore = useVideoStore()
 
@@ -70,16 +70,14 @@ function batchSubmitAudit() {
 }
 
 const selectedMedia = computed(() =>
-  selectedVideo.value ? videoMedia(selectedVideo.value.id, selectedVideo.value.title) : null
+  selectedVideo.value ? videoMedia(selectedVideo.value.id) : null
 )
 
-const rowThumb = (row) => makePoster(row.title, { seed: row.id, width: 128, height: 72, play: false, subtitle: '' })
+const rowThumb = (row) => coverFor(row.id)
 
 const coverOptions = computed(() => {
   if (!selectedVideo.value) return []
-  return [1, 2, 3, 4].map((n) =>
-    makePoster(selectedVideo.value.title, { seed: `${selectedVideo.value.id}-c${n}`, subtitle: `封面方案 ${n}` })
-  )
+  return [1, 2, 3, 4].map((n) => coverFor(selectedVideo.value.id, n * 3))
 })
 </script>
 

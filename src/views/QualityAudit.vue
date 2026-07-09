@@ -129,8 +129,8 @@ function partialRegen() {
           <video
             :key="selectedItem.id"
             class="audit-player"
-            :src="videoMedia(selectedItem.id, selectedItem.title).src"
-            :poster="videoMedia(selectedItem.id, selectedItem.title).poster"
+            :src="videoMedia(selectedItem.id).src"
+            :poster="videoMedia(selectedItem.id).poster"
             controls
             preload="metadata"
             muted

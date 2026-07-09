@@ -2,11 +2,11 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {
-  DocumentCopy, Clock, Monitor, Plus, ArrowRight,
+  DocumentCopy, Clock, Monitor, Plus, ArrowRight, VideoPlay,
 } from '@element-plus/icons-vue'
 import { useAssetStore } from '@/stores'
 import { templateRecords } from '@/mock'
-import { makePoster } from '@/mock/media'
+import { coverFor } from '@/mock/media'
 
 const router = useRouter()
 const assetStore = useAssetStore()
@@ -88,7 +88,14 @@ if (assetStore.templateList.length && !selectedTemplate.value) {
             @click="selectTemplate(tpl)"
           >
             <div class="tpl-preview">
-              <img :src="makePoster(tpl.type, { seed: tpl.id, subtitle: tpl.duration + ' · ' + tpl.resolution, play: false })" class="tpl-cover" alt="" />
+              <img :src="coverFor(tpl.id)" class="tpl-cover" alt="" />
+              <div class="tpl-overlay">
+                <span class="tpl-type">{{ tpl.type }}</span>
+                <span class="tpl-spec">{{ tpl.duration }} · {{ tpl.resolution }}</span>
+              </div>
+              <div class="tpl-play">
+                <el-icon :size="16"><VideoPlay /></el-icon>
+              </div>
               <span class="tpl-badge" :style="{ background: badgeColors[tpl.badge] || '#64748b' }">{{ tpl.badge }}</span>
             </div>
             <div class="tpl-body">

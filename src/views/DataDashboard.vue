@@ -76,36 +76,25 @@ const productionTrendOption = computed(() => ({
   ],
 }))
 
-/** 企业级环形图：粗环 + 环心汇总 + 带数值的图例 */
+/** 企业级环形图：居中粗环 + 环心汇总，图例用图表下方的 HTML 渲染，避免窄卡片挤压 */
 function makeDonut(data, colors, { centerValue, centerLabel, unit = '%' }) {
-  const nameMap = Object.fromEntries(data.map((d) => [d.name, d.value]))
   return {
     tooltip: { trigger: 'item', formatter: `{b}: {c}${unit === '%' ? '%' : ''} ({d}%)`, ...tooltipStyle() },
-    legend: {
-      orient: 'vertical',
-      right: 0,
-      top: 'middle',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 10,
-      icon: 'roundRect',
-      formatter: (name) => `${name}  ${nameMap[name]}${unit}`,
-      textStyle: { fontSize: 11, color: legendText() },
-    },
+    legend: { show: false },
     title: {
       text: centerValue,
       subtext: centerLabel,
-      left: '31%',
-      top: '38%',
+      left: '49%',
+      top: '34%',
       textAlign: 'center',
-      textStyle: { fontSize: 22, fontWeight: 700, color: strongText(), fontFamily: 'inherit' },
-      subtextStyle: { fontSize: 11, color: axisText },
-      itemGap: 4,
+      textStyle: { fontSize: 18, fontWeight: 700, color: strongText(), fontFamily: 'inherit' },
+      subtextStyle: { fontSize: 10, color: axisText },
+      itemGap: 2,
     },
     series: [{
       type: 'pie',
-      radius: ['58%', '82%'],
-      center: ['32%', '50%'],
+      radius: ['62%', '86%'],
+      center: ['50%', '50%'],
       data,
       label: { show: false },
       emphasis: { scaleSize: 3 },
@@ -115,31 +104,29 @@ function makeDonut(data, colors, { centerValue, centerLabel, unit = '%' }) {
   }
 }
 
+const failureData = [
+  { name: '素材加载', value: 32.6 },
+  { name: '视频合成', value: 27.8 },
+  { name: '语音合成', value: 16.2 },
+  { name: '字幕生成', value: 12.5 },
+  { name: '风险拦截', value: 6.1 },
+  { name: '其他', value: 4.8 },
+]
+const failureColors = ['#6e79f7', '#60a5fa', '#22d3ee', '#8b5cf6', '#34d399', '#5d6472']
+
+const riskData = [
+  { name: '高风险', value: 420 },
+  { name: '中风险', value: 1860 },
+  { name: '低风险', value: 7720 },
+]
+const riskColors = ['#fb7185', '#fbbf24', '#34d399']
+
 const failureReasonOption = computed(() =>
-  makeDonut(
-    [
-      { name: '素材加载', value: 32.6 },
-      { name: '视频合成', value: 27.8 },
-      { name: '语音合成', value: 16.2 },
-      { name: '字幕生成', value: 12.5 },
-      { name: '风险拦截', value: 6.1 },
-      { name: '其他', value: 4.8 },
-    ],
-    ['#6e79f7', '#60a5fa', '#22d3ee', '#8b5cf6', '#34d399', '#5d6472'],
-    { centerValue: '214', centerLabel: '失败总数' }
-  )
+  makeDonut(failureData, failureColors, { centerValue: '214', centerLabel: '失败总数' })
 )
 
 const riskLevelOption = computed(() =>
-  makeDonut(
-    [
-      { name: '高风险', value: 420 },
-      { name: '中风险', value: 1860 },
-      { name: '低风险', value: 7720 },
-    ],
-    ['#fb7185', '#fbbf24', '#34d399'],
-    { centerValue: '4.2%', centerLabel: '高风险占比', unit: '' }
-  )
+  makeDonut(riskData, riskColors, { centerValue: '4.2%', centerLabel: '高风险占比', unit: '' })
 )
 
 const channelCompareOption = computed(() => ({
@@ -255,10 +242,24 @@ const lowEfficiencyAssets = [
           <div class="page-card chart-card dash-chart chart-pie">
             <h4>失败原因分布</h4>
             <div class="chart-body"><VChart :option="failureReasonOption" autoresize /></div>
+            <div class="donut-legend">
+              <div v-for="(item, i) in failureData" :key="item.name" class="dl-item">
+                <span class="dl-dot" :style="{ background: failureColors[i] }" />
+                <span class="dl-name">{{ item.name }}</span>
+                <span class="dl-val">{{ item.value }}%</span>
+              </div>
+            </div>
           </div>
           <div class="page-card chart-card dash-chart chart-pie">
             <h4>风险等级分布</h4>
             <div class="chart-body"><VChart :option="riskLevelOption" autoresize /></div>
+            <div class="donut-legend">
+              <div v-for="(item, i) in riskData" :key="item.name" class="dl-item">
+                <span class="dl-dot" :style="{ background: riskColors[i] }" />
+                <span class="dl-name">{{ item.name }}</span>
+                <span class="dl-val">{{ item.value.toLocaleString() }}</span>
+              </div>
+            </div>
           </div>
           <div class="page-card chart-card dash-chart chart-wide chart-bar">
             <h4>渠道播放效果</h4>
@@ -338,6 +339,43 @@ const lowEfficiencyAssets = [
 
 .chart-pie .chart-body {
   padding-right: 4px;
+}
+
+.donut-legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px 12px;
+  margin-top: 10px;
+}
+
+.dl-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 0;
+}
+
+.dl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.dl-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dl-val {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
 }
 
 .suggest-item {
