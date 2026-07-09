@@ -314,8 +314,7 @@ function handleChannelAction(row, action) {
 }
 
 .channel-section {
-  flex: 1;
-  min-height: 0;
+  flex: none;
 }
 
 .section-head {

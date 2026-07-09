@@ -235,7 +235,7 @@ async function runFlow() {
           <el-tag v-if="isRunning" type="primary" effect="plain" size="small">运行中</el-tag>
           <el-tag v-else type="info" effect="plain" size="small">空闲</el-tag>
         </div>
-        <el-table :data="runOverviewRows" size="small" height="120" stripe>
+        <el-table :data="runOverviewRows" size="small" stripe>
           <el-table-column prop="name" label="节点" width="100" />
           <el-table-column prop="model" label="模型" width="120" />
           <el-table-column label="状态" width="90">
@@ -281,20 +281,15 @@ async function runFlow() {
   display: grid;
   grid-template-columns: 1fr 260px;
   gap: 10px;
-  flex: 1;
-  min-height: 0;
 }
 
 .canvas-wrap {
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
+  min-height: 400px;
+  height: 400px;
 }
 
 .config-panel {
   padding: 10px 12px;
-  overflow-y: auto;
-  min-height: 0;
 }
 
 .config-panel h3,
@@ -314,9 +309,7 @@ async function runFlow() {
   display: grid;
   grid-template-columns: 1fr 280px;
   gap: 8px;
-  flex-shrink: 0;
   position: relative;
-  max-height: 150px;
 }
 
 .run-table,
@@ -332,7 +325,7 @@ async function runFlow() {
 }
 
 .log-list {
-  max-height: 100px;
+  max-height: 200px;
   overflow-y: auto;
   font-size: 11px;
 }

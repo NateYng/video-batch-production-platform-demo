@@ -1,16 +1,14 @@
-/* 视口布局：内容不足一屏时铺满，超出时由 page-content 滚动 */
+/* 视口布局：内容自然撑开，由 page-content 统一滚动 */
 
 .page-viewport {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 }
 
 .page-shell {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex: 1;
+  padding-bottom: 16px;
 }
 
 .page-shell.scrollable {
@@ -312,18 +310,13 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
 }
 
 .chart-card.compact {
   padding: 10px 12px;
-  min-height: 0;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .chart-card.compact h4 {
@@ -478,8 +471,6 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   flex-shrink: 0;
-  max-height: 168px;
-  overflow-y: auto;
 }
 
 /* 向导步骤 */
@@ -493,9 +484,7 @@
 }
 
 .step-scroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
+  width: 100%;
 }
 
 .page-shell > .metric-grid,
@@ -524,9 +513,7 @@
 
 /* 配置页 Tab */
 .config-tab-panel {
-  flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 8px;
 }

@@ -316,11 +316,9 @@ const configTab = ref('roles')
 }
 
 .tab-content {
-  flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 8px;
 }
 
 .section-title {
@@ -328,7 +326,6 @@ const configTab = ref('roles')
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
-  flex-shrink: 0;
 }
 
 .section-title h3 {
@@ -340,7 +337,6 @@ const configTab = ref('roles')
   display: grid;
   grid-template-columns: 1fr 200px;
   gap: 12px;
-  height: 100%;
 }
 
 .model-form {
@@ -435,7 +431,6 @@ const configTab = ref('roles')
   display: grid;
   grid-template-columns: 1fr 220px 240px;
   gap: 12px;
-  flex: 1;
 }
 
 .cost-cards {

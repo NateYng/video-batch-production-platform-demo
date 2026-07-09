@@ -231,7 +231,7 @@ if (assetStore.templateList.length && !selectedTemplate.value) {
 }
 
 .detail-panel {
-  overflow: hidden;
+  padding: 10px 12px;
 }
 
 .detail-header {
