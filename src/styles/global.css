@@ -1,0 +1,124 @@
+@import './variables.css';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.page-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.page-header p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.metric-grid.cols-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.metric-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.risk-high {
+  color: #ef4444;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.risk-medium {
+  color: #f59e0b;
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.risk-low {
+  color: #22c55e;
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.status-running {
+  color: #0ea5e9;
+}
+
+.status-success {
+  color: #22c55e;
+}
+
+.status-fail {
+  color: #ef4444;
+}
+
+.status-warn {
+  color: #f59e0b;
+}
+
+.el-table {
+  --el-table-header-bg-color: #f8fafc;
+}
+
+[data-theme='dark-page'] .el-table {
+  --el-table-bg-color: #111827;
+  --el-table-tr-bg-color: #111827;
+  --el-table-header-bg-color: #0f172a;
+  --el-table-row-hover-bg-color: #1f2937;
+  --el-table-border-color: #1f2937;
+  --el-table-text-color: #e2e8f0;
+  --el-table-header-text-color: #94a3b8;
+}
+
+[data-theme='dark-page'] .el-input__wrapper,
+[data-theme='dark-page'] .el-select__wrapper {
+  background: #0f172a !important;
+  box-shadow: 0 0 0 1px #1f2937 inset !important;
+}
+
+[data-theme='dark-page'] .el-tabs__item {
+  color: #94a3b8;
+}
+
+[data-theme='dark-page'] .el-tabs__item.is-active {
+  color: #38bdf8;
+}
