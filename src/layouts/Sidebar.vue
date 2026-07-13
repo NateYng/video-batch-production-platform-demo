@@ -77,15 +77,15 @@ function navigate(path) {
           :class="{ active: isActive(item) }"
           @click="navigate(item.path)"
         >
-          <component :is="item.icon" :size="15" :stroke-width="1.8" class="nav-icon" />
+          <component :is="item.icon" :size="18" :stroke-width="1.7" class="nav-icon" />
           <span v-if="!appStore.sidebarCollapsed" class="nav-label">{{ item.title }}</span>
           <span v-if="item.badge && !appStore.sidebarCollapsed" class="nav-count">{{ item.badge }}</span>
         </div>
       </div>
     </nav>
     <div class="collapse-btn" @click="appStore.toggleSidebar">
-      <PanelLeftClose v-if="!appStore.sidebarCollapsed" :size="15" :stroke-width="1.8" />
-      <PanelLeftOpen v-else :size="15" :stroke-width="1.8" />
+      <PanelLeftClose v-if="!appStore.sidebarCollapsed" :size="17" :stroke-width="1.7" />
+      <PanelLeftOpen v-else :size="17" :stroke-width="1.7" />
       <span v-if="!appStore.sidebarCollapsed">收起菜单</span>
     </div>
   </aside>
@@ -97,7 +97,7 @@ function navigate(path) {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 216px;
+  width: 232px;
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
   display: flex;
@@ -109,21 +109,21 @@ function navigate(path) {
 }
 
 .sidebar.collapsed {
-  width: 64px;
+  width: 72px;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 17px 16px 13px;
+  gap: 10px;
+  padding: 19px 18px 15px;
   flex-shrink: 0;
 }
 
 .logo-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
   background: var(--primary);
   display: flex;
   align-items: center;
@@ -139,7 +139,7 @@ function navigate(path) {
 }
 
 .logo-text {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -148,16 +148,16 @@ function navigate(path) {
 .nav {
   flex: 1;
   overflow-y: auto;
-  padding: 2px 8px 8px;
+  padding: 4px 10px 10px;
 }
 
 .nav-group {
-  margin-bottom: 2px;
+  margin-bottom: 6px;
 }
 
 .group-title {
-  font-size: 11px;
-  padding: 14px 10px 4px;
+  font-size: 12px;
+  padding: 18px 12px 8px;
   color: var(--text-tertiary);
   font-weight: 500;
 }
@@ -165,13 +165,13 @@ function navigate(path) {
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 6px 10px;
-  margin: 1px 0;
+  gap: 11px;
+  padding: 9px 12px;
+  margin: 3px 0;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   transition: background 0.15s, color 0.15s;
-  border-radius: 6px;
+  border-radius: 7px;
   color: var(--sidebar-text);
 }
 
@@ -204,20 +204,20 @@ function navigate(path) {
 
 .nav-count {
   margin-left: auto;
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
 }
 
 .collapse-btn {
-  padding: 13px 18px;
+  padding: 15px 20px;
   border-top: 1px solid var(--sidebar-border);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--text-tertiary);
-  font-size: 12px;
+  font-size: 13px;
   transition: color 0.15s;
   flex-shrink: 0;
 }

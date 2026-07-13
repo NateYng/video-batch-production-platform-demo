@@ -7,6 +7,7 @@ import DonutChart from '@/components/DonutChart.vue'
 import { operationLogs } from '@/mock'
 import { videoMedia } from '@/mock/media'
 import { ElMessage } from 'element-plus'
+import { Check } from 'lucide-vue-next'
 const route = useRoute()
 const router = useRouter()
 const taskStore = useTaskStore()
@@ -175,15 +176,26 @@ const recentLogs = [
         <div class="page-card fill-card">
           <el-tabs v-model="sideTab" class="side-tabs compact-tabs">
             <el-tab-pane label="阶段" name="stage">
-              <el-steps :active="task.stages.findIndex((s) => s.status === 'active')" finish-status="success" direction="vertical" simple>
-                <el-step
+              <div class="stage-list">
+                <div
                   v-for="(stage, i) in task.stages"
                   :key="i"
-                  :title="stage.name"
-                  :description="stage.time"
-                  :status="stage.status === 'done' ? 'success' : stage.status === 'active' ? 'process' : 'wait'"
-                />
-              </el-steps>
+                  class="stage-item"
+                  :class="stage.status"
+                >
+                  <div class="stage-rail">
+                    <span class="stage-dot">
+                      <Check v-if="stage.status === 'done'" :size="10" :stroke-width="3" />
+                    </span>
+                    <span v-if="i < task.stages.length - 1" class="stage-line" />
+                  </div>
+                  <div class="stage-info">
+                    <span class="stage-name">{{ stage.name }}</span>
+                    <span class="stage-time">{{ stage.time }}</span>
+                  </div>
+                  <span v-if="stage.status === 'active'" class="stage-tag">进行中</span>
+                </div>
+              </div>
               <div class="time-info compact">
                 <span>已运行 {{ task.elapsed }}</span>
                 <span>剩余 {{ task.remaining }}</span>
@@ -228,6 +240,118 @@ const recentLogs = [
 <style scoped>
 .fill-tabs :deep(.el-tabs__content) {
   min-height: 200px;
+}
+
+/* 纵向阶段进度 */
+.stage-list {
+  padding: 4px 2px 0;
+}
+
+.stage-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+}
+
+.stage-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 18px;
+}
+
+.stage-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-strong);
+  background: var(--bg-card);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.stage-item.done .stage-dot {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.stage-item.active .stage-dot {
+  border-color: var(--primary);
+}
+
+.stage-item.active .stage-dot::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.stage-line {
+  flex: 1;
+  width: 1.5px;
+  min-height: 14px;
+  background: var(--border);
+  margin: 3px 0;
+}
+
+.stage-item.done .stage-line {
+  background: var(--primary);
+  opacity: 0.4;
+}
+
+.stage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-bottom: 14px;
+  min-width: 0;
+}
+
+.stage-item:last-child .stage-info {
+  padding-bottom: 2px;
+}
+
+.stage-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 18px;
+}
+
+.stage-item.wait .stage-name {
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.stage-time {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stage-tag {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 10.5px;
+  color: var(--primary);
+  background: var(--sidebar-active);
+  padding: 1px 7px;
+  border-radius: 10px;
+  line-height: 16px;
+}
+
+.time-info.compact {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
 }
 
 .cost-row {
