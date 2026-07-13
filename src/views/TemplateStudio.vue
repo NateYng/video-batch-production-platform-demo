@@ -35,10 +35,10 @@ const recordStatusMap = {
 }
 
 const badgeColors = {
-  已发布: '#34d399',
-  高复用: '#22d3ee',
-  草稿: '#94a3b8',
-  待优化: '#fbbf24',
+  已发布: '#217a4b',
+  高复用: '#635bff',
+  草稿: '#8792a2',
+  待优化: '#b3861a',
 }
 
 const templateVariables = [

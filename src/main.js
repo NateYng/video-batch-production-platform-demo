@@ -9,7 +9,7 @@ import App from './App.vue'
 import router from './router'
 import './styles/global.css'
 
-const mode = localStorage.getItem('vbpp-color-mode') || 'dark'
+const mode = localStorage.getItem('vbpp-theme') || 'light'
 document.documentElement.setAttribute('data-theme', mode)
 document.documentElement.classList.toggle('dark', mode === 'dark')
 

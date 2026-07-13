@@ -80,10 +80,10 @@ const recentLogs = [
 
     <div class="metric-grid compact kpi-6">
       <MetricCard label="总量" :value="task.total" accent="indigo" />
-      <MetricCard label="已完成" :value="task.completed" color="#34d399" accent="emerald" />
-      <MetricCard label="失败" :value="task.failed" color="#fb7185" accent="rose" />
-      <MetricCard label="待审核" :value="task.pendingAudit" color="#fbbf24" accent="amber" />
-      <MetricCard label="待发布" :value="task.pendingPublish" color="#22d3ee" accent="cyan" />
+      <MetricCard label="已完成" :value="task.completed" color="#217a4b" accent="emerald" />
+      <MetricCard label="失败" :value="task.failed" color="#c0123c" accent="rose" />
+      <MetricCard label="待审核" :value="task.pendingAudit" color="#b3861a" accent="amber" />
+      <MetricCard label="待发布" :value="task.pendingPublish" color="#635bff" accent="cyan" />
       <MetricCard label="完成率" :value="task.progress" suffix="%" accent="violet" />
     </div>
 

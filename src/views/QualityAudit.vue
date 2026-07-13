@@ -23,9 +23,9 @@ const filteredItems = computed(() => {
 })
 
 const scoreColor = (score) => {
-  if (score < 70) return '#fb7185'
-  if (score < 85) return '#fbbf24'
-  return '#34d399'
+  if (score < 70) return '#c0123c'
+  if (score < 85) return '#b3861a'
+  return '#217a4b'
 }
 
 function selectItem(row) {

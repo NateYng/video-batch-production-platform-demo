@@ -18,7 +18,7 @@ const props = defineProps({
   centerLabel: { type: String, default: '合计' },
   colors: {
     type: Array,
-    default: () => ['#6e79f7', '#60a5fa', '#22d3ee', '#8b5cf6', '#34d399', '#5d6472'],
+    default: () => ['#635bff', '#8f88ff', '#b8b3ff', '#d5d2ff', '#8792a2', '#d5dbe1'],
   },
 })
 
@@ -45,8 +45,8 @@ const option = computed(() => {
       left: '49%',
       top: '36%',
       textAlign: 'center',
-      textStyle: { fontSize: 18, fontWeight: 700, color: dark ? '#f2f4f8' : '#0c1222', fontFamily: 'inherit' },
-      subtextStyle: { fontSize: 10, color: '#8a92a6' },
+      textStyle: { fontSize: 18, fontWeight: 600, color: dark ? '#ededf0' : '#1a1f36', fontFamily: 'inherit' },
+      subtextStyle: { fontSize: 10, color: '#8792a2' },
       itemGap: 2,
     },
     series: [
@@ -57,7 +57,7 @@ const option = computed(() => {
         data: props.data,
         label: { show: false },
         emphasis: { scaleSize: 3 },
-        itemStyle: { borderColor: dark ? 'rgba(17, 19, 28, 0.9)' : '#ffffff', borderWidth: 2 },
+        itemStyle: { borderColor: dark ? '#15161a' : '#ffffff', borderWidth: 2 },
         color: props.colors,
       },
     ],

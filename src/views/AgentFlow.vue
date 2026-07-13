@@ -343,7 +343,7 @@ async function runFlow() {
 }
 
 .log-item.success .log-msg {
-  color: #34d399;
+  color: var(--success);
 }
 
 .log-item.info .log-msg {
@@ -363,45 +363,44 @@ async function runFlow() {
 }
 
 :deep(.vue-flow__node) {
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 12px;
   padding: 10px 16px;
-  border: 1px solid rgba(110, 121, 247, 0.32);
+  border: 1px solid var(--border-strong);
   background: var(--bg-card-solid);
   color: var(--text-primary);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow);
   font-weight: 500;
 }
 
 :deep(.vue-flow__node.selected) {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(110, 121, 247, 0.3), 0 4px 16px rgba(110, 121, 247, 0.2);
+  box-shadow: 0 0 0 2px rgba(99, 91, 255, 0.18);
 }
 
 :deep(.decision-node) {
-  border-color: rgba(251, 191, 36, 0.45);
-  background: color-mix(in srgb, #fbbf24 10%, var(--bg-card-solid));
+  border-color: rgba(179, 134, 26, 0.4);
+  background: color-mix(in srgb, var(--warning) 6%, var(--bg-card-solid));
   transform: rotate(0deg);
   border-radius: 6px;
 }
 
 :deep(.start-node) {
-  border-color: rgba(52, 211, 153, 0.45);
-  background: color-mix(in srgb, #34d399 10%, var(--bg-card-solid));
+  border-color: rgba(33, 122, 75, 0.4);
+  background: color-mix(in srgb, var(--success) 6%, var(--bg-card-solid));
 }
 
 :deep(.end-node) {
-  border-color: rgba(110, 121, 247, 0.45);
-  background: color-mix(in srgb, #6e79f7 10%, var(--bg-card-solid));
+  border-color: rgba(99, 91, 255, 0.4);
+  background: color-mix(in srgb, var(--primary) 6%, var(--bg-card-solid));
 }
 
 :deep(.vue-flow__edge-path) {
-  stroke: rgba(34, 211, 238, 0.55);
-  stroke-width: 2;
+  stroke: #b3b9c6;
+  stroke-width: 1.5;
 }
 
 :deep(.vue-flow__background) {
-  background: rgba(148, 155, 175, 0.03);
+  background: var(--bg-fill);
 }
 </style>

@@ -19,8 +19,8 @@ const keyword = ref('')
 const overviewCards = [
   { label: '排队中', value: 12, accent: 'slate' },
   { label: '生成中', value: 38, accent: 'cyan' },
-  { label: '部分失败', value: 7, accent: 'amber', color: '#fbbf24' },
-  { label: '今日完成', value: 64, accent: 'emerald', color: '#34d399' },
+  { label: '部分失败', value: 7, accent: 'amber', color: '#b3861a' },
+  { label: '今日完成', value: 64, accent: 'emerald', color: '#217a4b' },
 ]
 
 const statusOptions = [
@@ -237,7 +237,7 @@ function viewTask(row) {
             </div>
             <div class="health-item">
               <span class="health-label">GPU 占用</span>
-              <el-progress :percentage="82" color="#fbbf24" :stroke-width="8" />
+              <el-progress :percentage="82" color="#dfa63f" :stroke-width="8" />
             </div>
           </div>
         </div>
@@ -251,7 +251,7 @@ function viewTask(row) {
           <div class="warning-content">
             <div class="warning-amount">¥ 28,426.50</div>
             <div class="warning-desc">本月累计成本已超预算 85%</div>
-            <el-progress :percentage="85" color="#fb7185" :stroke-width="8" />
+            <el-progress :percentage="85" color="#dd6b7f" :stroke-width="8" />
             <div class="warning-tip">建议优化并发配置或启用成本熔断策略</div>
           </div>
         </div>
@@ -303,14 +303,14 @@ function viewTask(row) {
 }
 
 .cost-warning {
-  border-color: rgba(251, 113, 133, 0.3);
-  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(251, 113, 133, 0.07) 100%);
+  border-color: rgba(192, 18, 60, 0.25);
+  background: rgba(192, 18, 60, 0.03);
 }
 
 .warning-amount {
   font-size: 18px;
-  font-weight: 700;
-  color: #fb7185;
+  font-weight: 600;
+  color: var(--danger);
   margin-bottom: 2px;
 }
 
@@ -322,7 +322,7 @@ function viewTask(row) {
 
 .warning-tip {
   font-size: 10px;
-  color: #fbbf24;
+  color: var(--warning);
   margin-top: 6px;
 }
 

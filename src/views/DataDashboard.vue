@@ -24,27 +24,26 @@ const sideTab = ref('suggest')
 const tabs = ['生产效率', '内容质量', '发布效果', '资产复用']
 
 const kpiCards = [
-  { label: '生成成功率', value: '93.6%', trend: 2.4, accent: 'emerald' },
-  { label: '高风险占比', value: '4.2%', trend: -0.8, color: '#fb7185', accent: 'rose' },
-  { label: '近7日播放', value: '128万', trend: 18.6, accent: 'cyan' },
-  { label: '模板复用', value: '62%', trend: 5.2, accent: 'indigo' },
-  { label: '平均耗时', value: '2m18s', trend: -6.3, accent: 'violet' },
-  { label: '单条成本', value: '¥1.86', trend: -3.1, accent: 'amber' },
+  { label: '生成成功率', value: '93.6%', trend: 2.4 },
+  { label: '高风险占比', value: '4.2%', trend: -0.8 },
+  { label: '近7日播放', value: '128万', trend: 18.6 },
+  { label: '模板复用', value: '62%', trend: 5.2 },
+  { label: '平均耗时', value: '2m18s', trend: -6.3 },
+  { label: '单条成本', value: '¥1.86', trend: -3.1 },
 ]
 
 const isDark = () => appStore.colorMode === 'dark'
-const axisText = '#8a92a6'
-const strongText = () => (isDark() ? '#f2f4f8' : '#0c1222')
-const legendText = () => (isDark() ? '#c9d0e0' : '#3d4a63')
-const lineColor = () => (isDark() ? 'rgba(255,255,255,0.12)' : 'rgba(12,18,34,0.14)')
-const splitLine = () => ({ lineStyle: { color: isDark() ? 'rgba(255,255,255,0.06)' : 'rgba(12,18,34,0.07)' } })
-const pieBorder = () => (isDark() ? 'rgba(17, 19, 28, 0.9)' : '#ffffff')
+const axisText = '#8792a2'
+const strongText = () => (isDark() ? '#ededf0' : '#1a1f36')
+const lineColor = () => (isDark() ? 'rgba(255,255,255,0.12)' : '#d5dbe1')
+const splitLine = () => ({ lineStyle: { color: isDark() ? 'rgba(255,255,255,0.06)' : '#eef1f4' } })
+const pieBorder = () => (isDark() ? '#15161a' : '#ffffff')
 const tooltipStyle = () =>
   isDark()
     ? {
-        backgroundColor: '#161927',
+        backgroundColor: '#1a1b20',
         borderColor: 'rgba(255,255,255,0.12)',
-        textStyle: { color: '#e7eaf2', fontSize: 12 },
+        textStyle: { color: '#ededf0', fontSize: 12 },
       }
     : { textStyle: { fontSize: 12 } }
 
@@ -70,9 +69,9 @@ const productionTrendOption = computed(() => ({
   },
   yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine: splitLine() },
   series: [
-    { name: '生成量', type: 'bar', data: [8200, 9100, 7800, 10200, 9600, 11200, 8420], itemStyle: { color: '#6e79f7', borderRadius: [3, 3, 0, 0] } },
-    { name: '成功量', type: 'bar', data: [7680, 8520, 7320, 9580, 9020, 10480, 7880], itemStyle: { color: '#34d399', borderRadius: [3, 3, 0, 0] } },
-    { name: '失败量', type: 'bar', data: [520, 580, 480, 620, 580, 720, 540], itemStyle: { color: '#fb7185', borderRadius: [3, 3, 0, 0] } },
+    { name: '生成量', type: 'bar', data: [8200, 9100, 7800, 10200, 9600, 11200, 8420], itemStyle: { color: '#635bff', borderRadius: [2, 2, 0, 0] } },
+    { name: '成功量', type: 'bar', data: [7680, 8520, 7320, 9580, 9020, 10480, 7880], itemStyle: { color: '#b8b3ff', borderRadius: [2, 2, 0, 0] } },
+    { name: '失败量', type: 'bar', data: [520, 580, 480, 620, 580, 720, 540], itemStyle: { color: '#dd6b7f', borderRadius: [2, 2, 0, 0] } },
   ],
 }))
 
@@ -112,14 +111,14 @@ const failureData = [
   { name: '风险拦截', value: 6.1 },
   { name: '其他', value: 4.8 },
 ]
-const failureColors = ['#6e79f7', '#60a5fa', '#22d3ee', '#8b5cf6', '#34d399', '#5d6472']
+const failureColors = ['#635bff', '#8f88ff', '#b8b3ff', '#d5d2ff', '#8792a2', '#d5dbe1']
 
 const riskData = [
   { name: '高风险', value: 420 },
   { name: '中风险', value: 1860 },
   { name: '低风险', value: 7720 },
 ]
-const riskColors = ['#fb7185', '#fbbf24', '#34d399']
+const riskColors = ['#dd6b7f', '#dfa63f', '#4aa87c']
 
 const failureReasonOption = computed(() =>
   makeDonut(failureData, failureColors, { centerValue: '214', centerLabel: '失败总数' })
@@ -136,9 +135,9 @@ const channelCompareOption = computed(() => ({
   xAxis: { type: 'category', data: ['抖音', '视频号', '官网'], axisLabel: { fontSize: 11, color: axisText }, axisLine: { lineStyle: { color: lineColor() } } },
   yAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine: splitLine() },
   series: [
-    { name: '播放量(万)', type: 'bar', data: [256.8, 128.6, 32.4], itemStyle: { color: '#6e79f7', borderRadius: [3, 3, 0, 0] } },
-    { name: '完播率(%)', type: 'bar', data: [42.3, 38.6, 56.2], itemStyle: { color: '#34d399', borderRadius: [3, 3, 0, 0] } },
-    { name: '互动率(%)', type: 'bar', data: [8.6, 6.2, 4.8], itemStyle: { color: '#fbbf24', borderRadius: [3, 3, 0, 0] } },
+    { name: '播放量(万)', type: 'bar', data: [256.8, 128.6, 32.4], itemStyle: { color: '#635bff', borderRadius: [2, 2, 0, 0] } },
+    { name: '完播率(%)', type: 'bar', data: [42.3, 38.6, 56.2], itemStyle: { color: '#9d97ff', borderRadius: [2, 2, 0, 0] } },
+    { name: '互动率(%)', type: 'bar', data: [8.6, 6.2, 4.8], itemStyle: { color: '#d5d2ff', borderRadius: [2, 2, 0, 0] } },
   ],
 }))
 
@@ -156,16 +155,16 @@ const completionDistOption = computed(() => ({
     type: 'bar',
     data: [1280, 2860, 4520, 6280, 8420],
     itemStyle: {
-      color: (params) => ['#fb7185', '#fbbf24', '#facc15', '#a3e635', '#34d399'][params.dataIndex],
-      borderRadius: [4, 4, 0, 0],
+      color: (params) => ['#e3e1fd', '#c7c2fb', '#a8a1f9', '#847bf7', '#635bff'][params.dataIndex],
+      borderRadius: [2, 2, 0, 0],
     },
   }],
 }))
 
 const templateTop5Option = computed(() => ({
   tooltip: { trigger: 'axis', ...tooltipStyle() },
-  grid: { left: 100, right: 24, top: 8, bottom: 8 },
-  xAxis: { type: 'value', axisLabel: { fontSize: 11, color: axisText }, splitLine: splitLine() },
+  grid: { left: 100, right: 24, top: 8, bottom: 24 },
+  xAxis: { type: 'value', splitNumber: 3, axisLabel: { fontSize: 10, color: axisText }, splitLine: splitLine() },
   yAxis: {
     type: 'category',
     data: ['营销活动宣传', '品牌宣传片', '科普短视频', '企业新闻播报', '数字人讲解'].reverse(),
@@ -175,7 +174,7 @@ const templateTop5Option = computed(() => ({
   series: [{
     type: 'bar',
     data: [86, 128, 186, 256, 428].reverse(),
-    itemStyle: { color: '#22d3ee', borderRadius: [0, 4, 4, 0] },
+    itemStyle: { color: '#635bff', borderRadius: [0, 2, 2, 0] },
   }],
 }))
 
@@ -406,8 +405,8 @@ const lowEfficiencyAssets = [
   color: var(--text-secondary);
 }
 
-.alert-item.high { color: #fb7185; }
-.alert-item.medium { color: #fbbf24; }
+.alert-item.high { color: var(--danger); }
+.alert-item.medium { color: var(--warning); }
 
 .asset-row {
   display: flex;
@@ -428,6 +427,6 @@ const lowEfficiencyAssets = [
   margin-right: 6px;
 }
 
-.ar-metric.good { color: #34d399; flex-shrink: 0; }
-.ar-metric.bad { color: #fb7185; flex-shrink: 0; }
+.ar-metric.good { color: var(--success); flex-shrink: 0; }
+.ar-metric.bad { color: var(--danger); flex-shrink: 0; }
 </style>

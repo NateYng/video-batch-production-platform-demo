@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from '@/stores'
-import { Bell, QuestionFilled, Search, Sunny, Moon } from '@element-plus/icons-vue'
+import { Search, Bell, CircleHelp, Sun, Moon, Plus } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -15,41 +15,36 @@ function goCreate() {
 <template>
   <header class="topbar">
     <div class="left">
-      <div class="breadcrumb">
-        <span class="bc-module">视频中台</span>
-        <span class="bc-sep">/</span>
-        <h2 class="page-title">{{ route.meta.title }}</h2>
-        <span class="live-status"><span class="live-dot" />运行中</span>
-      </div>
-    </div>
-    <div class="center">
-      <el-input
-        placeholder="搜索任务、素材、模板、知识库..."
-        :prefix-icon="Search"
-        class="search-input"
-        clearable
-      />
+      <h2 class="page-title">{{ route.meta.title }}</h2>
     </div>
     <div class="right">
-      <el-button type="primary" class="create-btn" @click="goCreate">
-        <span class="btn-glow" />
-        + 创建批量任务
-      </el-button>
-      <el-badge :value="12" class="icon-btn">
-        <el-button :icon="Bell" circle class="icon-circle" />
-      </el-badge>
-      <el-button :icon="QuestionFilled" circle class="icon-circle" />
-      <el-tooltip :content="appStore.isDark ? '切换浅色模式' : '切换深色模式'" placement="bottom">
-        <el-button
-          circle
-          class="icon-circle theme-toggle"
-          :icon="appStore.isDark ? Sunny : Moon"
-          @click="appStore.toggleColorMode()"
-        />
-      </el-tooltip>
+      <div class="search-box">
+        <Search :size="14" :stroke-width="1.8" class="search-ic" />
+        <input class="search-input" placeholder="搜索任务、素材、模板…" />
+        <span class="search-kbd">⌘K</span>
+      </div>
+      <button class="icon-btn" title="通知">
+        <Bell :size="15" :stroke-width="1.8" />
+        <span class="badge-dot" />
+      </button>
+      <button class="icon-btn" title="帮助">
+        <CircleHelp :size="15" :stroke-width="1.8" />
+      </button>
+      <button
+        class="icon-btn"
+        :title="appStore.isDark ? '切换浅色模式' : '切换深色模式'"
+        @click="appStore.toggleColorMode()"
+      >
+        <Sun v-if="appStore.isDark" :size="15" :stroke-width="1.8" />
+        <Moon v-else :size="15" :stroke-width="1.8" />
+      </button>
+      <button class="btn-primary" @click="goCreate">
+        <Plus :size="14" :stroke-width="2" />
+        创建批量任务
+      </button>
       <el-dropdown>
         <div class="user-info">
-          <el-avatar :size="28" class="user-avatar">MO</el-avatar>
+          <span class="user-avatar">MO</span>
           <span class="user-name">市场运营</span>
         </div>
         <template #dropdown>
@@ -68,10 +63,9 @@ function goCreate() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 14px;
+  height: 52px;
+  padding: 0 20px;
   background: var(--topbar-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--topbar-border);
   gap: 12px;
   flex-shrink: 0;
@@ -81,121 +75,148 @@ function goCreate() {
 .left {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
-}
-
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.bc-module {
-  font-size: 10px;
-  color: var(--text-tertiary);
-  letter-spacing: 0.3px;
-}
-
-.bc-sep {
-  color: var(--text-tertiary);
-  font-size: 11px;
+  min-width: 0;
 }
 
 .page-title {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   white-space: nowrap;
-}
-
-.live-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 10px;
-  color: var(--success);
-  margin-left: 8px;
-  padding: 2px 8px;
-  background: rgba(16, 185, 129, 0.08);
-  border-radius: 10px;
-}
-
-.live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--success);
-  box-shadow: 0 0 6px var(--success);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.center {
-  flex: 1;
-  max-width: 360px;
-}
-
-.search-input {
-  width: 100%;
-}
-
-.search-input :deep(.el-input__wrapper) {
-  background: rgba(148, 155, 175, 0.06);
-  border-radius: 20px !important;
+  color: var(--text-primary);
 }
 
 .right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.create-btn {
-  font-size: 12px;
-  padding: 6px 12px;
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 260px;
   height: 30px;
+  padding: 0 10px;
+  background: var(--bg-fill);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-tertiary);
+  transition: border-color 0.15s;
 }
 
-.icon-circle {
-  background: rgba(148, 155, 175, 0.07) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text-secondary) !important;
+.search-box:focus-within {
+  border-color: var(--primary);
 }
 
-.theme-toggle:hover {
-  border-color: rgba(110, 121, 247, 0.45) !important;
-  color: var(--primary-light) !important;
+.search-ic {
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-kbd {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.icon-btn:hover {
+  background: var(--bg-fill);
+  color: var(--text-primary);
+}
+
+.badge-dot {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--danger);
+  border: 1.5px solid var(--topbar-bg);
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   cursor: pointer;
-  padding: 2px 8px 2px 2px;
-  border-radius: 20px;
-  transition: background 0.2s;
+  padding: 3px 8px 3px 3px;
+  border-radius: 6px;
+  transition: background 0.15s;
 }
 
 .user-info:hover {
-  background: rgba(148, 155, 175, 0.08);
+  background: var(--bg-fill);
 }
 
 .user-avatar {
-  background: linear-gradient(135deg, #6e79f7, #22d3ee) !important;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.user-name {
-  font-size: 12px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--sidebar-active);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
   font-weight: 600;
 }
 
-.icon-btn {
-  margin: 0;
+.user-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 </style>

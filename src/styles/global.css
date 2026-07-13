@@ -12,7 +12,7 @@ body,
 #app {
   height: 100%;
   overflow: hidden;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   background: var(--bg-page);
   color: var(--text-primary);
@@ -25,48 +25,17 @@ a {
   text-decoration: none;
 }
 
-/* 科技网格底纹 */
 .page-content {
-  background: var(--bg-page-mesh);
-  background-attachment: fixed;
-  position: relative;
+  background: var(--bg-page);
 }
 
-.page-content::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 70%);
-  z-index: 0;
-}
-
-.page-content > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Linear 风玻璃卡片：细描边 + 顶部内高光 */
+/* 极简卡片：细描边 + 极浅阴影，无玻璃效果 */
 .page-card {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), var(--shadow);
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.page-card:hover {
-  border-color: var(--border-strong);
-}
-
-[data-theme='light'] .page-card {
+  border-radius: var(--radius);
   box-shadow: var(--shadow);
+  transition: border-color 0.15s;
 }
 
 .page-header {
@@ -79,25 +48,27 @@ a {
 }
 
 .page-header h1 {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 600;
   margin-bottom: 0;
   letter-spacing: -0.2px;
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-dark) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
 }
 
 .page-header p {
   display: none;
 }
 
+/* KPI 指标组：合并为一个描边容器，内部 1px 分隔线 */
 .metric-grid {
   display: grid;
-  gap: 12px;
+  gap: 1px;
   margin-bottom: 0;
   flex-shrink: 0;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .metric-grid.kpi-4 {
@@ -136,21 +107,21 @@ a {
 
 /* 风险标签 */
 .risk-high {
-  color: #f43f5e;
-  background: rgba(244, 63, 94, 0.1);
-  border-color: rgba(244, 63, 94, 0.25);
+  color: var(--danger);
+  background: rgba(192, 18, 60, 0.06);
+  border-color: rgba(192, 18, 60, 0.2);
 }
 
 .risk-medium {
-  color: #f59e0b;
-  background: rgba(245, 158, 11, 0.1);
-  border-color: rgba(245, 158, 11, 0.25);
+  color: var(--warning);
+  background: rgba(179, 134, 26, 0.07);
+  border-color: rgba(179, 134, 26, 0.22);
 }
 
 .risk-low {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--success);
+  background: rgba(33, 122, 75, 0.06);
+  border-color: rgba(33, 122, 75, 0.2);
 }
 
 .status-running {
@@ -169,25 +140,17 @@ a {
   color: var(--warning);
 }
 
-/* Element Plus 全局增强 */
+/* Element Plus 全局：去掉渐变与浮起动效，回归克制 */
 .el-button--primary {
-  background: var(--gradient-primary) !important;
-  border: none !important;
-  box-shadow: 0 2px 8px rgba(0, 180, 216, 0.3);
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-.el-button--primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0, 180, 216, 0.4);
-}
-
-.el-button--primary:active {
-  transform: translateY(0);
+  --el-button-bg-color: var(--primary);
+  --el-button-border-color: var(--primary);
+  --el-button-hover-bg-color: var(--primary-dark);
+  --el-button-hover-border-color: var(--primary-dark);
+  box-shadow: none;
 }
 
 .el-tag {
-  border-radius: 6px !important;
+  border-radius: 5px !important;
   font-weight: 500;
 }
 
@@ -196,16 +159,18 @@ a {
 }
 
 .el-table {
-  --el-table-header-bg-color: rgba(110, 121, 247, 0.05);
+  --el-table-header-bg-color: #f6f8fa;
   --el-table-border-color: var(--border);
+  --el-table-row-hover-bg-color: #f9fafb;
   border-radius: var(--radius);
   overflow: hidden;
+  border: 1px solid var(--border);
 }
 
 .el-table th.el-table__cell {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   text-transform: none;
   letter-spacing: 0.2px;
 }
@@ -216,35 +181,29 @@ a {
 }
 
 .el-tabs__active-bar {
-  background: var(--gradient-primary) !important;
-  height: 3px !important;
-  border-radius: 2px;
+  background: var(--primary) !important;
+  height: 2px !important;
 }
 
 .el-input__wrapper {
   border-radius: var(--radius-sm) !important;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.15s;
 }
 
 .el-input__wrapper:focus-within,
 .el-input__wrapper.is-focus {
-  box-shadow: 0 0 0 1px var(--primary) inset, 0 0 0 3px rgba(110, 121, 247, 0.14) !important;
+  box-shadow: 0 0 0 1px var(--primary) inset, 0 0 0 3px rgba(99, 91, 255, 0.12) !important;
 }
 
-/* 深色页面 */
-[data-theme='dark'] .page-card {
-  background: var(--bg-card);
-  border-color: var(--border);
-}
-
+/* 深色模式 */
 [data-theme='dark'] .el-table {
   --el-table-bg-color: transparent;
   --el-table-tr-bg-color: transparent;
   --el-table-header-bg-color: rgba(255, 255, 255, 0.03);
-  --el-table-row-hover-bg-color: rgba(110, 121, 247, 0.07);
+  --el-table-row-hover-bg-color: rgba(255, 255, 255, 0.04);
   --el-table-border-color: var(--border);
-  --el-table-text-color: #c9d0e0;
-  --el-table-header-text-color: #8a92a6;
+  --el-table-text-color: #c6c9d0;
+  --el-table-header-text-color: #8a8d95;
 }
 
 [data-theme='dark'] .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
@@ -258,7 +217,7 @@ a {
 }
 
 [data-theme='dark'] .el-tabs__item {
-  color: #8a92a6;
+  color: #8a8d95;
 }
 
 [data-theme='dark'] .el-tabs__item.is-active {
@@ -266,15 +225,37 @@ a {
 }
 
 [data-theme='dark'] .risk-high {
-  background: rgba(244, 63, 94, 0.15);
+  background: rgba(229, 96, 111, 0.12);
+  color: var(--danger);
 }
 
 [data-theme='dark'] .risk-medium {
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(214, 162, 67, 0.12);
+  color: var(--warning);
 }
 
 [data-theme='dark'] .risk-low {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(76, 195, 138, 0.12);
+  color: var(--success);
+}
+
+[data-theme='dark'] .el-button--default {
+  --el-button-bg-color: rgba(255, 255, 255, 0.03);
+  --el-button-border-color: var(--border-strong);
+  --el-button-text-color: #c6c9d0;
+  --el-button-hover-bg-color: rgba(255, 255, 255, 0.06);
+  --el-button-hover-border-color: rgba(255, 255, 255, 0.22);
+}
+
+[data-theme='dark'] .el-dialog {
+  --el-dialog-bg-color: #17181d;
+  --el-dialog-border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+[data-theme='dark'] .el-card {
+  --el-card-bg-color: var(--bg-card-solid);
+  --el-card-border-color: var(--border);
 }
 
 /* 滚动条 */
@@ -288,47 +269,10 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 155, 175, 0.25);
+  background: rgba(135, 146, 162, 0.3);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 155, 175, 0.4);
-}
-
-/* 深色模式 · 全局组件 */
-[data-theme='dark'] html,
-[data-theme='dark'] body,
-[data-theme='dark'] #app {
-  background: var(--bg-page);
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .page-header h1 {
-  background: linear-gradient(135deg, #f2f4f8 0%, var(--primary-light) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-[data-theme='dark'] .el-button--default {
-  --el-button-bg-color: rgba(255, 255, 255, 0.03);
-  --el-button-border-color: var(--border-strong);
-  --el-button-text-color: #c9d0e0;
-  --el-button-hover-bg-color: rgba(255, 255, 255, 0.06);
-  --el-button-hover-border-color: rgba(255, 255, 255, 0.22);
-}
-
-[data-theme='dark'] .el-dialog {
-  --el-dialog-bg-color: #14161f;
-  --el-dialog-border-radius: 12px;
-}
-
-[data-theme='dark'] .el-dialog {
-  border: 1px solid var(--border);
-}
-
-[data-theme='dark'] .el-card {
-  --el-card-bg-color: var(--bg-card-solid);
-  --el-card-border-color: var(--border);
+  background: rgba(135, 146, 162, 0.5);
 }

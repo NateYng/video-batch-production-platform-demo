@@ -19,16 +19,16 @@ const statCards = [
   { label: '资产总数', value: 32846, trend: 6.2, accent: 'cyan' },
   { label: '本周新增', value: 1428, trend: 18.4, accent: 'indigo' },
   { label: '引用次数', value: 48672, trend: 12.8, accent: 'emerald' },
-  { label: '待审核', value: 236, trend: -4.2, color: '#fbbf24', accent: 'amber' },
+  { label: '待审核', value: 236, trend: -4.2, color: '#b3861a', accent: 'amber' },
 ]
 
 const categoryCards = [
-  { name: '品牌资产', count: 1286, icon: Picture, color: '#22d3ee', desc: 'LOGO/片头/品牌规范' },
-  { name: '媒体素材', count: 18420, icon: VideoCamera, color: '#34d399', desc: '视频/B-roll/音效' },
-  { name: '数字人资产', count: 86, icon: User, color: '#8b5cf6', desc: '数字人形象与音色' },
-  { name: '知识库', count: 3420, icon: Reading, color: '#fbbf24', desc: '文档/白皮书/FAQ' },
-  { name: '账号与渠道', count: 48, icon: Link, color: '#ec4899', desc: '渠道授权与账号' },
-  { name: '素材审核', count: 236, icon: Checked, color: '#fb7185', desc: '待审/驳回/已通过' },
+  { name: '品牌资产', count: 1286, icon: Picture, color: '#635bff', desc: 'LOGO/片头/品牌规范' },
+  { name: '媒体素材', count: 18420, icon: VideoCamera, color: '#217a4b', desc: '视频/B-roll/音效' },
+  { name: '数字人资产', count: 86, icon: User, color: '#7b61c9', desc: '数字人形象与音色' },
+  { name: '知识库', count: 3420, icon: Reading, color: '#b3861a', desc: '文档/白皮书/FAQ' },
+  { name: '账号与渠道', count: 48, icon: Link, color: '#b8437a', desc: '渠道授权与账号' },
+  { name: '素材审核', count: 236, icon: Checked, color: '#c0123c', desc: '待审/驳回/已通过' },
 ]
 
 const knowledgeRankings = [
@@ -240,7 +240,7 @@ const assetThumb = (row) => coverFor(row.id)
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  background: rgba(110, 121, 247, 0.12);
+  background: var(--bg-fill);
   color: var(--text-secondary);
   font-size: 10px;
   font-weight: 600;
@@ -250,9 +250,9 @@ const assetThumb = (row) => coverFor(row.id)
   flex-shrink: 0;
 }
 
-.rank-no.top1 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-.rank-no.top2 { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
-.rank-no.top3 { background: rgba(180, 83, 9, 0.15); color: #d97706; }
+.rank-no.top1 { background: rgba(179, 134, 26, 0.12); color: var(--warning); }
+.rank-no.top2 { background: rgba(135, 146, 162, 0.12); color: var(--text-tertiary); }
+.rank-no.top3 { background: rgba(180, 83, 9, 0.1); color: #b45309; }
 
 .rank-name {
   flex: 1;

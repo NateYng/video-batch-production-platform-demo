@@ -51,7 +51,7 @@ const typeIcons = {
   企业新闻播报: Microphone,
 }
 
-const typeColors = ['#22d3ee', '#8b5cf6', '#34d399', '#fbbf24', '#fb7185']
+const typeColors = ['#635bff', '#7b61c9', '#217a4b', '#b3861a', '#c0123c']
 
 const steps = ['选择类型', '上传素材', '生产配置', '审核策略', '发布配置']
 
